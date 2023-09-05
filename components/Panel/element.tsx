@@ -2,7 +2,7 @@
 
 import { type DivProps } from "@/lib/types/html";
 import { cn } from "@/lib/utils";
-import React from "react";
+import React, { useState } from "react";
 import { useEffect, useRef } from "react";
 import { Handler } from "./handler";
 import { getElementColor, getElementIcon } from "./utils";
@@ -17,6 +17,13 @@ export const Element = ({
   children,
   ...props
 }: ElementProps) => {
+  const oriWidth = 200;
+  const maximumBoundary = element.type === "video";
+  const minWidth = 15;
+  const [x, setX] = useState(0);
+  const [leftDragging, setLeftDragging] = useState(false);
+  const [left, setLeft] = useState(0);
+  const [width, setWidth] = useState(200);
   const resizeableBox = useRef<HTMLDivElement | null>(null);
   const resizeableLeftHandler = useRef<HTMLDivElement | null>(null);
   const resizeableRightHandler = useRef<HTMLDivElement | null>(null);
@@ -120,25 +127,61 @@ export const Element = ({
       document.addEventListener("mouseup", onMouseUpLeftResize);
     };
 
-    resizeableElement.addEventListener("dragstart", onDragStartBox); // move box
+    // resizeableElement.addEventListener("dragstart", onDragStartBox); // move box
     resizerRight.addEventListener("mousedown", onMouseDownRightResize); // resize from right
-    resizerLeft.addEventListener("mousedown", onMouseDownLeftResize); // resize from left
+    // resizerLeft.addEventListener("mousedown", onMouseDownLeftResize); // resize from left
 
     return () => {
-      resizeableElement.removeEventListener("dragstart", onDragStartBox);
+      //   resizeableElement.removeEventListener("dragstart", onDragStartBox);
       resizerRight.removeEventListener("mousedown", onMouseDownRightResize);
-      resizerLeft.removeEventListener("mousedown", onMouseDownLeftResize);
+      //   resizerLeft.removeEventListener("mousedown", onMouseDownLeftResize);
     };
   }, [element.type]);
 
   return (
     <div className="relative h-6 my-8" {...props}>
       <div className="relative w-[200px] h-full">
-        <Handler className="-left-2" ref={resizeableLeftHandler} />
+        <Handler
+          className="-left-2"
+          onMouseDown={(e) => {
+            setLeftDragging(true);
+            setX(e.clientX);
+          }}
+          onMouseUp={(e) => {
+            setLeftDragging(false);
+          }}
+          onMouseMove={(e) => {
+            if (!leftDragging) return;
+            const dx = e.clientX - x;
+            setX(e.clientX);
+            // prevent width from increasing if box reached 0 and user still drag to the left
+            if (maximumBoundary || left !== 0) {
+              setWidth((p) => p - dx);
+            }
+            // prevent width from decreasing below min width
+            setWidth((p) => Math.max(width, minWidth));
+
+            // prevent width from increasing beyond original width if maximum boundary is set to true
+            if (maximumBoundary) {
+              setWidth((p) => Math.min(width, oriWidth));
+            }
+
+            // only allow box the move left if width is within min width and ori width
+            if (maximumBoundary && width > minWidth && width < oriWidth) {
+              setLeft((p) => p + dx);
+            }
+            // only allow box the move left if width greater than min width (prevent box from moving the right if reached the right limit)
+            else if (!maximumBoundary && width > minWidth) {
+              setLeft((p) => p + dx);
+            }
+            console.log(left, width);
+          }}
+        />
         <Handler className="-right-2" ref={resizeableRightHandler} />
         <div
           ref={resizeableBox}
-          draggable
+          //   draggable
+          style={{ left: `${left}px`, width: `${width}px` }}
           className={cn([
             "rounded w-full select-none absolute top-0 h-full gap-2 py-2 px-2 text-black font-bold flex items-center ring-2 ring-primary-200 ring-offset-primary-500 ring-offset-[3px]",
             getElementColor(element.type),
