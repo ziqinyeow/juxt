@@ -22,6 +22,9 @@ module.exports = {
         "left-bracket": "url(/cursor/left-bracket.svg) 4 8, auto",
         "right-bracket": "url(/cursor/right-bracket.svg) 14 8, auto",
       },
+      backgroundImage: {
+        voice: "url('/voice.svg')",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -46,11 +49,14 @@ module.exports = {
           200: "#2BEBC8",
         },
         element: {
-          1: "#01CFFE",
-          2: "#FE409C",
-          3: "#FF9D00",
+          1: "#FE409C",
+          2: "#FF9D00",
+          3: "#01CFFE",
           4: "#612AFE",
           5: "#9DFA31",
+          6: "#FF2B61",
+          7: "#0065F4",
+          8: "#FFBE1B",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -73,6 +79,7 @@ module.exports = {
           foreground: "hsl(var(--card-foreground))",
         },
       },
+
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

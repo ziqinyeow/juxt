@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { ButtonProps } from "@/lib/types/html";
+import { type ButtonProps } from "@/lib/types/html";
 
 export const Button = ({ className, children, ...props }: ButtonProps) => (
   <button

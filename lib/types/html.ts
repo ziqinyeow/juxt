@@ -1,19 +1,9 @@
-export interface DivProps
-  extends React.DetailedHTMLProps<
-      React.HTMLAttributes<HTMLDivElement>,
-      HTMLDivElement
-    >,
-    React.AriaAttributes {
+export interface DivProps extends React.ComponentPropsWithRef<"div"> {
   className?: string;
   children?: React.ReactNode;
 }
 
-export interface ButtonProps
-  extends React.DetailedHTMLProps<
-      React.ButtonHTMLAttributes<HTMLButtonElement>,
-      HTMLButtonElement
-    >,
-    React.AriaAttributes {
+export interface ButtonProps extends React.ComponentPropsWithRef<"button"> {
   className?: string;
   children?: React.ReactNode;
 }

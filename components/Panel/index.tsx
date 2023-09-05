@@ -2,16 +2,12 @@
 
 import React, { useState } from "react";
 import {
-  IconBoxMargin,
   IconChevronDown,
   IconChevronUp,
-  IconLanguageHiragana,
-  IconPhoto,
   IconPlayerPauseFilled,
   IconPlayerPlayFilled,
   IconRewindBackward5,
   IconRewindForward5,
-  IconVideo,
 } from "@tabler/icons-react";
 import { ButtonProps, DivProps } from "@/lib/types/html";
 import clsx from "clsx";
@@ -49,8 +45,8 @@ const tracks = [
   {
     name: "track 5",
     icon: "",
-    type: "image",
-    color: "bg-element-3",
+    type: "pose",
+    color: "bg-element-5",
   },
   {
     name: "track 5",
@@ -129,7 +125,7 @@ const Panel = () => {
             <div className="w-[200px] bg-primary-500"></div>
             <div className="grid grid-rows-[36px_auto] w-full overflow-x-auto panel_scrollbar">
               <div
-                className="sticky top-0 z-10 flex items-end px-2 pb-2 select-none h-9 bg-primary-500"
+                className="sticky top-0 z-50 flex items-end px-2 pb-2 select-none h-9 bg-primary-500"
                 style={{ gap: `${(120 + panelScale * 10) / panelScale}px` }}
               >
                 {Array((maxTime / 1000 + 5) * panelScale)
