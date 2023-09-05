@@ -17,7 +17,8 @@ export const Element = ({
   children,
   ...props
 }: ElementProps) => {
-  const resizeableBox = useRef<HTMLDivElement | null>(null);
+  const parentBox = useRef<HTMLDivElement | null>(null);
+  const dragBox = useRef<HTMLDivElement | null>(null);
   const resizeableLeftHandler = useRef<HTMLDivElement | null>(null);
   const resizeableRightHandler = useRef<HTMLDivElement | null>(null);
 
@@ -30,34 +31,43 @@ export const Element = ({
     // prevent video from scaling more than original width
     const maximumBoundary = type === "video";
     const minWidth = 15;
-    const resizeableElement = resizeableBox.current as HTMLDivElement;
+    const parentBoxElement = parentBox.current as HTMLDivElement;
+    const dragBoxElement = dragBox.current as HTMLDivElement;
     const resizerRight = resizeableRightHandler.current as HTMLDivElement;
     const resizerLeft = resizeableLeftHandler.current as HTMLDivElement;
 
-    const styles = window.getComputedStyle(resizeableElement);
+    const styles = window.getComputedStyle(parentBoxElement);
     let oriWidth = parseInt(styles.width);
     let width = parseInt(styles.width);
 
     let xCord = 0;
     let left = 0;
 
-    const onDragBox = (event: DragEvent) => {
+    // const onDragBox = (event: DragEvent) => {
+    const onDragBox = (event: MouseEvent) => {
       const dx = event.clientX - xCord;
       xCord = event.clientX;
       left += dx;
       // prevent movement exceeding left: -px
       left = Math.max(0, left);
-      resizeableElement.style.left = `${left}px`;
+
+      parentBoxElement.style.left = `${left}px`;
+      //   dragBoxElement.style.left = `${left}px`;
     };
 
-    const onDragEndBox = (event: DragEvent) => {
-      document.removeEventListener("drag", onDragBox);
+    // const onDragEndBox = (event: DragEvent) => {
+    const onDragEndBox = (event: MouseEvent) => {
+      //   document.removeEventListener("drag", onDragBox);
+      document.removeEventListener("mousemove", onDragBox);
     };
 
-    const onDragStartBox = (event: DragEvent) => {
+    // const onDragStartBox = (event: DragEvent) => {
+    const onDragStartBox = (event: MouseEvent) => {
       xCord = event.clientX;
-      document.addEventListener("drag", onDragBox);
-      document.addEventListener("dragend", onDragEndBox);
+      //   document.addEventListener("drag", onDragBox);
+      //   document.addEventListener("dragend", onDragEndBox);
+      document.addEventListener("mousemove", onDragBox);
+      document.addEventListener("mouseup", onDragEndBox);
     };
 
     const onMouseMoveRightResize = (event: MouseEvent) => {
@@ -69,7 +79,7 @@ export const Element = ({
       if (maximumBoundary) {
         width = Math.min(width, oriWidth);
       }
-      resizeableElement.style.width = `${width}px`;
+      parentBoxElement.style.width = `${width}px`;
     };
 
     const onMouseUpRightResize = (event: MouseEvent) => {
@@ -97,7 +107,7 @@ export const Element = ({
         width = Math.min(width, oriWidth);
       }
 
-      resizeableElement.style.width = `${width}px`;
+      parentBoxElement.style.width = `${width}px`;
 
       // only allow box the move left if width is within min width and ori width
       if (maximumBoundary && width > minWidth && width < oriWidth) {
@@ -107,7 +117,8 @@ export const Element = ({
       else if (!maximumBoundary && width > minWidth) {
         left += dx;
       }
-      resizeableElement.style.left = `${left}px`;
+
+      parentBoxElement.style.left = `${left}px`;
     };
 
     const onMouseUpLeftResize = (event: MouseEvent) => {
@@ -120,12 +131,14 @@ export const Element = ({
       document.addEventListener("mouseup", onMouseUpLeftResize);
     };
 
-    resizeableElement.addEventListener("dragstart", onDragStartBox); // move box
+    // dragBoxElement.addEventListener("dragstart", onDragStartBox); // move box
+    dragBoxElement.addEventListener("mousedown", onDragStartBox); // move box
     resizerRight.addEventListener("mousedown", onMouseDownRightResize); // resize from right
     resizerLeft.addEventListener("mousedown", onMouseDownLeftResize); // resize from left
 
     return () => {
-      resizeableElement.removeEventListener("dragstart", onDragStartBox);
+      //   dragBoxElement.removeEventListener("dragstart", onDragStartBox);
+      dragBoxElement.removeEventListener("mousedown", onDragStartBox);
       resizerRight.removeEventListener("mousedown", onMouseDownRightResize);
       resizerLeft.removeEventListener("mousedown", onMouseDownLeftResize);
     };
@@ -133,12 +146,12 @@ export const Element = ({
 
   return (
     <div className="relative h-6 my-8" {...props}>
-      <div className="relative w-[200px] h-full">
+      <div ref={parentBox} className="relative w-[200px] h-full">
         <Handler className="-left-2" ref={resizeableLeftHandler} />
         <Handler className="-right-2" ref={resizeableRightHandler} />
         <div
-          ref={resizeableBox}
-          draggable
+          ref={dragBox}
+          //   draggable
           className={cn([
             "rounded w-full select-none absolute top-0 h-full gap-2 py-2 px-2 text-black font-bold flex items-center ring-2 ring-primary-200 ring-offset-primary-500 ring-offset-[3px]",
             getElementColor(element.type),
