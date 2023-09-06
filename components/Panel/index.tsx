@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import {
   IconChevronDown,
   IconChevronUp,
+  IconEye,
+  IconLock,
+  IconLockSquare,
   IconPlayerPauseFilled,
   IconPlayerPlayFilled,
   IconRewindBackward5,
@@ -18,6 +21,7 @@ import { useStore } from "@/lib/store";
 import { cn, formatTimeToMinSec, formatTimeToMinSecMili } from "@/lib/utils";
 import { Button } from "./button";
 import { Element } from "./element";
+import { Unlock } from "lucide-react";
 
 const tracks = [
   {
@@ -124,68 +128,76 @@ const Panel = () => {
       {!hidePanel && (
         <>
           <div className="h-[calc(100%_-_50px)] relative min-h-[300px] overflow-y-auto panel_scrollbar max-h-[350px] flex">
-            <div className="min-w-[200px] bg-primary-500 grid grid-rows-[36px_auto]">
-              <div className="sticky top-0 z-50 flex items-end gap-3 px-4 pb-2 border-b border-r bg-primary-600 border-primary-400 h-9">
-                <IconSearch className="w-4 h-4 stroke-[4px] text-primary-200 " />
-                <input
-                  className="w-full tracking-widest bg-primary-600 focus:outline-none"
-                  type="text"
-                  placeholder="Search"
-                />
-              </div>
-              <div className="pt-2 border-r border-primary-400">
-                {tracks?.map((track, i) => (
-                  <div
-                    className="relative px-2 py-4 border-b border-primary-400"
-                    key={i}
-                  >
-                    <div className="flex items-center h-6 gap-2 px-2 text-primary-200">
-                      <IconTrack className="w-5 h-5" />
-                      <div>Track {i + 1}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="grid relative grid-rows-[36px_auto] w-full overflow-x-auto panel_scrollbar">
-              {/* tick */}
-              <div
-                className="sticky top-0 z-50 flex items-end px-4 pb-2 border-b select-none border-primary-400 h-9 bg-primary-500"
-                style={{ gap: `${(120 + panelScale * 10) / panelScale}px` }}
-              >
-                {Array((maxTime / 1000 + 5) * panelScale)
-                  .fill(1)
-                  .map((_, i) => (
-                    <div
-                      key={i}
-                      className="flex flex-col items-center gap-[0.5px]"
-                    >
+            <div className="bg-primary-500 grid grid-rows-[36px_auto] overflow-x-auto panel_scrollbar">
+              <div className="sticky top-0 z-50 flex items-end border-b bg-primary-600 border-primary-400">
+                <div className="w-[200px] sticky z-50 bg-primary-600 pb-2 border-r border-primary-400 left-0 flex items-end gap-3 px-4 h-full">
+                  <IconSearch className="w-4 h-4 stroke-[4px] text-primary-200 " />
+                  <input
+                    className="w-full tracking-widest bg-primary-600 focus:outline-none"
+                    type="text"
+                    placeholder="Search"
+                  />
+                </div>
+                <div
+                  style={{ gap: `${(120 + panelScale * 10) / panelScale}px` }}
+                  className="relative flex items-end w-full h-full px-4 pb-2 select-none"
+                >
+                  {/* <div className="absolute left-0 w-1 h-full bg-white" /> */}
+                  {Array((maxTime / 1000 + 5) * panelScale)
+                    .fill(1)
+                    .map((_, i) => (
                       <div
-                        className={cn([
-                          i % panelScale === 0
-                            ? "text-[8px] text-primary-200"
-                            : "hidden",
-                        ])}
+                        key={i}
+                        className="flex flex-col items-center gap-[0.5px]"
                       >
-                        {i / panelScale}
+                        <div
+                          className={cn([
+                            i % panelScale === 0
+                              ? "text-[8px] text-primary-200"
+                              : "hidden",
+                          ])}
+                        >
+                          {i / panelScale}
+                        </div>
+                        <div
+                          className={cn([
+                            "w-[0.1px] bg-primary-200",
+                            i % panelScale == 0 ? "h-2" : "h-1",
+                          ])}
+                        ></div>
                       </div>
-                      <div
-                        className={cn([
-                          "w-[0.1px] bg-primary-200",
-                          i % panelScale == 0 ? "h-2" : "h-1",
-                        ])}
-                      ></div>
+                    ))}
+                </div>
+              </div>
+              <div className="flex w-full">
+                <div className="w-[200px] sticky z-40 left-0 pt-2 border-r bg-primary-500 border-primary-400">
+                  {tracks?.map((track, i) => (
+                    <div
+                      className="relative px-2 py-4 border-b border-primary-400"
+                      key={i}
+                    >
+                      <div className="flex items-center justify-between h-6 gap-2 px-2 text-primary-200">
+                        <div className="flex items-center gap-2">
+                          <IconTrack className="w-5 h-5" />
+                          <div>Track {i + 1}</div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Unlock className="w-4 h-4 cursor-not-allowed text-primary-200/50" />
+                          <IconEye className="w-5 h-5 cursor-not-allowed text-primary-200/50" />
+                        </div>
+                      </div>
                     </div>
                   ))}
-              </div>
-              <div className="px-4 pt-2">
-                {tracks?.map((track, i) => (
-                  <div className="relative py-4" key={i}>
-                    <div className="h-6">
-                      <Element element={track} />
+                </div>
+                <div className="w-full px-4 pt-2">
+                  {tracks?.map((track, i) => (
+                    <div className="relative py-4" key={i}>
+                      <div className="h-6">
+                        <Element element={track} />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
