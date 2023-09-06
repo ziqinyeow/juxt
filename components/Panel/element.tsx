@@ -96,7 +96,7 @@ export const Element = ({
       const dx = event.clientX - xCord;
       xCord = event.clientX;
       // prevent width from increasing if box reached 0 and user still drag to the left
-      if (maximumBoundary || left !== 0) {
+      if (maximumBoundary || (!maximumBoundary && left > 0)) {
         width -= dx;
       }
       // prevent width from decreasing below min width
@@ -117,6 +117,8 @@ export const Element = ({
       else if (!maximumBoundary && width > minWidth) {
         left += dx;
       }
+
+      left = Math.max(0, left);
 
       parentBoxElement.style.left = `${left}px`;
     };
