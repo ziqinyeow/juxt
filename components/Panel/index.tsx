@@ -8,6 +8,8 @@ import {
   IconPlayerPlayFilled,
   IconRewindBackward5,
   IconRewindForward5,
+  IconSearch,
+  IconTrack,
 } from "@tabler/icons-react";
 import { ButtonProps, DivProps } from "@/lib/types/html";
 import clsx from "clsx";
@@ -122,10 +124,33 @@ const Panel = () => {
       {!hidePanel && (
         <>
           <div className="h-[calc(100%_-_50px)] relative min-h-[300px] overflow-y-auto panel_scrollbar max-h-[350px] flex">
-            <div className="w-[200px] bg-primary-500"></div>
-            <div className="grid grid-rows-[36px_auto] w-full overflow-x-auto panel_scrollbar">
+            <div className="min-w-[200px] bg-primary-500 grid grid-rows-[36px_auto]">
+              <div className="sticky top-0 z-50 flex items-end gap-3 px-4 pb-2 border-b border-r bg-primary-600 border-primary-400 h-9">
+                <IconSearch className="w-4 h-4 stroke-[4px] text-primary-200 " />
+                <input
+                  className="w-full tracking-widest bg-primary-600 focus:outline-none"
+                  type="text"
+                  placeholder="Search"
+                />
+              </div>
+              <div className="pt-2 border-r border-primary-400">
+                {tracks?.map((track, i) => (
+                  <div
+                    className="relative px-2 py-4 border-b border-primary-400"
+                    key={i}
+                  >
+                    <div className="flex items-center h-6 gap-2 px-2 text-primary-200">
+                      <IconTrack className="w-5 h-5" />
+                      <div>Track {i + 1}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="grid relative grid-rows-[36px_auto] w-full overflow-x-auto panel_scrollbar">
+              {/* tick */}
               <div
-                className="sticky top-0 z-50 flex items-end px-2 pb-2 select-none h-9 bg-primary-500"
+                className="sticky top-0 z-50 flex items-end px-4 pb-2 border-b select-none border-primary-400 h-9 bg-primary-500"
                 style={{ gap: `${(120 + panelScale * 10) / panelScale}px` }}
               >
                 {Array((maxTime / 1000 + 5) * panelScale)
@@ -153,9 +178,13 @@ const Panel = () => {
                     </div>
                   ))}
               </div>
-              <div className="p-2">
+              <div className="px-4 pt-2">
                 {tracks?.map((track, i) => (
-                  <Element key={i} element={track} />
+                  <div className="relative py-4" key={i}>
+                    <div className="h-6">
+                      <Element element={track} />
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>

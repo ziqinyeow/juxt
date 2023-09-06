@@ -55,17 +55,12 @@ export const Element = ({
       //   dragBoxElement.style.left = `${left}px`;
     };
 
-    // const onDragEndBox = (event: DragEvent) => {
     const onDragEndBox = (event: MouseEvent) => {
-      //   document.removeEventListener("drag", onDragBox);
       document.removeEventListener("mousemove", onDragBox);
     };
 
-    // const onDragStartBox = (event: DragEvent) => {
     const onDragStartBox = (event: MouseEvent) => {
       xCord = event.clientX;
-      //   document.addEventListener("drag", onDragBox);
-      //   document.addEventListener("dragend", onDragEndBox);
       document.addEventListener("mousemove", onDragBox);
       document.addEventListener("mouseup", onDragEndBox);
     };
@@ -133,38 +128,34 @@ export const Element = ({
       document.addEventListener("mouseup", onMouseUpLeftResize);
     };
 
-    // dragBoxElement.addEventListener("dragstart", onDragStartBox); // move box
-    dragBoxElement.addEventListener("mousedown", onDragStartBox); // move box
+    parentBoxElement.addEventListener("mousedown", onDragStartBox); // move box
     resizerRight.addEventListener("mousedown", onMouseDownRightResize); // resize from right
     resizerLeft.addEventListener("mousedown", onMouseDownLeftResize); // resize from left
 
     return () => {
-      //   dragBoxElement.removeEventListener("dragstart", onDragStartBox);
-      dragBoxElement.removeEventListener("mousedown", onDragStartBox);
+      parentBoxElement.removeEventListener("mousedown", onDragStartBox);
       resizerRight.removeEventListener("mousedown", onMouseDownRightResize);
       resizerLeft.removeEventListener("mousedown", onMouseDownLeftResize);
     };
   }, [element.type]);
 
   return (
-    <div className="relative h-6 my-8" {...props}>
-      <div ref={parentBox} className="relative w-[200px] h-full">
-        <Handler className="-left-2" ref={resizeableLeftHandler} />
-        <Handler className="-right-2" ref={resizeableRightHandler} />
-        <div
-          ref={dragBox}
-          //   draggable
-          className={cn([
-            "rounded w-full select-none absolute top-0 h-full gap-2 py-2 px-2 text-black font-bold flex items-center ring-2 ring-primary-200 ring-offset-primary-500 ring-offset-[3px]",
-            getElementColor(element.type),
-          ])}
-        >
-          <div className="absolute top-0 left-0 z-10 w-full h-full bg-repeat-space bg-contain bg-voice" />
-          <div className="z-20 select-none line-clamp-1 [&>*]:w-4 [&>*]:h-4">
-            {getElementIcon(element.type)}
-          </div>
-          <div className="z-20 select-none line-clamp-1">{element.type}</div>
+    <div ref={parentBox} className="relative w-[200px] h-full">
+      <Handler className="-left-2" ref={resizeableLeftHandler} />
+      <Handler className="-right-2" ref={resizeableRightHandler} />
+      <div
+        ref={dragBox}
+        //   draggable
+        className={cn([
+          "rounded w-full select-none absolute top-0 h-full gap-2 py-2 px-2 text-black font-bold flex items-center ring-2 ring-primary-200 ring-offset-primary-500 ring-offset-[3px]",
+          getElementColor(element.type),
+        ])}
+      >
+        <div className="absolute top-0 left-0 z-10 w-full h-full bg-repeat-space bg-contain bg-voice" />
+        <div className="z-20 select-none line-clamp-1 [&>*]:w-4 [&>*]:h-4">
+          {getElementIcon(element.type)}
         </div>
+        <div className="z-20 select-none line-clamp-1">{element.type}</div>
       </div>
     </div>
   );
