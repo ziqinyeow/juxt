@@ -143,7 +143,7 @@ const Panel = () => {
         <>
           <div className="h-[calc(100%_-_50px)] relative grid grid-cols-[200px_auto] min-h-[300px] overflow-y-auto bg-primary-500 panel_scrollbar max-h-[350px]">
             <div className="w-full">
-              <div className="top-0 z-50 flex items-end w-full gap-3 px-4 pb-2 border-b border-r h-9 bg-primary-600 border-primary-400">
+              <div className="z-50 flex items-end w-full gap-3 px-4 pb-2 border-b border-r h-9 bg-primary-600 border-primary-400">
                 <IconSearch className="w-4 h-4 stroke-[4px] text-primary-200 " />
                 <input
                   className="w-full tracking-widest bg-primary-600 focus:outline-none"
@@ -153,8 +153,8 @@ const Panel = () => {
               </div>
               {tracks?.map((track, i) => (
                 <div
-                  className="relative px-2 py-4 border-b border-r border-primary-400"
                   key={i}
+                  className="relative px-2 py-4 border-b border-r border-primary-400"
                 >
                   <div className="flex items-center justify-between h-[23px] gap-2 px-2 text-primary-200">
                     <div className="flex items-center gap-2">
@@ -169,7 +169,7 @@ const Panel = () => {
                 </div>
               ))}
             </div>
-            <div className="grid grid-rows-[36px_auto] overflow-x-auto overflow-y-hidden panel_scrollbar">
+            <div className="w-full grid grid-rows-[36px_auto] overflow-x-auto overflow-y-hidden panel_scrollbar">
               <div
                 style={{ gap: `${(120 + panelScale * 10) / panelScale}px` }}
                 className="z-40 flex items-end w-full px-4 pb-2 border-b select-none border-primary-400 h-9"
