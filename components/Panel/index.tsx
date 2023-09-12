@@ -30,6 +30,11 @@ const tracks = [
         duration: 5,
         startAt: 2,
       },
+      {
+        type: "video",
+        duration: 5,
+        startAt: 5,
+      },
     ],
   },
   {
@@ -141,70 +146,74 @@ const Panel = () => {
       </div>
       {!hidePanel && (
         <>
-          <div className="h-[calc(100%_-_50px)] relative grid grid-cols-[200px_auto] min-h-[300px] overflow-y-auto bg-primary-500 panel_scrollbar max-h-[350px]">
-            <div className="w-full">
-              <div className="z-50 flex items-end w-full gap-3 px-4 pb-2 border-b border-r h-9 bg-primary-600 border-primary-400">
-                <IconSearch className="w-4 h-4 stroke-[4px] text-primary-200 " />
-                <input
-                  className="w-full tracking-widest bg-primary-600 focus:outline-none"
-                  type="text"
-                  placeholder="Search"
-                />
-              </div>
-              {tracks?.map((track, i) => (
-                <div
-                  key={i}
-                  className="relative px-2 py-4 border-b border-r border-primary-400"
-                >
-                  <div className="flex items-center justify-between h-[23px] gap-2 px-2 text-primary-200">
-                    <div className="flex items-center gap-2">
-                      <IconGripVertical className="w-4 h-4 text-primary-200/80 cursor-grab" />
-                      <div>{track.name}</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Unlock className="w-4 h-4 cursor-not-allowed text-primary-200/50" />
-                      <IconEye className="w-5 h-5 cursor-not-allowed text-primary-200/50" />
-                    </div>
-                  </div>
+          <div className="h-[calc(100%_-_50px)] relative min-h-[300px] overflow-y-auto panel_scrollbar max-h-[350px] flex">
+            <div className="bg-primary-500 grid grid-rows-[36px_auto] panel_scrollbar">
+              <div className="sticky top-0 z-50 grid grid-cols-[200px_auto] border-b bg-primary-600 border-primary-400">
+                <div className="sticky left-0 z-50 flex items-end h-full gap-3 px-4 pb-2 border-r bg-primary-600 border-primary-400">
+                  <IconSearch className="w-4 h-4 stroke-[4px] text-primary-200 " />
+                  <input
+                    className="w-full tracking-widest bg-primary-600 focus:outline-none"
+                    type="text"
+                    placeholder="Search"
+                  />
                 </div>
-              ))}
-            </div>
-            <div className="w-full grid grid-rows-[36px_auto] overflow-x-auto overflow-y-hidden panel_scrollbar">
-              <div
-                style={{ gap: `${(120 + panelScale * 10) / panelScale}px` }}
-                className="z-40 flex items-end w-full px-4 pb-2 border-b select-none border-primary-400 h-9"
-              >
-                {Array((maxTime / 1000 + 5) * panelScale)
-                  .fill(1)
-                  .map((_, i) => (
-                    <div
-                      key={i}
-                      className="flex flex-col items-center gap-[0.5px]"
-                    >
+                <div
+                  style={{ gap: `${(120 + panelScale * 10) / panelScale}px` }}
+                  className="relative flex items-end w-full h-full px-4 pb-2 select-none"
+                >
+                  {Array((maxTime / 1000 + 5) * panelScale)
+                    .fill(1)
+                    .map((_, i) => (
                       <div
-                        className={cn([
-                          i % panelScale === 0
-                            ? "text-[8px] text-primary-200"
-                            : "hidden",
-                        ])}
+                        key={i}
+                        className="flex flex-col items-center gap-[0.5px]"
                       >
-                        {i / panelScale}
+                        <div
+                          className={cn([
+                            i % panelScale === 0
+                              ? "text-[8px] text-primary-200"
+                              : "hidden",
+                          ])}
+                        >
+                          {i / panelScale}
+                        </div>
+                        <div
+                          className={cn([
+                            "w-[0.1px] bg-primary-200",
+                            i % panelScale == 0 ? "h-2" : "h-1",
+                          ])}
+                        ></div>
                       </div>
-                      <div
-                        className={cn([
-                          "w-[0.1px] bg-primary-200",
-                          i % panelScale == 0 ? "h-2" : "h-1",
-                        ])}
-                      ></div>
+                    ))}
+                </div>
+              </div>
+              <div className="w-full grid grid-cols-[200px_auto]">
+                <div className="sticky left-0 z-40 pt-2 border-r bg-primary-500 border-primary-400">
+                  {tracks?.map((track, i) => (
+                    <div
+                      className="relative px-2 py-4 border-b border-primary-400"
+                      key={i}
+                    >
+                      <div className="flex items-center justify-between h-[23px] gap-2 px-2 text-primary-200">
+                        <div className="flex items-center gap-2">
+                          <IconGripVertical className="w-4 h-4 text-primary-200/80 cursor-grab" />
+                          <div>{track.name}</div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Unlock className="w-4 h-4 cursor-not-allowed text-primary-200/50" />
+                          <IconEye className="w-5 h-5 cursor-not-allowed text-primary-200/50" />
+                        </div>
+                      </div>
                     </div>
                   ))}
-              </div>
-              <div className="w-full">
-                {tracks?.map((track, i) => (
-                  <div key={i} className="w-full p-4">
-                    <Track className="relative w-full h-6" track={track} />
-                  </div>
-                ))}
+                </div>
+                <div className="w-full px-4 pt-2">
+                  {tracks?.map((track, i) => (
+                    <div key={i} className="py-4">
+                      <Track className="relative h-6" track={track} />
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
