@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   IconChevronDown,
   IconChevronUp,
   IconEye,
-  IconLock,
-  IconLockSquare,
+  IconGripVertical,
   IconPlayerPauseFilled,
   IconPlayerPlayFilled,
   IconRewindBackward5,
@@ -20,8 +19,9 @@ import "./style.css";
 import { useStore } from "@/lib/store";
 import { cn, formatTimeToMinSec, formatTimeToMinSecMili } from "@/lib/utils";
 import { Button } from "./button";
-import { Element } from "./element";
+import Element from "./element";
 import { Unlock } from "lucide-react";
+import Track from "./track";
 
 const tracks = [
   {
@@ -70,21 +70,13 @@ const Panel = () => {
     setCurrentTimeInMs,
     rewindCurrentTimeInMs,
   } = useStore();
-  // const [playing, setPlaying] = useState(false);
-  // const [currentMs, setCurrentMs] = useState("00:00:00");
   const [panelScale, setPanelScale] = useState(5);
   const [hidePanel, setHidePanel] = useState(false);
 
-  const rewindBackward5 = () => {
-    rewindCurrentTimeInMs(5000, false);
-  };
+  const rewindBackward5 = () => rewindCurrentTimeInMs(5000, false);
   const play = () => {};
-  const rewindForward5 = () => {
-    rewindCurrentTimeInMs(5000, true);
-  };
-  const toggleHidePanel = () => {
-    setHidePanel((p) => !p);
-  };
+  const rewindForward5 = () => rewindCurrentTimeInMs(5000, true);
+  const toggleHidePanel = () => setHidePanel((p) => !p);
 
   return (
     <div
@@ -178,7 +170,8 @@ const Panel = () => {
                     >
                       <div className="flex items-center justify-between h-6 gap-2 px-2 text-primary-200">
                         <div className="flex items-center gap-2">
-                          <IconTrack className="w-5 h-5" />
+                          <IconGripVertical className="w-4 h-4 text-primary-200/80 cursor-grab" />
+                          {/* <IconTrack className="w-5 h-5" /> */}
                           <div>Track {i + 1}</div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -192,8 +185,9 @@ const Panel = () => {
                 <div className="w-full px-4 pt-2">
                   {tracks?.map((track, i) => (
                     <div className="relative py-4" key={i}>
-                      <div className="h-6">
-                        <Element element={track} />
+                      <div className="flex h-6 ">
+                        <Track element={track} />
+                        {/* <Element element={track} /> */}
                       </div>
                     </div>
                   ))}

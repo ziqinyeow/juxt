@@ -140,7 +140,7 @@ export const Element = ({
   }, [element.type]);
 
   return (
-    <div ref={parentBox} className="relative w-[200px] h-full">
+    <div {...props} ref={parentBox} className="relative w-[200px] h-full">
       <Handler className="-left-2" ref={resizeableLeftHandler} />
       <Handler className="-right-2" ref={resizeableRightHandler} />
       <div
@@ -160,3 +160,5 @@ export const Element = ({
     </div>
   );
 };
+
+export default React.memo(Element);
