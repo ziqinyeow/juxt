@@ -156,10 +156,10 @@ const Panel = () => {
                   className="relative px-2 py-4 border-b border-r border-primary-400"
                   key={i}
                 >
-                  <div className="flex items-center justify-between h-6 gap-2 px-2 text-primary-200">
+                  <div className="flex items-center justify-between h-[23px] gap-2 px-2 text-primary-200">
                     <div className="flex items-center gap-2">
                       <IconGripVertical className="w-4 h-4 text-primary-200/80 cursor-grab" />
-                      <div>Track {i + 1}</div>
+                      <div>{track.name}</div>
                     </div>
                     <div className="flex items-center gap-2">
                       <Unlock className="w-4 h-4 cursor-not-allowed text-primary-200/50" />
