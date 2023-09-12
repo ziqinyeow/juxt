@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { Rnd } from "react-rnd";
 import { getElementColor, getElementIcon } from "./utils";
 
-const Track = ({ element }: any) => {
+const Track = ({ track }: any) => {
   const [state, setState] = useState({
     width: 200,
     height: 24,
@@ -18,7 +18,7 @@ const Track = ({ element }: any) => {
       <Rnd
         className={cn([
           "rounded select-none ring-2 ring-primary-200 ring-offset-primary-500 ring-offset-[3px]",
-          getElementColor(element.type),
+          getElementColor(track.type),
         ])}
         bounds="parent"
         enableResizing={{
@@ -49,9 +49,9 @@ const Track = ({ element }: any) => {
         <div className="absolute top-0 left-0 z-10 w-full h-full bg-repeat-space bg-contain bg-voice" />
         <div className="flex items-center w-full h-full gap-2 px-2 font-bold text-black">
           <div className="z-20 select-none line-clamp-1 [&>*]:w-4 [&>*]:h-4">
-            {getElementIcon(element.type)}
+            {getElementIcon(track.type)}
           </div>
-          <div className="z-20 select-none line-clamp-1">{element.type}</div>
+          <div className="z-20 select-none line-clamp-1">{track.type}</div>
         </div>
       </Rnd>
     </div>

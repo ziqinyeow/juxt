@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import {
   IconChevronDown,
   IconChevronUp,
@@ -13,13 +13,11 @@ import {
   IconSearch,
   IconTrack,
 } from "@tabler/icons-react";
-import { ButtonProps, DivProps } from "@/lib/types/html";
 import clsx from "clsx";
 import "./style.css";
 import { useStore } from "@/lib/store";
 import { cn, formatTimeToMinSec, formatTimeToMinSecMili } from "@/lib/utils";
 import { Button } from "./button";
-import Element from "./element";
 import { Unlock } from "lucide-react";
 import Track from "./track";
 
@@ -186,8 +184,7 @@ const Panel = () => {
                   {tracks?.map((track, i) => (
                     <div className="relative py-4" key={i}>
                       <div className="flex h-6 ">
-                        <Track element={track} />
-                        {/* <Element element={track} /> */}
+                        <Track track={track} />
                       </div>
                     </div>
                   ))}
