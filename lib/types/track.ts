@@ -43,6 +43,7 @@ export type TextElement = ElementBase<
 export type Element = VideoElement | ImageElement | TextElement;
 
 export type Tracks = {
+  id: string;
   name: string;
   elements: Element[];
 };

@@ -11,93 +11,28 @@ import {
   IconRewindBackward5,
   IconRewindForward5,
   IconSearch,
-  IconTrack,
 } from "@tabler/icons-react";
 import clsx from "clsx";
 import "./style.css";
 import { useStore } from "@/lib/store";
-import { cn, formatTimeToMinSec, formatTimeToMinSecMili } from "@/lib/utils";
+import { cn, formatTimeToMinSecMili } from "@/lib/utils";
 import { Button } from "./button";
 import { Unlock } from "lucide-react";
 import Track from "./track";
-
-const tracks = [
-  {
-    name: "track 1",
-    elements: [
-      {
-        type: "text",
-        duration: 5,
-        startAt: 2,
-      },
-      {
-        type: "video",
-        duration: 5,
-        startAt: 5,
-      },
-    ],
-  },
-  {
-    name: "track 2",
-    elements: [
-      {
-        type: "video",
-        duration: 5,
-        startAt: 2,
-      },
-    ],
-  },
-  {
-    name: "track 3",
-    elements: [
-      {
-        type: "image",
-        duration: 5,
-        startAt: 2,
-      },
-    ],
-  },
-  {
-    name: "track 4",
-    elements: [
-      {
-        type: "pose",
-        duration: 5,
-        startAt: 2,
-      },
-    ],
-  },
-  {
-    name: "track 4",
-    elements: [
-      {
-        type: "pose",
-        duration: 5,
-        startAt: 2,
-      },
-    ],
-  },
-  {
-    name: "track 4",
-    elements: [
-      {
-        type: "pose",
-        duration: 5,
-        startAt: 2,
-      },
-    ],
-  },
-];
+import { tracks } from "@/lib/samples/tracks";
+import Slider from "./slider";
+import { showSecondsOnPanelTickLogic } from "./utils";
 
 const Panel = () => {
   const {
+    panelScale,
+    addPanelScale,
     playing,
     maxTime,
     getCurrentTimeInMs,
     setCurrentTimeInMs,
     rewindCurrentTimeInMs,
   } = useStore();
-  const [panelScale, setPanelScale] = useState(5);
   const [hidePanel, setHidePanel] = useState(false);
 
   const rewindBackward5 = () => rewindCurrentTimeInMs(5000, false);
@@ -134,7 +69,8 @@ const Panel = () => {
             <IconRewindForward5 className="w-4 h-4" />
           </Button>
         </div>
-        <div className="flex items-center justify-end w-full">
+        <div className="flex items-center justify-end w-full gap-4">
+          <Slider className="w-24" />
           <Button onClick={toggleHidePanel} className="text-secondary-200">
             {hidePanel ? (
               <IconChevronUp className="w-4 h-4" />
@@ -146,7 +82,14 @@ const Panel = () => {
       </div>
       {!hidePanel && (
         <>
-          <div className="h-[calc(100%_-_50px)] relative min-h-[300px] overflow-y-auto panel_scrollbar max-h-[350px] flex">
+          <div
+            onWheel={(e) => {
+              if (e.metaKey) {
+                addPanelScale(Number((e.deltaY * 0.1).toFixed(0)));
+              }
+            }}
+            className="h-[calc(100%_-_50px)] relative min-h-[300px] overflow-y-auto panel_scrollbar max-h-[340px] flex"
+          >
             <div className="bg-primary-500 grid grid-rows-[36px_auto] panel_scrollbar">
               <div className="sticky top-0 z-50 grid grid-cols-[200px_auto] border-b bg-primary-600 border-primary-400">
                 <div className="sticky left-0 z-50 flex items-end h-full gap-3 px-4 pb-2 border-r bg-primary-600 border-primary-400">
@@ -159,23 +102,23 @@ const Panel = () => {
                 </div>
                 <div
                   style={{ gap: `${(120 + panelScale * 10) / panelScale}px` }}
-                  className="relative flex items-end w-full h-full px-4 pb-2 select-none"
+                  className="relative flex items-end w-[calc(100vw_-_200px)] h-full px-4 pb-2 select-none"
                 >
-                  {Array((maxTime / 1000 + 5) * panelScale)
+                  {Array((maxTime / 10000 + 1) * panelScale + 1)
                     .fill(1)
                     .map((_, i) => (
                       <div
                         key={i}
-                        className="flex flex-col items-center gap-[0.5px]"
+                        className="flex flex-col relative items-center gap-[0.5px]"
                       >
                         <div
                           className={cn([
-                            i % panelScale === 0
-                              ? "text-[8px] text-primary-200"
+                            showSecondsOnPanelTickLogic(i, panelScale)
+                              ? "text-[8px] whitespace-nowrap absolute -top-4 text-primary-200"
                               : "hidden",
                           ])}
                         >
-                          {i / panelScale}
+                          {((i * 10) / panelScale).toFixed(0)} s
                         </div>
                         <div
                           className={cn([

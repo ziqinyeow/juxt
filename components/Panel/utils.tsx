@@ -8,6 +8,34 @@ import {
 } from "@tabler/icons-react";
 import { ClassValue } from "clsx";
 
+/**
+ * Logic used to check if current index (corresponse to seconds) can be shown or not.
+ *
+ * For example,
+ * i == 25, panelScale == 50, show the text as 5 seconds
+ * i == 50, panelScale == 50, show the text as 10 seconds
+ * i == 75, panelScale == 50, show the text as 15 seconds
+ *
+ * i == 26, panelScale == 51, 5 seconds
+ * i == 51, panelScale == 51, 10 seconds
+ * i == 52, panelScale == 51, false
+ * i == 77, panelScale == 51, true -> 15 seconds
+ *
+ * @param i (number) index used to
+ * @param panelScale
+ * @returns
+ */
+export const showSecondsOnPanelTickLogic = (i: number, panelScale: number) => {
+  // i is the scale of panelScale number
+  if (i % panelScale == 0) {
+    return true;
+  } else if (panelScale % 2 == 0 && i % (panelScale / 2) == 0) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
 export const getElementColor = (elementType: ElementType): ClassValue => {
   switch (elementType) {
     case "video":

@@ -1,17 +1,56 @@
 import { fabric } from "fabric";
 import { create } from "zustand";
 import { StoreTypes } from "./types/store";
+import { Element } from "./types/track";
+import { tracks } from "./samples/tracks";
 
 export const useStore = create<StoreTypes>()((set, get) => ({
   canvas: null,
   setCanvas: (canvas: fabric.Canvas | null) =>
     set((state) => ({ ...state, canvas })),
 
-  //   medias
+  // medias
   videos: [],
   images: [],
 
-  // media player properties
+  // elements
+  tracks,
+  selectedElement: null,
+  addElement: (trackId: string, element: Element) => {
+    set((state) => ({
+      ...state,
+      tracks: get().tracks.map((t) => {
+        return t.id === trackId
+          ? {
+              id: t.id,
+              name: t.name,
+              elements: [...t.elements, element],
+            }
+          : t;
+      }),
+    }));
+  },
+  setSelectedElement: (element: Element) =>
+    set((state) => ({ ...state, selectedElement: element })),
+
+  // panel properties
+  panelScale: 50,
+  addPanelScale: (n: number) => {
+    if (n < 1) {
+      set((state) => ({
+        ...state,
+        panelScale: Math.max(2, state.panelScale + n),
+      }));
+    } else {
+      set((state) => ({
+        ...state,
+        panelScale: Math.min(100, state.panelScale + n),
+      }));
+    }
+  },
+  setPanelScale: (panelScale: number) =>
+    set((state) => ({ ...state, panelScale })),
+
   playing: false,
   setPlaying: (playing: boolean) => {
     set((state) => ({ ...state, playing }));

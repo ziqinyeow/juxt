@@ -6,10 +6,9 @@ import { Rnd } from "react-rnd";
 import { getElementColor, getElementIcon } from "./utils";
 import { DivProps } from "@/lib/types/html";
 
-export const TrackElement = ({ element }: any) => {
+export const Element = ({ element }: any) => {
   const [state, setState] = useState({
     width: 200,
-    height: 24,
     x: 0,
     y: 0,
   });
@@ -31,7 +30,7 @@ export const TrackElement = ({ element }: any) => {
         bottomLeft: false,
         topLeft: false,
       }}
-      size={{ width: state.width, height: state.height }}
+      size={{ width: state.width, height: 24 }}
       position={{ x: state.x, y: state.y }}
       onDragStop={(e, d) => {
         setState((p) => {
@@ -41,7 +40,6 @@ export const TrackElement = ({ element }: any) => {
       onResizeStop={(e, direction, ref, delta, position) => {
         setState({
           width: Number(ref.style.width.replace("px", "")),
-          height: Number(ref.style.height.replace("px", "")),
           ...position,
         });
       }}
@@ -65,7 +63,7 @@ export const Track = ({ track, ...props }: TrackProps) => {
   return (
     <div {...props}>
       {track.elements.map((element: any, i: number) => (
-        <TrackElement key={i} element={element} />
+        <Element key={i} element={element} />
       ))}
     </div>
   );
