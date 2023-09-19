@@ -183,7 +183,8 @@ const Panel = () => {
           <div
             onWheel={(e) => {
               if (e.metaKey) {
-                addPanelScale(Number((e.deltaY * 0.1).toFixed(0)));
+                const val = Number((e.deltaY * 0.1).toFixed(0));
+                addPanelScale(val + (val % 2));
               }
             }}
             className="h-[calc(100%_-_50px)] relative min-h-[300px] overflow-y-auto panel_scrollbar max-h-[340px] flex"
