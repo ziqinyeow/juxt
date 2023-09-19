@@ -84,8 +84,25 @@ export const Element = ({ element }: Props) => {
         });
       }}
       onResizeStop={(e, direction, ref, delta, position) => {
+        const width = Number(ref.style.width.replace("px", ""));
+        const start = convertPixelWidthToDuration(
+          position.x,
+          maxTime,
+          panelScale
+        );
+        const duration = convertPixelWidthToDuration(
+          width,
+          maxTime,
+          panelScale
+        );
+        updateElement(element.id, {
+          timeframe: {
+            start,
+            duration,
+          },
+        });
         setState({
-          width: Number(ref.style.width.replace("px", "")),
+          width,
           ...position,
         });
       }}
