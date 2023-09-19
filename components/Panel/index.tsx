@@ -43,8 +43,11 @@ import {
 import type { Cursor } from "@/lib/types/cursor";
 import CursorDropdown from "./cursor-dropdown";
 import Tooltip from "../Tooltip";
+import { useOperatingSystem } from "@/lib/hooks/useOperatingSystem";
 
 const Panel = () => {
+  const os = useOperatingSystem();
+
   const {
     tracks,
     panelScale,
@@ -142,12 +145,12 @@ const Panel = () => {
             </Tooltip>
           </div>
           <div className="flex gap-1 p-1 rounded bg-primary-500">
-            <Tooltip tooltip={`undo (cmd + z)`}>
+            <Tooltip tooltip={`undo (${os === "mac" ? "cmd" : "ctrl"} + z)`}>
               <ToolbarButton disabled>
                 <Undo2 className="w-4 h-4" />
               </ToolbarButton>
             </Tooltip>
-            <Tooltip tooltip={`redo (cmd + y)`}>
+            <Tooltip tooltip={`redo (${os === "mac" ? "cmd" : "ctrl"} + y)`}>
               <ToolbarButton disabled={true}>
                 <Redo2 className="w-4 h-4" />
               </ToolbarButton>
