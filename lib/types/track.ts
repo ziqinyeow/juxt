@@ -8,7 +8,7 @@ export type Placement = {
   scaleX: number;
   scaleY: number;
 };
-export type Timeframe = { start: number; end: number };
+export type Timeframe = { start: number; duration: number };
 
 export type ElementBase<Type extends ElementType, Properties> = {
   id: string;

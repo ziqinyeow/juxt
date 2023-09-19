@@ -22,8 +22,8 @@ export const tracks: Tracks[] = [
           scaleY: 1,
         },
         timeframe: {
-          start: 0,
-          end: 1000,
+          start: 1000,
+          duration: 5000,
         },
         properties: {
           elementId: `video_1`,
@@ -51,7 +51,7 @@ export const tracks: Tracks[] = [
         },
         timeframe: {
           start: 0,
-          end: 1000,
+          duration: 10000,
         },
         properties: {
           elementId: `image_1`,

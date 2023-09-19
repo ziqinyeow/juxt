@@ -13,6 +13,7 @@ export interface StoreTypes {
   selectedElement: Element | null;
   addElement: (trackId: string, element: Element) => void;
   setSelectedElement: (element: Element) => void;
+  updateElement: (elementId: string, data: any) => void;
 
   //
   panelScale: number;

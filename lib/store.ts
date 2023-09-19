@@ -3,6 +3,10 @@ import { create } from "zustand";
 import { StoreTypes } from "./types/store";
 import { Element } from "./types/track";
 import { tracks } from "./samples/tracks";
+import {
+  PANEL_SLIDER_MAX_VALUE,
+  PANEL_SLIDER_MIN_VALUE,
+} from "@/lib/constants/panel";
 
 export const useStore = create<StoreTypes>()((set, get) => ({
   canvas: null,
@@ -19,32 +23,48 @@ export const useStore = create<StoreTypes>()((set, get) => ({
   addElement: (trackId: string, element: Element) => {
     set((state) => ({
       ...state,
-      tracks: get().tracks.map((t) => {
-        return t.id === trackId
+      tracks: get().tracks.map((t) =>
+        t.id === trackId
           ? {
               id: t.id,
               name: t.name,
               elements: [...t.elements, element],
             }
-          : t;
-      }),
+          : t
+      ),
     }));
   },
   setSelectedElement: (element: Element) =>
     set((state) => ({ ...state, selectedElement: element })),
 
+  updateElement: (elementId: string, data: Element | any) =>
+    set((state) => ({
+      ...state,
+      tracks: get().tracks.map((t) => ({
+        ...t,
+        elements: t.elements.map((element) =>
+          element.id === elementId
+            ? {
+                ...element,
+                ...data,
+              }
+            : element
+        ),
+      })),
+    })),
+
   // panel properties
   panelScale: 50,
   addPanelScale: (n: number) => {
-    if (n < 1) {
+    if (n < 0) {
       set((state) => ({
         ...state,
-        panelScale: Math.max(2, state.panelScale + n),
+        panelScale: Math.max(PANEL_SLIDER_MIN_VALUE, state.panelScale + n),
       }));
     } else {
       set((state) => ({
         ...state,
-        panelScale: Math.min(100, state.panelScale + n),
+        panelScale: Math.min(PANEL_SLIDER_MAX_VALUE, state.panelScale + n),
       }));
     }
   },

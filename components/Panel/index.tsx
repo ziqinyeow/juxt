@@ -19,12 +19,17 @@ import { cn, formatTimeToMinSecMili } from "@/lib/utils";
 import { Button } from "./button";
 import { Unlock } from "lucide-react";
 import Track from "./track";
-import { tracks } from "@/lib/samples/tracks";
+// import { tracks } from "@/lib/samples/tracks";
 import Slider from "./slider";
-import { showSecondsOnPanelTickLogic } from "./utils";
+import {
+  getNumberOfTicks,
+  getTicksGapWidth,
+  showSecondsOnPanelTickLogic,
+} from "./utils";
 
 const Panel = () => {
   const {
+    tracks,
     panelScale,
     addPanelScale,
     playing,
@@ -101,10 +106,10 @@ const Panel = () => {
                   />
                 </div>
                 <div
-                  style={{ gap: `${(120 + panelScale * 10) / panelScale}px` }}
+                  style={{ gap: `${getTicksGapWidth(panelScale)}px` }}
                   className="relative flex items-end w-[calc(100vw_-_200px)] h-full px-4 pb-2 select-none"
                 >
-                  {Array((maxTime / 10000 + 1) * panelScale + 1)
+                  {Array(getNumberOfTicks(maxTime, panelScale))
                     .fill(1)
                     .map((_, i) => (
                       <div

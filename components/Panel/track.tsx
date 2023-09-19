@@ -1,17 +1,56 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Rnd } from "react-rnd";
-import { getElementColor, getElementIcon } from "./utils";
+import {
+  convertDurationToPixelWidth,
+  convertPixelWidthToDuration,
+  getElementColor,
+  getElementIcon,
+  getTicksGapWidth,
+} from "./utils";
 import { DivProps } from "@/lib/types/html";
+import { Element as ElementType } from "@/lib/types/track";
+import { useStore } from "@/lib/store";
 
-export const Element = ({ element }: any) => {
+type Props = {
+  element: ElementType;
+};
+
+export const Element = ({ element }: Props) => {
+  const { panelScale, maxTime, updateElement } = useStore();
   const [state, setState] = useState({
-    width: 200,
-    x: 0,
+    width: convertDurationToPixelWidth(
+      element.timeframe.duration,
+      maxTime,
+      panelScale
+    ),
+    x: convertDurationToPixelWidth(
+      element.timeframe.start,
+      maxTime,
+      panelScale
+    ),
     y: 0,
   });
+
+  // track elements' width if panelScale changed
+  useEffect(() => {
+    setState((p) => ({
+      ...p,
+      width: convertDurationToPixelWidth(
+        element.timeframe.duration,
+        maxTime,
+        panelScale
+      ),
+      x: convertDurationToPixelWidth(
+        element.timeframe.start,
+        maxTime,
+        panelScale
+      ),
+    }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [maxTime, panelScale]);
 
   return (
     <Rnd
@@ -31,10 +70,17 @@ export const Element = ({ element }: any) => {
         topLeft: false,
       }}
       size={{ width: state.width, height: 24 }}
-      position={{ x: state.x, y: state.y }}
+      position={{ x: state.x, y: 0 }}
       onDragStop={(e, d) => {
+        const start = convertPixelWidthToDuration(d.x, maxTime, panelScale);
+        updateElement(element.id, {
+          timeframe: {
+            ...element.timeframe,
+            start,
+          },
+        });
         setState((p) => {
-          return { ...p, x: d.x, y: d.y };
+          return { ...p, x: d.x };
         });
       }}
       onResizeStop={(e, direction, ref, delta, position) => {
