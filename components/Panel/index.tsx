@@ -2,30 +2,47 @@
 
 import React, { useState } from "react";
 import {
+  IconBackspace,
   IconChevronDown,
   IconChevronUp,
+  IconCut,
   IconEye,
   IconGripVertical,
+  IconPentagon,
   IconPlayerPauseFilled,
   IconPlayerPlayFilled,
   IconRewindBackward5,
   IconRewindForward5,
   IconSearch,
+  IconSlash,
+  IconSquareRounded,
+  IconTriangle,
 } from "@tabler/icons-react";
 import clsx from "clsx";
 import "./style.css";
 import { useStore } from "@/lib/store";
 import { cn, formatTimeToMinSecMili } from "@/lib/utils";
-import { Button } from "./button";
-import { Unlock } from "lucide-react";
+import { Button, ToolbarButton } from "./button";
+import {
+  MoveUpRight,
+  Redo2,
+  ScissorsLineDashed,
+  Square,
+  Trash,
+  Undo2,
+  Unlock,
+} from "lucide-react";
 import Track from "./track";
-// import { tracks } from "@/lib/samples/tracks";
 import Slider from "./slider";
+import { Slider as UISlider } from "../ui/slider";
 import {
   getNumberOfTicks,
   getTicksGapWidth,
   showSecondsOnPanelTickLogic,
 } from "./utils";
+import type { Cursor } from "@/lib/types/cursor";
+import CursorDropdown from "./cursor-dropdown";
+import Tooltip from "../Tooltip";
 
 const Panel = () => {
   const {
@@ -39,6 +56,7 @@ const Panel = () => {
     rewindCurrentTimeInMs,
   } = useStore();
   const [hidePanel, setHidePanel] = useState(false);
+  const [cursor, setCursor] = useState<Cursor>("pointer");
 
   const rewindBackward5 = () => rewindCurrentTimeInMs(5000, false);
   const play = () => {};
@@ -52,39 +70,114 @@ const Panel = () => {
       ])}
     >
       <div className="absolute w-full h-1 transition-all -top-1 hover:bg-secondary-200 bg-primary-400 cursor-row-resize"></div>
-      <div className="h-[40px] bg-primary-400 px-4 flex items-center justify-between">
-        <div className="w-full select-none">
-          <span>{formatTimeToMinSecMili(getCurrentTimeInMs())}</span> /{" "}
-          <span className="text-white/70">
-            {formatTimeToMinSecMili(maxTime)}
-          </span>
-        </div>
-        <div className="flex items-center justify-center w-full gap-4 px-4">
+      <div className="h-[40px] bg-primary-400 px-4 flex items-center gap-5 justify-between">
+        <div className="flex items-end gap-2">
           <Button onClick={rewindBackward5} className="text-white">
             <IconRewindBackward5 className="w-4 h-4" />
           </Button>
-          <Button onClick={play} className="text-secondary-200">
-            {playing ? (
-              <IconPlayerPauseFilled className="w-5 h-5" />
-            ) : (
-              <IconPlayerPlayFilled className="w-5 h-5" />
-            )}
-          </Button>
+
+          <Tooltip tooltip={playing ? `pause` : `play`}>
+            <Button onClick={play} className="text-secondary-200">
+              {playing ? (
+                <IconPlayerPauseFilled className="w-5 h-5" />
+              ) : (
+                <IconPlayerPlayFilled className="w-5 h-5" />
+              )}
+            </Button>
+          </Tooltip>
           <Button onClick={rewindForward5} className="text-white">
             <IconRewindForward5 className="w-4 h-4" />
           </Button>
         </div>
         <div className="flex items-center justify-end w-full gap-4">
-          <Slider className="w-24" />
-          <Button onClick={toggleHidePanel} className="text-secondary-200">
-            {hidePanel ? (
-              <IconChevronUp className="w-4 h-4" />
-            ) : (
-              <IconChevronDown className="w-4 h-4" />
-            )}
-          </Button>
+          <UISlider step={1} className="w-full" />
+        </div>
+        <div className="flex items-center justify-end gap-4 whitespace-nowrap">
+          <div className="">
+            <span>{formatTimeToMinSecMili(getCurrentTimeInMs())}</span> /{" "}
+            <span className="text-white/70">
+              {formatTimeToMinSecMili(maxTime)}
+            </span>
+          </div>
+          <Tooltip tooltip={hidePanel ? `open panel` : `close panel`}>
+            <Button onClick={toggleHidePanel} className="text-secondary-200">
+              {hidePanel ? (
+                <IconChevronUp className="w-4 h-4" />
+              ) : (
+                <IconChevronDown className="w-4 h-4" />
+              )}
+            </Button>
+          </Tooltip>
         </div>
       </div>
+
+      <div className="h-[50px] bg-primary-400 border-b border-primary-400 px-4 py-2 flex items-center justify-between">
+        <div className="flex items-center w-full gap-4">
+          <CursorDropdown cursor={cursor} setCursor={setCursor} />
+          <div className="flex gap-1 px-2 py-1 rounded bg-primary-500">
+            <Tooltip tooltip={`square (1)`}>
+              <ToolbarButton>
+                <Square className="w-4 h-4" />
+              </ToolbarButton>
+            </Tooltip>
+            <Tooltip tooltip={`triangle (2)`}>
+              <ToolbarButton>
+                <IconTriangle className="w-4 h-4" />
+              </ToolbarButton>
+            </Tooltip>
+            <Tooltip tooltip={`polygon (3)`}>
+              <ToolbarButton>
+                <IconPentagon className="w-4 h-4" />
+              </ToolbarButton>
+            </Tooltip>
+            <Tooltip tooltip={`line (4)`}>
+              <ToolbarButton>
+                <IconSlash className="w-4 h-4" />
+              </ToolbarButton>
+            </Tooltip>
+            <Tooltip tooltip={`arrow (5)`}>
+              <ToolbarButton>
+                <MoveUpRight className="w-4 h-4" />
+              </ToolbarButton>
+            </Tooltip>
+          </div>
+          <div className="flex gap-1 p-1 rounded bg-primary-500">
+            <Tooltip tooltip={`undo (cmd + z)`}>
+              <ToolbarButton disabled>
+                <Undo2 className="w-4 h-4" />
+              </ToolbarButton>
+            </Tooltip>
+            <Tooltip tooltip={`redo (cmd + y)`}>
+              <ToolbarButton disabled={true}>
+                <Redo2 className="w-4 h-4" />
+              </ToolbarButton>
+            </Tooltip>
+          </div>
+          <div className="flex gap-1 p-1 rounded bg-primary-500">
+            <Tooltip tooltip={`trim (T)`}>
+              <ToolbarButton disabled>
+                <ScissorsLineDashed className="w-4 h-4 rotate-[270deg]" />
+              </ToolbarButton>
+            </Tooltip>
+            <Tooltip
+              tooltip={
+                <span className="flex">
+                  delete <IconBackspace className="w-4 h-4" />
+                </span>
+              }
+            >
+              <ToolbarButton disabled>
+                <Trash className="w-4 h-4" />
+              </ToolbarButton>
+            </Tooltip>
+          </div>
+        </div>
+        <div className="flex items-center justify-center w-full gap-4 px-4"></div>
+        <div className="flex items-center justify-end w-full gap-4">
+          {!hidePanel && <Slider className="w-24" />}
+        </div>
+      </div>
+
       {!hidePanel && (
         <>
           <div
