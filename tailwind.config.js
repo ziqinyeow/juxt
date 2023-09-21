@@ -41,6 +41,7 @@ module.exports = {
           500: "#131519",
           600: "#18151B",
           700: "#000000",
+          800: "#0D0B0D",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",

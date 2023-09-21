@@ -12,7 +12,7 @@ export interface StoreTypes {
   tracks: Tracks[];
   selectedElement: Element | null;
   addElement: (trackId: string, element: Element) => void;
-  setSelectedElement: (element: Element) => void;
+  setSelectedElement: (element: Element | null) => void;
   updateElement: (elementId: string, data: any) => void;
 
   //

@@ -69,7 +69,7 @@ const Panel = () => {
   return (
     <div
       className={clsx([
-        "relative h-full w-full min-w-[500px] flex flex-col bg-primary-600 text-primary-100",
+        "relative h-full w-full min-w-[300px] flex flex-col bg-primary-600 text-primary-100",
       ])}
     >
       <div className="absolute w-full h-1 transition-all -top-1 hover:bg-secondary-200 bg-primary-400 cursor-row-resize"></div>
@@ -177,7 +177,7 @@ const Panel = () => {
         </div>
         <div className="flex items-center justify-center w-full gap-4 px-4"></div>
         <div className="flex items-center justify-end w-full gap-4">
-          {!hidePanel && <Slider className="w-24" />}
+          {!hidePanel && <Slider className="w-8 md:w-24" />}
         </div>
       </div>
 
@@ -190,7 +190,7 @@ const Panel = () => {
                 addPanelScale(val + (val % 2));
               }
             }}
-            className="h-[calc(100%_-_50px)] relative min-h-[300px] overflow-y-auto panel_scrollbar max-h-[340px] flex"
+            className="relative h-[220px] overflow-y-auto panel_scrollbar flex"
           >
             <div className="bg-primary-500 grid grid-rows-[36px_auto] panel_scrollbar">
               <div className="sticky top-0 z-50 grid grid-cols-[200px_auto] border-b bg-primary-600 border-primary-400">

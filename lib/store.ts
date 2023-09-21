@@ -34,7 +34,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       ),
     }));
   },
-  setSelectedElement: (element: Element) =>
+  setSelectedElement: (element: Element | null) =>
     set((state) => ({ ...state, selectedElement: element })),
 
   updateElement: (elementId: string, data: Element | any) =>

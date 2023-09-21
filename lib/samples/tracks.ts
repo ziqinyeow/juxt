@@ -22,8 +22,8 @@ export const tracks: Tracks[] = [
           scaleY: 1,
         },
         timeframe: {
-          start: 1000,
-          duration: 5000,
+          start: 2000,
+          duration: 8000,
         },
         properties: {
           elementId: `video_1`,
@@ -35,6 +35,62 @@ export const tracks: Tracks[] = [
   {
     id: "track_2",
     name: "track 2",
+    elements: [
+      {
+        id: nanoid(),
+        name: `video_1`,
+        type: "video",
+        placement: {
+          x: 0,
+          y: 0,
+          width: 100 * aspectRatio,
+          height: 100,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+        },
+        timeframe: {
+          start: 5000,
+          duration: 5000,
+        },
+        properties: {
+          elementId: `video_1`,
+          src: "",
+        },
+      },
+    ],
+  },
+  {
+    id: "track_3",
+    name: "track 3",
+    elements: [
+      {
+        id: nanoid(),
+        name: `video_1`,
+        type: "video",
+        placement: {
+          x: 0,
+          y: 0,
+          width: 100 * aspectRatio,
+          height: 100,
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+        },
+        timeframe: {
+          start: 1000,
+          duration: 5000,
+        },
+        properties: {
+          elementId: `video_1`,
+          src: "",
+        },
+      },
+    ],
+  },
+  {
+    id: "track_4",
+    name: "track 4",
     elements: [
       {
         id: nanoid(),
