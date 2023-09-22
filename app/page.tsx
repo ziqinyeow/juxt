@@ -11,9 +11,6 @@ export default function Home() {
       <div>
         <Panel />
       </div>
-      {/* <div className="w-[80vw] h-[80vh]">
-        <canvas className="w-full h-full border-2"></canvas>
-      </div> */}
     </div>
   );
 }

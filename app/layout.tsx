@@ -8,7 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "App",
+  title: "RTM",
   description: "Video Annotation Tools",
 };
 
