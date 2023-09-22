@@ -40,7 +40,7 @@ export type TextElement = ElementBase<
   }
 >;
 
-export type Element = VideoElement | ImageElement | TextElement;
+export type Element = VideoElement | ImageElement | TextElement | any;
 
 export type Tracks = {
   id: string;

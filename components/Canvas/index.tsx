@@ -2,16 +2,16 @@
 
 import { useStore } from "@/lib/store";
 import { fabric } from "fabric";
-import React, { useEffect, useState } from "react";
-import { useMedia } from "react-use";
+import React, { useEffect } from "react";
+import Zoomable from "./zoomable";
 
 const Canvas = () => {
   const { canvas, setCanvas, setSelectedElement } = useStore();
 
   useEffect(() => {
     const canvas = new fabric.Canvas("canvas", {
-      width: 700,
-      height: 400,
+      width: 550,
+      height: 300,
       backgroundColor: "#000",
     });
     fabric.Object.prototype.transparentCorners = false;
@@ -33,14 +33,16 @@ const Canvas = () => {
   }, [setCanvas, setSelectedElement]);
 
   return (
-    <div className="flex items-center justify-center w-full h-full overflow-hidden">
-      <canvas
-        id="canvas"
-        width={0}
-        height={0}
-        className="border rounded-md border-primary-400"
-      />
-    </div>
+    <Zoomable>
+      <div className="h-[calc(100vh_-_5rem_-_310px)] w-[100vw] flex items-center justify-center bg-primary-800">
+        <canvas
+          id="canvas"
+          width={0}
+          height={0}
+          className="border rounded-md border-primary-400"
+        />
+      </div>
+    </Zoomable>
   );
 };
 

@@ -39,7 +39,7 @@ export const tracks: Tracks[] = [
       {
         id: nanoid(),
         name: `video_1`,
-        type: "video",
+        type: "pose",
         placement: {
           x: 0,
           y: 0,
@@ -53,10 +53,7 @@ export const tracks: Tracks[] = [
           start: 5000,
           duration: 5000,
         },
-        properties: {
-          elementId: `video_1`,
-          src: "",
-        },
+        properties: {},
       },
     ],
   },
@@ -67,7 +64,7 @@ export const tracks: Tracks[] = [
       {
         id: nanoid(),
         name: `video_1`,
-        type: "video",
+        type: "text",
         placement: {
           x: 0,
           y: 0,
@@ -82,8 +79,10 @@ export const tracks: Tracks[] = [
           duration: 5000,
         },
         properties: {
-          elementId: `video_1`,
-          src: "",
+          text: "",
+          fontSize: 1,
+          fontWeight: 2,
+          splittedTexts: [],
         },
       },
     ],
