@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Slider as UISlider } from "@/components/ui/slider";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
-import { Button } from "./button";
+import { Button } from "@/components/Button";
 import { useStore } from "@/lib/store";
 import {
   PANEL_SLIDER_MAX_VALUE,

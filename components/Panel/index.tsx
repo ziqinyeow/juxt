@@ -22,7 +22,7 @@ import clsx from "clsx";
 import "./style.css";
 import { useStore } from "@/lib/store";
 import { cn, formatTimeToMinSecMili } from "@/lib/utils";
-import { Button, ToolbarButton } from "./button";
+import { Button, ToolbarButton } from "@/components/Button";
 import {
   MoveUpRight,
   Redo2,

@@ -4,7 +4,7 @@ import { useStore } from "@/lib/store";
 import { fabric } from "fabric";
 import React, { useEffect, useRef, useState } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { Button } from "../Panel/button";
+import { Button } from "@/components/Button";
 import { Minus, Plus } from "lucide-react";
 import {
   DropdownMenu,

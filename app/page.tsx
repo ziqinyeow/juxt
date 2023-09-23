@@ -8,9 +8,6 @@ export default function Home() {
       <div className="relative">
         <Canvas />
       </div>
-      {/* <div className="h-[calc(100vh_-_5rem_-_310px)] w-full bg-primary-800">
-        <Canvas />
-      </div> */}
       <div>
         <Panel />
       </div>
