@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import Tooltip from "../Tooltip";
+import { IconFocusCentered } from "@tabler/icons-react";
 
 type Props = {
   children: React.ReactNode;
@@ -60,6 +61,23 @@ const Zoomable = ({ children }: Props) => {
       {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
         <React.Fragment>
           <div className="absolute z-20 flex items-center gap-1 p-1 text-white border rounded bg-primary-400 border-primary-400 right-5 bottom-8">
+            <Tooltip tooltip={`center`}>
+              <Button
+                className="p-2"
+                onClick={() => {
+                  const offset = canvasScale - 0.3;
+                  const out = offset > 0;
+                  if (out) {
+                    zoomOut(offset);
+                  } else {
+                    zoomIn(Math.abs(offset));
+                  }
+                  setCanvasScale(0.3);
+                }}
+              >
+                <IconFocusCentered className="w-4 h-4" />
+              </Button>
+            </Tooltip>
             <Tooltip tooltip={`zoom out`}>
               <Button
                 className="p-2"
