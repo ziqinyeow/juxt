@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import clsx from "clsx";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import Dropzone from "@/layout/Dropzone";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body className={clsx([inter.className, "text-xs"])}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            <Dropzone>{children}</Dropzone>
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>
