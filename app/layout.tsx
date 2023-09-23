@@ -20,7 +20,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning={true}>
-      <body className={clsx([inter.className, "text-xs"])}>
+      <body
+        suppressHydrationWarning={true}
+        className={clsx([inter.className, "text-xs"])}
+      >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TooltipProvider>
             <Dropzone>{children}</Dropzone>
