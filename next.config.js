@@ -8,6 +8,7 @@ const nextConfig = {
       // sharp: "commonjs sharp",
       canvas: "commonjs canvas",
     });
+    // config.infrastructureLogging = { debug: /PackFileCache/ };
     return config;
   },
 };
