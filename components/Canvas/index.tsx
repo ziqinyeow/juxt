@@ -34,7 +34,7 @@ const Canvas = () => {
 
   return (
     <Zoomable>
-      <div className="h-[calc(100vh_-_5rem_-_310px)] w-[100vw] flex items-center justify-center bg-primary-800">
+      <div className="h-[calc(100vh_-_64px_-_310px)] w-[calc(100vw_-_300px)] flex items-center justify-center bg-primary-800">
         <canvas
           id="canvas"
           width={0}

@@ -117,7 +117,7 @@ const Panel = () => {
       <div className="h-[50px] bg-primary-400 border-b border-primary-400 px-4 py-2 flex items-center justify-between">
         <div className="flex items-center w-full gap-4">
           <CursorDropdown cursor={cursor} setCursor={setCursor} />
-          <div className="flex gap-1 px-2 py-1 rounded bg-primary-500">
+          {/* <div className="flex gap-1 px-2 py-1 rounded bg-primary-500">
             <Tooltip tooltip={`square (1)`}>
               <ToolbarButton>
                 <Square className="w-4 h-4" />
@@ -143,7 +143,7 @@ const Panel = () => {
                 <MoveUpRight className="w-4 h-4" />
               </ToolbarButton>
             </Tooltip>
-          </div>
+          </div> */}
           <div className="flex gap-1 p-1 rounded bg-primary-500">
             <Tooltip tooltip={`undo (${os === "mac" ? "cmd" : "ctrl"} + z)`}>
               <ToolbarButton disabled>
@@ -190,7 +190,7 @@ const Panel = () => {
                 addPanelScale(val + (val % 2));
               }
             }}
-            className="relative h-[220px] overflow-y-auto panel_scrollbar flex"
+            className="relative h-[220px] w-[calc(100vw_-_300px)] overflow-y-auto panel_scrollbar flex"
           >
             <div className="bg-primary-500 grid grid-rows-[36px_auto] panel_scrollbar">
               <div className="sticky top-0 z-50 grid grid-cols-[200px_auto] border-b bg-primary-600 border-primary-400">
@@ -204,7 +204,7 @@ const Panel = () => {
                 </div>
                 <div
                   style={{ gap: `${getTicksGapWidth(panelScale)}px` }}
-                  className="relative flex items-end w-[calc(100vw_-_200px)] h-full px-4 pb-2 select-none"
+                  className="relative flex items-end h-full px-4 pb-2 select-none"
                 >
                   {Array(getNumberOfTicks(maxTime, panelScale))
                     .fill(1)
