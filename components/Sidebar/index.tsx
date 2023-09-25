@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import Tooltip from "../Tooltip";
 import { Database } from "lucide-react";
 import { Tab, getTabIcon } from "./utils";
+import Explorer from "../Explorer";
 
 type SidebarButtonProps = {
   tooltip?: string;
@@ -32,7 +33,7 @@ export const SidebarButton = ({
 );
 
 const Sidebar = ({ className, ...props }: DivProps) => {
-  const [tab, setTab] = useState<Tab>("bucket");
+  const [tab, setTab] = useState<Tab>("explorer");
 
   return (
     <div
@@ -45,17 +46,6 @@ const Sidebar = ({ className, ...props }: DivProps) => {
       <div className="flex flex-col w-full gap-4 p-4 border-r border-primary-400 text-secondary-200">
         <SidebarButton
           onClick={() => {
-            setTab("bucket");
-          }}
-          tooltip="bucket"
-          className={cn([
-            tab === "bucket" && "ring ring-secondary-200 hover:ring-opacity-60",
-          ])}
-        >
-          {getTabIcon("bucket")}
-        </SidebarButton>
-        <SidebarButton
-          onClick={() => {
             setTab("explorer");
           }}
           tooltip="folder"
@@ -66,6 +56,17 @@ const Sidebar = ({ className, ...props }: DivProps) => {
         >
           {getTabIcon("explorer")}
         </SidebarButton>
+        <SidebarButton
+          onClick={() => {
+            setTab("bucket");
+          }}
+          tooltip="bucket"
+          className={cn([
+            tab === "bucket" && "ring ring-secondary-200 hover:ring-opacity-60",
+          ])}
+        >
+          {getTabIcon("bucket")}
+        </SidebarButton>
       </div>
       <div className="">
         <div className="flex items-center gap-3 p-4">
@@ -74,7 +75,7 @@ const Sidebar = ({ className, ...props }: DivProps) => {
             {tab.toUpperCase()}
           </span>
         </div>
-        <div className="p-4">a</div>
+        <Explorer />
       </div>
     </div>
   );

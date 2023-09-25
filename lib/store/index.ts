@@ -1,8 +1,8 @@
 import { fabric } from "fabric";
 import { create } from "zustand";
-import { StoreTypes } from "./types/store";
-import { Element } from "./types/track";
-import { tracks } from "./samples/tracks";
+import { StoreTypes } from "../types/store";
+import { Element } from "../types/track";
+import { tracks } from "../samples/tracks";
 import {
   PANEL_SLIDER_MAX_VALUE,
   PANEL_SLIDER_MIN_VALUE,

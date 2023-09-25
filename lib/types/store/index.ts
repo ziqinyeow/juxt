@@ -1,5 +1,5 @@
 import { fabric } from "fabric";
-import { Element, Tracks } from "./track";
+import { Element, Tracks } from "../track";
 
 export interface StoreTypes {
   canvas: fabric.Canvas | null;
