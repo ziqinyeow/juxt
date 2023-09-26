@@ -16,12 +16,19 @@ import { FileWithPath } from "@/lib/types/file";
 import React, { useMemo, useRef } from "react";
 import "./style.css";
 import { cn } from "@/lib/utils";
-import { IconFolderFilled } from "@tabler/icons-react";
-import { FileVideo } from "lucide-react";
+import {
+  IconFileSymlink,
+  IconFolderFilled,
+  IconFolderSymlink,
+  IconPackageImport,
+} from "@tabler/icons-react";
+import { FileVideo, Files, Folders, Youtube } from "lucide-react";
+import { useOperatingSystem } from "@/lib/hooks/useOperatingSystem";
 
 const Explorer = () => {
+  const os = useOperatingSystem();
   const windowRef = useRef<HTMLDivElement | null>(null);
-  const { bucket } = useFile();
+  const { bucket, mergeFileListToBucket } = useFile();
 
   const tree = useMemo(
     () =>
@@ -185,13 +192,47 @@ const Explorer = () => {
         </div>
       </div>
       {bucket["/"].length === 0 && (
-        <div className="border flex tracking-widest text-sm text-center p-4 items-center text-primary-200 justify-center border-primary-400 h-[calc(100vh_-_64px_-_60px)] rounded">
-          <div className="flex flex-col gap-2">
-            <span>Drag and drop</span>
-            <span>OR</span>
-            <span>Paste Files Here</span>
+        <label htmlFor="upload-1">
+          <input
+            id="upload-1"
+            name="upload-1"
+            onChange={(e) => {
+              mergeFileListToBucket(e.target.files);
+            }}
+            type="file"
+            className="hidden"
+            multiple
+          />
+          <div className="border cursor-pointer flex tracking-widest text-sm p-4 items-center hover:text-secondary-200/60 text-secondary-200/40 justify-center border-primary-400 h-[calc(100vh_-_64px_-_60px)] rounded">
+            <div className="flex flex-col items-center gap-8 transition-all">
+              <div className="flex items-center gap-3">
+                <IconPackageImport className="w-14 h-14" />
+              </div>
+              <div className="flex flex-col items-center gap-1">
+                <span>Drag and drop</span>
+                <span>OR</span>
+                <span>Paste ({os === "mac" ? "⌘" : "ctrl"} + c and v)</span>
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <span>-</span>
+                  <Files className="w-5 h-5" />
+                  <span>Files</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>-</span>
+                  <Folders className="w-5 h-5" />
+                  <span>Folders</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>-</span>
+                  <Youtube className="w-5 h-5" />
+                  <span>Youtube Links</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        </label>
       )}
     </div>
   );

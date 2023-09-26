@@ -2,12 +2,21 @@
 
 import { ButtonProps, DivProps } from "@/lib/types/html";
 import { cn } from "@/lib/utils";
-import { IconFolderFilled } from "@tabler/icons-react";
+import {
+  IconFile,
+  IconFileImport,
+  IconFileUpload,
+  IconFolderFilled,
+  IconFolderUp,
+  IconPlus,
+} from "@tabler/icons-react";
 import React, { useState } from "react";
 import Tooltip from "../Tooltip";
-import { Database } from "lucide-react";
+import { Database, FolderUp } from "lucide-react";
 import { Tab, getTabIcon } from "./utils";
 import Explorer from "../Explorer";
+import { Button } from "../Button";
+import { useFile } from "@/lib/store/file";
 
 type SidebarButtonProps = {
   tooltip?: string;
@@ -33,6 +42,7 @@ export const SidebarButton = ({
 );
 
 const Sidebar = ({ className, ...props }: DivProps) => {
+  const { mergeFileListToBucket } = useFile();
   const [tab, setTab] = useState<Tab>("explorer");
 
   return (
@@ -58,6 +68,17 @@ const Sidebar = ({ className, ...props }: DivProps) => {
         </SidebarButton>
         <SidebarButton
           onClick={() => {
+            setTab("search");
+          }}
+          tooltip="search"
+          className={cn([
+            tab === "search" && "ring ring-secondary-200 hover:ring-opacity-60",
+          ])}
+        >
+          {getTabIcon("search")}
+        </SidebarButton>
+        <SidebarButton
+          onClick={() => {
             setTab("bucket");
           }}
           tooltip="bucket"
@@ -69,13 +90,39 @@ const Sidebar = ({ className, ...props }: DivProps) => {
         </SidebarButton>
       </div>
       <div className="">
-        <div className="flex items-center gap-3 p-4">
-          <span className="text-secondary-200">{getTabIcon(tab)}</span>
-          <span className="text-sm font-bold tracking-widest text-secondary-200">
-            {tab.toUpperCase()}
-          </span>
+        <div className="flex items-center justify-between p-4">
+          <div className="flex items-center gap-3">
+            <span className="text-secondary-200">{getTabIcon(tab)}</span>
+            <span className="text-sm font-bold tracking-widest text-secondary-200">
+              {tab.toUpperCase()}
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
+            <label htmlFor="upload-2">
+              <input
+                id="upload-2"
+                onChange={(e) => {
+                  mergeFileListToBucket(e.target.files);
+                }}
+                type="file"
+                name="upload-2"
+                className="hidden"
+                multiple
+              />
+              <Tooltip tooltip={"files"} className="py-1 text-[11px]">
+                <div className="p-1 rounded cursor-pointer hover:bg-primary-500">
+                  <IconFileUpload className="w-[17px] h-[17px] text-secondary-200/90" />
+                </div>
+              </Tooltip>
+            </label>
+            {/* <Tooltip tooltip={"folder"} className="py-1 text-[11px]">
+              <Button>
+                <FolderUp className="w-[17px] h-[17px] text-secondary-200/90" />
+              </Button>
+            </Tooltip> */}
+          </div>
         </div>
-        <Explorer />
+        {tab === "explorer" && <Explorer />}
       </div>
     </div>
   );

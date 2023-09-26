@@ -7,7 +7,7 @@ import { useFile } from "@/lib/store/file";
 
 const Dropzone = ({ children, ...props }: DivProps) => {
   const [dragging, setDragging] = useState(false);
-  const { setBucket } = useFile();
+  const { mergeBucket } = useFile();
 
   useEffect(() => {
     const handlePasteAnywhere = async (e: ClipboardEvent) => {
@@ -15,7 +15,7 @@ const Dropzone = ({ children, ...props }: DivProps) => {
       if (!e.clipboardData) return;
       const { bucket, files } = await traverse(e.clipboardData.items);
       if (bucket) {
-        setBucket(bucket);
+        mergeBucket(bucket);
       }
       // const files = e.clipboardData.files;
       // console.log(files);
@@ -37,7 +37,7 @@ const Dropzone = ({ children, ...props }: DivProps) => {
     return () => {
       window.removeEventListener("paste", handlePasteAnywhere);
     };
-  }, [setBucket]);
+  }, [mergeBucket]);
 
   return (
     <div
@@ -52,7 +52,7 @@ const Dropzone = ({ children, ...props }: DivProps) => {
 
         const { bucket, files } = await traverse(e.dataTransfer.items);
         if (bucket) {
-          setBucket(bucket);
+          mergeBucket(bucket);
         }
 
         // const files = e.dataTransfer.files;
