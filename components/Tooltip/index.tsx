@@ -11,9 +11,16 @@ type Props = {
   children?: React.ReactNode;
   tooltip?: React.ReactNode;
   side?: "bottom" | "top" | "right" | "left" | undefined;
+  sideOffset?: number;
 };
 
-const Tooltip = ({ className, children, tooltip, side = "bottom" }: Props) => {
+const Tooltip = ({
+  className,
+  children,
+  tooltip,
+  side = "bottom",
+  sideOffset = 4,
+}: Props) => {
   return (
     <UITooltip delayDuration={200}>
       <TooltipTrigger asChild>
@@ -25,6 +32,7 @@ const Tooltip = ({ className, children, tooltip, side = "bottom" }: Props) => {
           className,
         ])}
         side={side}
+        sideOffset={sideOffset}
       >
         {tooltip}
       </TooltipContent>

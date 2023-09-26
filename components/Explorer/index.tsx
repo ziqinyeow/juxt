@@ -25,6 +25,7 @@ import {
 import { FileVideo, Files, Folders, Youtube } from "lucide-react";
 import { useOperatingSystem } from "@/lib/hooks/useOperatingSystem";
 import { getFileIcon } from "./utils";
+import Tooltip from "../Tooltip";
 
 const Explorer = () => {
   const os = useOperatingSystem();
@@ -140,7 +141,7 @@ const Explorer = () => {
   });
 
   return (
-    <div className="px-2 h-[calc(100vh_-_64px_-_60px)] overflow-auto panel_scrollbar">
+    <div className="px-2 h-[calc(100vh_-_64px_-_60px)] overflow-auto no_scrollbar">
       <div ref={windowRef} className={cn(["text-white"])}>
         <div {...virtualize.props}>
           {virtualize?.map((props) => {
@@ -184,10 +185,9 @@ const Explorer = () => {
                         )}
                       </>
                     )}
-
                     <span
                       title={props.node.basename}
-                      className="overflow-hidden whitespace-nowrap text-primary-200"
+                      className="overflow-hidden tracking-widest whitespace-nowrap text-primary-200"
                     >
                       {props.node.basename}
                     </span>
