@@ -37,12 +37,12 @@ const Explorer = () => {
       createFileTree((parent, { createFile, createDir }) =>
         Promise.resolve(
           bucket[parent.data.name].map((file: FileWithPath) => {
-            if (file.type === "file") {
-              return createFile({
-                name: file?.path,
-              });
+            if (file.type === "directory") {
+              return createDir({ name: file?.path });
             }
-            return createDir({ name: file?.path });
+            return createFile({
+              name: file?.path,
+            });
           })
         )
       ),
@@ -177,7 +177,6 @@ const Explorer = () => {
                         </>
                       )
                     ) : (
-                      // <FileVideo className="icon-4 text-secondary-200/30" />
                       <>
                         {getFileIcon(
                           props.node.basename,

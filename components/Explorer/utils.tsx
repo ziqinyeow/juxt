@@ -5,7 +5,7 @@ import {
   IconFileTypePdf,
   IconPhoto,
 } from "@tabler/icons-react";
-import { Braces, Clapperboard } from "lucide-react";
+import { Braces, Clapperboard, Youtube } from "lucide-react";
 
 export const getFileIcon = (file: string, className: string = "") => {
   const fileSplit = file.split(".");
@@ -20,6 +20,8 @@ export const getFileIcon = (file: string, className: string = "") => {
     case "mp4":
     case "avi":
       return <Clapperboard className={newClassName} />;
+    case "youtube":
+      return <Youtube className={newClassName} />;
     case "json":
       return <Braces className={newClassName} />;
     case "pdf":

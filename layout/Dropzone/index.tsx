@@ -2,7 +2,7 @@
 
 import { DivProps } from "@/lib/types/html";
 import { useEffect, useState } from "react";
-import { traverse } from "./utils";
+import { getYoutubeId, traverse } from "./utils";
 import { useFile } from "@/lib/store/file";
 
 const Dropzone = ({ children, ...props }: DivProps) => {
@@ -11,26 +11,28 @@ const Dropzone = ({ children, ...props }: DivProps) => {
 
   useEffect(() => {
     const handlePasteAnywhere = async (e: ClipboardEvent) => {
-      //   console.log(e.clipboardData?.getData("Text"));
       if (!e.clipboardData) return;
+      const text = e.clipboardData.getData("Text");
+      if (text.startsWith("https://www.youtube.com/")) {
+        const id = getYoutubeId(text);
+        if (id) {
+          mergeBucket({
+            "/": [
+              {
+                path: id + ".youtube",
+                type: "youtube",
+                url: text,
+              },
+            ],
+          });
+        }
+        return;
+      }
+
       const { bucket, files } = await traverse(e.clipboardData.items);
       if (bucket) {
         mergeBucket(bucket);
       }
-      // const files = e.clipboardData.files;
-      // console.log(files);
-      // if (files && files.length) {
-      //   Array.from(files).forEach((file, i) => {
-      //     const blob = URL.createObjectURL(file);
-      //     console.log(blob);
-      //   });
-      // } else if (e.clipboardData.getData("Text")) {
-      //   const text = e.clipboardData.getData("Text");
-      //   if (text.startsWith("https://www.youtube.com/")) {
-      //     // handle youtube video
-      //     console.log("youtube");
-      //   }
-      // }
     };
 
     window.addEventListener("paste", handlePasteAnywhere);
@@ -49,26 +51,27 @@ const Dropzone = ({ children, ...props }: DivProps) => {
         e.preventDefault();
         setDragging(false);
         if (!e.dataTransfer) return;
+        const text = e.dataTransfer.getData("Text");
+        if (text.startsWith("https://www.youtube.com/")) {
+          const id = getYoutubeId(text);
+          if (id) {
+            mergeBucket({
+              "/": [
+                {
+                  path: id + ".youtube",
+                  type: "youtube",
+                  url: text,
+                },
+              ],
+            });
+          }
+          return;
+        }
 
         const { bucket, files } = await traverse(e.dataTransfer.items);
         if (bucket) {
           mergeBucket(bucket);
         }
-
-        // const files = e.dataTransfer.files;
-        // console.log(files);
-        // if (files && files.length) {
-        //   Array.from(files).forEach((file, i) => {
-        //     const blob = URL.createObjectURL(file);
-        //     console.log(blob);
-        //   });
-        // } else if (e.dataTransfer.getData("Text")) {
-        //   const text = e.dataTransfer.getData("Text");
-        //   if (text.startsWith("https://www.youtube.com/")) {
-        //     // handle youtube video
-        //     console.log("youtube");
-        //   }
-        // }
       }}
       {...props}
     >

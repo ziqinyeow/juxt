@@ -9,6 +9,14 @@ import {
 // export const supportsWebkitGetAsEntry =
 //   "webkitGetAsEntry" in DataTransferItem.prototype;
 
+export const getYoutubeId = (url: string) => {
+  url = url.replace("https://www.youtube.com/", "");
+  if (url.startsWith("watch?v=")) {
+    return url.replace("watch?v=", "").split("&")[0];
+  }
+  return url;
+};
+
 export const getFileSystemHandle = (
   items: DataTransferItemList
 ): FileSystemHandlePromises => {
