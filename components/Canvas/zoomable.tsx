@@ -1,8 +1,7 @@
 "use client";
 
 import { useStore } from "@/lib/store";
-import { fabric } from "fabric";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { Button } from "@/components/Button";
 import { Minus, Plus } from "lucide-react";
@@ -10,8 +9,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";

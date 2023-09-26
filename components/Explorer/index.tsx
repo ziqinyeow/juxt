@@ -16,16 +16,10 @@ import { FileWithPath } from "@/lib/types/file";
 import React, { useMemo, useRef } from "react";
 import "./style.css";
 import { cn } from "@/lib/utils";
-import {
-  IconFileSymlink,
-  IconFolderFilled,
-  IconFolderSymlink,
-  IconPackageImport,
-} from "@tabler/icons-react";
-import { FileVideo, Files, Folders, Youtube } from "lucide-react";
+import { IconFolderFilled, IconPackageImport } from "@tabler/icons-react";
+import { Files, Folders, Youtube } from "lucide-react";
 import { useOperatingSystem } from "@/lib/hooks/useOperatingSystem";
 import { getFileIcon } from "./utils";
-import Tooltip from "../Tooltip";
 
 const Explorer = () => {
   const os = useOperatingSystem();

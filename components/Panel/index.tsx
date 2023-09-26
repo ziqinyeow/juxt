@@ -5,33 +5,20 @@ import {
   IconBackspace,
   IconChevronDown,
   IconChevronUp,
-  IconCut,
   IconEye,
   IconGripVertical,
-  IconPentagon,
   IconPlayerPauseFilled,
   IconPlayerPlayFilled,
   IconRewindBackward5,
   IconRewindForward5,
   IconSearch,
-  IconSlash,
-  IconSquareRounded,
-  IconTriangle,
 } from "@tabler/icons-react";
 import clsx from "clsx";
 import "./style.css";
 import { useStore } from "@/lib/store";
 import { cn, formatTimeToMinSecMili } from "@/lib/utils";
 import { Button, ToolbarButton } from "@/components/Button";
-import {
-  MoveUpRight,
-  Redo2,
-  ScissorsLineDashed,
-  Square,
-  Trash,
-  Undo2,
-  Unlock,
-} from "lucide-react";
+import { Redo2, ScissorsLineDashed, Trash, Undo2, Unlock } from "lucide-react";
 import Track from "./track";
 import Slider from "./slider";
 import { Slider as UISlider } from "../ui/slider";

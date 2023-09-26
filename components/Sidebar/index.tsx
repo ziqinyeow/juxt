@@ -2,20 +2,11 @@
 
 import { ButtonProps, DivProps } from "@/lib/types/html";
 import { cn } from "@/lib/utils";
-import {
-  IconFile,
-  IconFileImport,
-  IconFileUpload,
-  IconFolderFilled,
-  IconFolderUp,
-  IconPlus,
-} from "@tabler/icons-react";
+import { IconFileUpload } from "@tabler/icons-react";
 import React, { useState } from "react";
 import Tooltip from "../Tooltip";
-import { Database, FolderUp } from "lucide-react";
 import { Tab, getTabIcon } from "./utils";
 import Explorer from "../Explorer";
-import { Button } from "../Button";
 import { useFile } from "@/lib/store/file";
 
 type SidebarButtonProps = {
