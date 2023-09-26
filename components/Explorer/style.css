@@ -1,10 +1,15 @@
+.icon-4 {
+  @apply min-w-[16px] max-w-[16px] min-h-[16px] max-h-[16px];
+}
+
 .selected {
   color: #2bebc8;
+  border-radius: 0.25rem;
 }
 
 .focused {
   outline: none;
-  background: #211f21;
+  background: #0d0b0d;
 }
 
 .drop-target {
@@ -16,8 +21,6 @@
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
   > *:last-child {
     overflow: hidden;
     textoverflow: ellipsis;
@@ -30,8 +33,6 @@
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
   > *:last-child {
     overflow: hidden;
     textoverflow: ellipsis;
@@ -40,13 +41,11 @@
 }
 
 [data-exploration-depth="2"] {
-  padding-left: 0.5rem;
+  margin-left: 0.5rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -56,13 +55,11 @@
 }
 
 [data-exploration-depth="3"] {
-  padding-left: 1rem;
+  margin-left: 1rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -72,13 +69,11 @@
 }
 
 [data-exploration-depth="4"] {
-  padding-left: 1.5rem;
+  margin-left: 1.5rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -88,13 +83,11 @@
 }
 
 [data-exploration-depth="5"] {
-  padding-left: 2rem;
+  margin-left: 2rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -104,13 +97,11 @@
 }
 
 [data-exploration-depth="6"] {
-  padding-left: 2.5rem;
+  margin-left: 2.5rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -120,13 +111,11 @@
 }
 
 [data-exploration-depth="7"] {
-  padding-left: 3rem;
+  margin-left: 3rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -136,13 +125,11 @@
 }
 
 [data-exploration-depth="8"] {
-  padding-left: 3.5rem;
+  margin-left: 3.5rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -152,13 +139,11 @@
 }
 
 [data-exploration-depth="9"] {
-  padding-left: 4rem;
+  margin-left: 4rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -168,13 +153,11 @@
 }
 
 [data-exploration-depth="10"] {
-  padding-left: 4.5rem;
+  margin-left: 4.5rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -184,13 +167,11 @@
 }
 
 [data-exploration-depth="11"] {
-  padding-left: 5rem;
+  margin-left: 5rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -216,13 +197,11 @@
 }
 
 [data-exploration-depth="13"] {
-  padding-left: 6rem;
+  margin-left: 6rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -232,13 +211,11 @@
 }
 
 [data-exploration-depth="14"] {
-  padding-left: 6.5rem;
+  margin-left: 6.5rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -248,13 +225,11 @@
 }
 
 [data-exploration-depth="15"] {
-  padding-left: 7rem;
+  margin-left: 7rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -264,13 +239,11 @@
 }
 
 [data-exploration-depth="16"] {
-  padding-left: 7.5rem;
+  margin-left: 7.5rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -280,13 +253,11 @@
 }
 
 [data-exploration-depth="17"] {
-  padding-left: 8rem;
+  margin-left: 8rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -296,13 +267,11 @@
 }
 
 [data-exploration-depth="18"] {
-  padding-left: 8.5rem;
+  margin-left: 8.5rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -312,13 +281,11 @@
 }
 
 [data-exploration-depth="19"] {
-  padding-left: 9rem;
+  margin-left: 9rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;
@@ -328,13 +295,11 @@
 }
 
 [data-exploration-depth="20"] {
-  padding-left: 9.5rem;
+  margin-left: 9.5rem;
   display: flex;
   gap: 0.3333em;
   align-items: center;
   width: 100%;
-  borderstyle: solid;
-  bordercolor: transparent;
 
   > *:last-child {
     overflow: hidden;

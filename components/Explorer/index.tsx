@@ -24,6 +24,7 @@ import {
 } from "@tabler/icons-react";
 import { FileVideo, Files, Folders, Youtube } from "lucide-react";
 import { useOperatingSystem } from "@/lib/hooks/useOperatingSystem";
+import { getFileIcon } from "./utils";
 
 const Explorer = () => {
   const os = useOperatingSystem();
@@ -152,7 +153,7 @@ const Explorer = () => {
                   index={props.index}
                   style={props.style}
                 >
-                  <div className="flex items-center w-full h-full gap-2 px-2">
+                  <div className="flex items-center w-full h-full gap-2 px-2 rounded hover:bg-primary-800/40">
                     {isDir(props.node) ? (
                       props.node.expanded ? (
                         <>
@@ -175,12 +176,18 @@ const Explorer = () => {
                         </>
                       )
                     ) : (
-                      <FileVideo className="w-4 h-4 text-secondary-200/30" />
+                      // <FileVideo className="icon-4 text-secondary-200/30" />
+                      <>
+                        {getFileIcon(
+                          props.node.basename,
+                          "text-secondary-200/30"
+                        )}
+                      </>
                     )}
 
                     <span
                       title={props.node.basename}
-                      className="tracking-wider whitespace-nowrap line-clamp-1 text-primary-200"
+                      className="overflow-hidden whitespace-nowrap text-primary-200"
                     >
                       {props.node.basename}
                     </span>
