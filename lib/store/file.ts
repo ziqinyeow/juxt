@@ -14,6 +14,7 @@ const merge = (a: FileWithPath[], b: FileWithPath[], predicate: Function) => {
 export const useFile = create<FileStoreType>()((set, get) => ({
   bucket: { "/": [] },
   setBucket: (bucket: BucketType) => set((state) => ({ ...state, bucket })),
+  // showFilePicker
   mergeFileListToBucket: (fileList: FileList | null) => {
     if (!fileList) {
       return;
@@ -26,8 +27,22 @@ export const useFile = create<FileStoreType>()((set, get) => ({
         "/": merge(
           [...curr["/"]],
           Array.from(fileList).map((file) => {
+            // if (file.type.startsWith("video")) {
+            //   const video = document.createElement("video");
+            //   video.onloadedmetadata = () => {
+            //     // return {
+            //     //   type: "file",
+            //     //   path: `/` + file.name,
+            //     //   file,
+            //     //   duration: video.duration,
+            //     // };
+            //   };
+            //   video.src = URL.createObjectURL(file);
+            //   video.remove();
+            // }
             return {
-              type: "file",
+              dir: false,
+              type: "others",
               path: `/` + file.name,
               file,
             };

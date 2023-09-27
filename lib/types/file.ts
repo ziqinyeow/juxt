@@ -3,10 +3,12 @@ export type FileSystemHandlePromises = Promise<
 >[];
 
 export type FileWithPath = {
-  type: "file" | "directory" | "youtube";
+  dir: boolean;
+  type: "image" | "video" | "youtube" | "others";
   path: string;
-  file?: File;
   url?: string;
+  duration?: number;
+  file?: File;
 };
 
 export type BucketType = Record<string, FileWithPath[]>;

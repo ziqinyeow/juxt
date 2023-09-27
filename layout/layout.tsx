@@ -12,6 +12,7 @@ const Layout = ({ children }: Props) => {
       <Navbar />
       <div className="grid grid-cols-[300px_auto]">
         <Sidebar />
+
         <div>{children}</div>
       </div>
     </div>

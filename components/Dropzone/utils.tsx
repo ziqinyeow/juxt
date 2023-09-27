@@ -91,7 +91,6 @@ export const traverse = async (items: DataTransferItemList) => {
   if (!fileSystemHandles.length) {
     return { bucket: null, files: null };
   }
-  console.log(fileSystemHandles);
   const bucket: BucketType | null = {
     "/": [],
   };

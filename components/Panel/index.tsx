@@ -31,9 +31,12 @@ import type { Cursor } from "@/lib/types/cursor";
 import CursorDropdown from "./cursor-dropdown";
 import Tooltip from "../Tooltip";
 import { useOperatingSystem } from "@/lib/hooks/useOperatingSystem";
+import { useFile } from "@/lib/store/file";
 
 const Panel = () => {
   const os = useOperatingSystem();
+  const { bucket } = useFile();
+  console.log(bucket);
 
   const {
     tracks,

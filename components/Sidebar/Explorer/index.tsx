@@ -1,3 +1,4 @@
+import "./style.css";
 import {
   Node,
   createFileTree,
@@ -14,12 +15,11 @@ import {
 import { useFile } from "@/lib/store/file";
 import { FileWithPath } from "@/lib/types/file";
 import React, { useMemo, useRef } from "react";
-import "./style.css";
 import { cn } from "@/lib/utils";
-import { IconFolderFilled, IconPackageImport } from "@tabler/icons-react";
-import { Files, Folders, Youtube } from "lucide-react";
+import { IconFolderFilled } from "@tabler/icons-react";
 import { useOperatingSystem } from "@/lib/hooks/useOperatingSystem";
 import { getFileIcon } from "./utils";
+import Droparea from "../droparea";
 
 const Explorer = () => {
   const os = useOperatingSystem();
@@ -31,7 +31,7 @@ const Explorer = () => {
       createFileTree((parent, { createFile, createDir }) =>
         Promise.resolve(
           bucket[parent.data.name].map((file: FileWithPath) => {
-            if (file.type === "directory") {
+            if (file.dir) {
               return createDir({ name: file?.path });
             }
             return createFile({
@@ -59,6 +59,9 @@ const Explorer = () => {
       const node = tree.getById(selected[0]);
 
       if (node && isFile(node)) {
+        const parent = node.parent?.data.name ?? "";
+        const file = bucket?.[parent]?.find((b) => b.path === node.data.name);
+
         console.log("Opening file:", node.data.name);
       }
     }
@@ -148,7 +151,7 @@ const Explorer = () => {
                   index={props.index}
                   style={props.style}
                 >
-                  <div className="flex items-center w-full h-full gap-2 px-2 rounded hover:bg-primary-800/40">
+                  <div className="flex items-center w-full h-full gap-2 px-2 rounded hover:bg-primary-500">
                     {isDir(props.node) ? (
                       props.node.expanded ? (
                         <>
@@ -191,49 +194,7 @@ const Explorer = () => {
           })}
         </div>
       </div>
-      {bucket["/"].length === 0 && (
-        <label htmlFor="upload-1">
-          <input
-            id="upload-1"
-            name="upload-1"
-            onChange={(e) => {
-              mergeFileListToBucket(e.target.files);
-            }}
-            type="file"
-            className="hidden"
-            multiple
-          />
-          <div className="border cursor-pointer flex tracking-widest text-sm p-4 items-center hover:text-secondary-200/60 text-secondary-200/40 justify-center border-primary-400 h-[calc(100vh_-_64px_-_60px)] rounded">
-            <div className="flex flex-col items-center gap-8 transition-all">
-              <div className="flex items-center gap-3">
-                <IconPackageImport className="w-14 h-14" />
-              </div>
-              <div className="flex flex-col items-center gap-1">
-                <span>Drag and drop</span>
-                <span>OR</span>
-                <span>Paste ({os === "mac" ? "⌘" : "ctrl"} + c and v)</span>
-              </div>
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <span>-</span>
-                  <Files className="w-5 h-5" />
-                  <span>Files</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span>-</span>
-                  <Folders className="w-5 h-5" />
-                  <span>Folders</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span>-</span>
-                  <Youtube className="w-5 h-5" />
-                  <span>Youtube Links</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </label>
-      )}
+      {bucket["/"].length === 0 && <Droparea id="upload-1" />}
     </div>
   );
 };

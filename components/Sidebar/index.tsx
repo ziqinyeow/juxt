@@ -6,7 +6,7 @@ import { IconFileUpload } from "@tabler/icons-react";
 import React, { useState } from "react";
 import Tooltip from "../Tooltip";
 import { Tab, getTabIcon } from "./utils";
-import Explorer from "../Explorer";
+import Explorer from "./Explorer";
 import { useFile } from "@/lib/store/file";
 
 type SidebarButtonProps = {
@@ -49,13 +49,24 @@ const Sidebar = ({ className, ...props }: DivProps) => {
           onClick={() => {
             setTab("explorer");
           }}
-          tooltip="folder"
+          tooltip="explorer"
           className={cn([
             tab === "explorer" &&
               "ring ring-secondary-200 hover:ring-opacity-60",
           ])}
         >
           {getTabIcon("explorer")}
+        </SidebarButton>
+        <SidebarButton
+          onClick={() => {
+            setTab("media");
+          }}
+          tooltip="media"
+          className={cn([
+            tab === "media" && "ring ring-secondary-200 hover:ring-opacity-60",
+          ])}
+        >
+          {getTabIcon("media")}
         </SidebarButton>
         <SidebarButton
           onClick={() => {
@@ -68,7 +79,7 @@ const Sidebar = ({ className, ...props }: DivProps) => {
         >
           {getTabIcon("search")}
         </SidebarButton>
-        <SidebarButton
+        {/* <SidebarButton
           onClick={() => {
             setTab("bucket");
           }}
@@ -78,7 +89,7 @@ const Sidebar = ({ className, ...props }: DivProps) => {
           ])}
         >
           {getTabIcon("bucket")}
-        </SidebarButton>
+        </SidebarButton> */}
       </div>
       <div className="">
         <div className="flex items-center justify-between p-4">
@@ -106,14 +117,10 @@ const Sidebar = ({ className, ...props }: DivProps) => {
                 </div>
               </Tooltip>
             </label>
-            {/* <Tooltip tooltip={"folder"} className="py-1 text-[11px]">
-              <Button>
-                <FolderUp className="w-[17px] h-[17px] text-secondary-200/90" />
-              </Button>
-            </Tooltip> */}
           </div>
         </div>
         {tab === "explorer" && <Explorer />}
+        {tab === "media" && <></>}
       </div>
     </div>
   );

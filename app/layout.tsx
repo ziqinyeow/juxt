@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import clsx from "clsx";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Dropzone from "@/layout/Dropzone";
+import Dropzone from "@/components/Dropzone";
 
 const inter = Inter({ subsets: ["latin"] });
 

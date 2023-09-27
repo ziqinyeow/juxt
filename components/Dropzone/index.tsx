@@ -7,7 +7,7 @@ import { useFile } from "@/lib/store/file";
 
 const Dropzone = ({ children, ...props }: DivProps) => {
   const [dragging, setDragging] = useState(false);
-  const { mergeBucket } = useFile();
+  const { bucket, mergeBucket } = useFile();
 
   useEffect(() => {
     const handlePasteAnywhere = async (e: ClipboardEvent) => {
@@ -19,6 +19,7 @@ const Dropzone = ({ children, ...props }: DivProps) => {
           mergeBucket({
             "/": [
               {
+                dir: false,
                 path: id + ".youtube",
                 type: "youtube",
                 url: text,
@@ -45,10 +46,12 @@ const Dropzone = ({ children, ...props }: DivProps) => {
     <div
       onDragOver={(e) => {
         e.preventDefault();
+        e.stopPropagation();
         setDragging(true);
       }}
       onDrop={async (e) => {
         e.preventDefault();
+        e.stopPropagation();
         setDragging(false);
         if (!e.dataTransfer) return;
         const text = e.dataTransfer.getData("Text");
@@ -58,8 +61,9 @@ const Dropzone = ({ children, ...props }: DivProps) => {
             mergeBucket({
               "/": [
                 {
-                  path: id + ".youtube",
+                  dir: false,
                   type: "youtube",
+                  path: id + ".youtube",
                   url: text,
                 },
               ],
