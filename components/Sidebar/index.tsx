@@ -120,8 +120,10 @@ const Sidebar = ({ className, ...props }: DivProps) => {
             </label>
           </div>
         </div>
-        {tab === "explorer" && <Explorer />}
-        {tab === "media" && <Media />}
+        <div>
+          {tab === "explorer" && <Explorer />}
+          {tab === "media" && <Media />}
+        </div>
       </div>
     </div>
   );

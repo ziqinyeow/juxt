@@ -231,7 +231,7 @@ const Panel = () => {
                       <div className="flex items-center justify-between h-[23px] gap-2 px-2 text-primary-200">
                         <div className="flex items-center gap-2">
                           <IconGripVertical className="w-4 h-4 text-primary-200/80 cursor-grab" />
-                          <div>{track.name}</div>
+                          <div className="w-24 line-clamp-1">{track.name}</div>
                         </div>
                         <div className="flex items-center gap-2">
                           <Unlock className="w-4 h-4 cursor-not-allowed text-primary-200/50" />

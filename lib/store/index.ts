@@ -7,6 +7,9 @@ import {
   PANEL_SLIDER_MAX_VALUE,
   PANEL_SLIDER_MIN_VALUE,
 } from "@/lib/constants/panel";
+import { FileWithPath } from "../types/file";
+import { isHtmlVideoElement } from "../utils/html";
+import { nanoid } from "nanoid";
 
 export const useStore = create<StoreTypes>()((set, get) => ({
   canvas: null,
@@ -15,10 +18,68 @@ export const useStore = create<StoreTypes>()((set, get) => ({
 
   // medias
   videos: [],
+  addVideo: (media: FileWithPath) => {
+    const video = document.getElementById(media.path);
+    if (!isHtmlVideoElement(video)) {
+      return;
+    }
+    const id = nanoid();
+    const element: Element = {
+      id,
+      name: media.path,
+      type: "video",
+      placement: {
+        x: 0,
+        y: 0,
+        width: 550,
+        height: 300,
+        rotation: 0,
+        scaleX: 1,
+        scaleY: 1,
+      },
+      timeframe: {
+        start: 0,
+        duration: video.duration * 1000 ?? 0,
+      },
+      properties: {
+        elementId: id,
+        src: media.url,
+      },
+    };
+    console.log("element", element);
+    get().addTrackAndElement(element);
+  },
+
   images: [],
+  addImage: (media: FileWithPath) => {
+    const id = nanoid();
+    const element: Element = {
+      id,
+      name: media.path,
+      type: "image",
+      placement: {
+        x: 0,
+        y: 0,
+        width: 550,
+        height: 300,
+        rotation: 0,
+        scaleX: 1,
+        scaleY: 1,
+      },
+      timeframe: {
+        start: 0,
+        duration: 5000,
+      },
+      properties: {
+        elementId: id,
+        src: media.url,
+      },
+    };
+    get().addTrackAndElement(element);
+  },
 
   // elements
-  tracks,
+  tracks: [],
   selectedElement: null,
   addElement: (trackId: string, element: Element) => {
     set((state) => ({
@@ -32,6 +93,20 @@ export const useStore = create<StoreTypes>()((set, get) => ({
             }
           : t
       ),
+    }));
+  },
+  addTrackAndElement: (element: Element) => {
+    const id = nanoid();
+    set((state) => ({
+      ...state,
+      tracks: [
+        ...get().tracks,
+        {
+          id,
+          name: element.name,
+          elements: [element],
+        },
+      ],
     }));
   },
   setSelectedElement: (element: Element | null) =>

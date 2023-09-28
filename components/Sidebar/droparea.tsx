@@ -8,7 +8,7 @@ const Droparea = ({ id }: { id: string }) => {
   const { mergeFileListToBucket } = useFile();
 
   return (
-    <label htmlFor={id}>
+    <label htmlFor={id} className="w-full">
       <input
         id={id}
         name={id}

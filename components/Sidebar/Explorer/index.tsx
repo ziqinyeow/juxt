@@ -19,9 +19,11 @@ import { cn } from "@/lib/utils";
 import { IconFolderFilled } from "@tabler/icons-react";
 import { getFileIcon } from "./utils";
 import Droparea from "../droparea";
+import { useStore } from "@/lib/store";
 
 const Explorer = () => {
   const windowRef = useRef<HTMLDivElement | null>(null);
+  const { addImage, addVideo } = useStore();
   const { bucket } = useFile();
 
   const tree = useMemo(
@@ -59,8 +61,12 @@ const Explorer = () => {
       if (node && isFile(node)) {
         const parent = node.parent?.data.name ?? "";
         const file = bucket?.[parent]?.find((b) => b.path === node.data.name);
-
-        console.log("Opening file:", node.data.name);
+        if (file?.type === "image") {
+          addImage(file);
+        } else if (file?.type === "video") {
+          addVideo(file);
+          console.log("added");
+        }
       }
     }
   });
@@ -140,8 +146,18 @@ const Explorer = () => {
       <div ref={windowRef} className={cn(["text-white"])}>
         <div {...virtualize.props}>
           {virtualize?.map((props) => {
+            const parent = props.node.parent?.data.name ?? "";
+            const file = bucket?.[parent]?.find(
+              (b) => b.path === props.node.data.name
+            );
             return (
               <React.Fragment key={props.index}>
+                {/* To add to the track panel (for retrieving duration purposes) */}
+                <video
+                  id={file?.path}
+                  className="hidden"
+                  src={file?.url ?? ""}
+                ></video>
                 <Node
                   plugins={plugins}
                   tree={props.tree}

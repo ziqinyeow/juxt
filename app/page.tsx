@@ -5,11 +5,11 @@ import Layout from "@/layout/layout";
 export default function Home() {
   return (
     <Layout>
-      <div className="flex flex-col justify-between bg-primary-800">
-        <div className="relative">
+      <div className="flex flex-col justify-between h-full bg-primary-800">
+        <div className="relative h-full">
           <Canvas />
         </div>
-        <div>
+        <div className="">
           <Panel />
         </div>
       </div>

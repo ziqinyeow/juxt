@@ -47,11 +47,14 @@ export const traverseDir = async (
     const file: File = await entry.getFile();
     const path = paths.join("/");
     const root = paths.slice(0, -1).join("/");
+    const type = checkFileType(file);
     const data: FileWithPath = {
       dir: false,
-      type: checkFileType(file),
+      type,
       path,
       file,
+      url:
+        type === "image" || type === "video" ? URL.createObjectURL(file) : "",
     };
     if (root in bucket) {
       bucket[root].push(data);
@@ -115,11 +118,14 @@ export const traverse = async (items: DataTransferItemList) => {
     } else {
       // @ts-ignore
       const file: File = await handle.getFile();
+      const type = checkFileType(file);
       const data: FileWithPath = {
         dir: false,
-        type: checkFileType(file),
+        type,
         path: pathname,
         file,
+        url:
+          type === "image" || type === "video" ? URL.createObjectURL(file) : "",
       };
       bucket["/"].push(data);
       files.push(data);
