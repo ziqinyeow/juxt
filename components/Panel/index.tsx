@@ -36,7 +36,6 @@ import { useFile } from "@/lib/store/file";
 const Panel = () => {
   const os = useOperatingSystem();
   const { bucket } = useFile();
-  console.log(bucket);
 
   const {
     tracks,

@@ -17,14 +17,12 @@ import { FileWithPath } from "@/lib/types/file";
 import React, { useMemo, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { IconFolderFilled } from "@tabler/icons-react";
-import { useOperatingSystem } from "@/lib/hooks/useOperatingSystem";
 import { getFileIcon } from "./utils";
 import Droparea from "../droparea";
 
 const Explorer = () => {
-  const os = useOperatingSystem();
   const windowRef = useRef<HTMLDivElement | null>(null);
-  const { bucket, mergeFileListToBucket } = useFile();
+  const { bucket } = useFile();
 
   const tree = useMemo(
     () =>

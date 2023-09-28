@@ -47,8 +47,9 @@ export const traverseDir = async (
     const file: File = await entry.getFile();
     const path = paths.join("/");
     const root = paths.slice(0, -1).join("/");
-    const data: any = {
-      type: "file",
+    const data: FileWithPath = {
+      dir: false,
+      type: checkFileType(file),
       path,
       file,
     };
@@ -71,7 +72,8 @@ export const traverseDir = async (
         const root = paths.slice(0, -1).join("/");
         bucket[path] = [];
         const data = {
-          type: `directory`,
+          dir: true,
+          type: "others",
           path,
         };
         if (root in bucket) {
@@ -101,7 +103,8 @@ export const traverse = async (items: DataTransferItemList) => {
     const pathname = `/` + name;
     if (kind === "directory") {
       bucket["/"].push({
-        type: "directory",
+        dir: true,
+        type: "others",
         path: pathname,
       });
       bucket[pathname] = [];
@@ -112,26 +115,24 @@ export const traverse = async (items: DataTransferItemList) => {
     } else {
       // @ts-ignore
       const file: File = await handle.getFile();
-      bucket["/"].push({
-        type: "file",
+      const data: FileWithPath = {
+        dir: false,
+        type: checkFileType(file),
         path: pathname,
         file,
-      });
-      files.push({
-        type: "file",
-        path: pathname,
-        file,
-      });
+      };
+      bucket["/"].push(data);
+      files.push(data);
     }
   }
   return { bucket, files };
 };
 
-export const checkFileType = (file: File): "image" | "video" | null => {
+export const checkFileType = (file: File): "image" | "video" | "others" => {
   if (file.type.includes("video")) {
     return "video";
   } else if (file.type.includes("image")) {
     return "image";
   }
-  return null;
+  return "others";
 };

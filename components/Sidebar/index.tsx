@@ -8,6 +8,7 @@ import Tooltip from "../Tooltip";
 import { Tab, getTabIcon } from "./utils";
 import Explorer from "./Explorer";
 import { useFile } from "@/lib/store/file";
+import Media from "./Media";
 
 type SidebarButtonProps = {
   tooltip?: string;
@@ -120,7 +121,7 @@ const Sidebar = ({ className, ...props }: DivProps) => {
           </div>
         </div>
         {tab === "explorer" && <Explorer />}
-        {tab === "media" && <></>}
+        {tab === "media" && <Media />}
       </div>
     </div>
   );
