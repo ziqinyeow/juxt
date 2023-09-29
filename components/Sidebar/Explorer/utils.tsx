@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import {
+  IconBrandYoutubeFilled,
   IconFile,
   IconFileTypeCsv,
   IconFileTypePdf,
@@ -21,7 +22,7 @@ export const getFileIcon = (file: string, className: string = "") => {
     case "avi":
       return <Clapperboard className={newClassName} />;
     case "youtube":
-      return <Youtube className={newClassName} />;
+      return <IconBrandYoutubeFilled className={newClassName} />;
     case "json":
       return <Braces className={newClassName} />;
     case "pdf":

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { IconPhoto, IconPhotoOff, IconVideo } from "@tabler/icons-react";
 import { useStore } from "@/lib/store";
 import { FileWithPath } from "@/lib/types/file";
+import { getYoutubeId } from "@/components/Dropzone/utils";
 
 const Media = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -38,6 +39,13 @@ const Media = () => {
       ),
     [allMedias, searchValue]
   );
+  console.log(
+    bucket,
+    "https://www.youtube.com/embed/" +
+      getYoutubeId(
+        "https://www.youtube.com/watch?v=FXcgzUmlD2o&ab_channel=CodieSanchez"
+      )
+  );
 
   const onClickMedia = (media: FileWithPath) => {
     if (media.type === "video") {
@@ -50,7 +58,19 @@ const Media = () => {
   return (
     <div className="px-2 h-[calc(100vh_-_64px_-_60px)] max-w-full overflow-auto no_scrollbar">
       {bucket["/"].length === 0 ? (
-        <Droparea id="upload-2" />
+        <>
+          {/* <iframe
+            src={
+              "https://www.youtube.com/embed/" +
+              getYoutubeId(
+                "https://www.youtube.com/watch?v=FXcgzUmlD2o&ab_channel=CodieSanchez"
+              ) +
+              "?controls=0&showinfo=0&modestbranding=1&autohide=1"
+            }
+            className="w-full rounded"
+          ></iframe> */}
+          <Droparea id="upload-2" />
+        </>
       ) : (
         <div className="w-full h-full px-2">
           <div className="flex items-center gap-2 mt-2 mb-4">
@@ -105,6 +125,19 @@ const Media = () => {
                       className="rounded"
                       src={media.url ?? ""}
                     ></video>
+                  </>
+                ) : media?.type === "youtube" ? (
+                  <>
+                    <iframe
+                      src={
+                        "https://www.youtube.com/embed/" +
+                        getYoutubeId(
+                          "https://www.youtube.com/watch?v=FXcgzUmlD2o&ab_channel=CodieSanchez"
+                        ) +
+                        "?modestbranding=1&rel=0"
+                      }
+                      className="w-full h-full rounded"
+                    ></iframe>
                   </>
                 ) : (
                   <></>

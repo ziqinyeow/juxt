@@ -61,11 +61,11 @@ const Explorer = () => {
       if (node && isFile(node)) {
         const parent = node.parent?.data.name ?? "";
         const file = bucket?.[parent]?.find((b) => b.path === node.data.name);
+
         if (file?.type === "image") {
           addImage(file);
         } else if (file?.type === "video") {
           addVideo(file);
-          console.log("added");
         }
       }
     }

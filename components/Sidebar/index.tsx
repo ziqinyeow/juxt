@@ -69,28 +69,6 @@ const Sidebar = ({ className, ...props }: DivProps) => {
         >
           {getTabIcon("media")}
         </SidebarButton>
-        <SidebarButton
-          onClick={() => {
-            setTab("search");
-          }}
-          tooltip="search"
-          className={cn([
-            tab === "search" && "ring ring-secondary-200 hover:ring-opacity-60",
-          ])}
-        >
-          {getTabIcon("search")}
-        </SidebarButton>
-        {/* <SidebarButton
-          onClick={() => {
-            setTab("bucket");
-          }}
-          tooltip="bucket"
-          className={cn([
-            tab === "bucket" && "ring ring-secondary-200 hover:ring-opacity-60",
-          ])}
-        >
-          {getTabIcon("bucket")}
-        </SidebarButton> */}
       </div>
       <div className="">
         <div className="flex items-center justify-between p-4">

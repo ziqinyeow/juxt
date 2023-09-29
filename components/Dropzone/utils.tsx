@@ -48,20 +48,23 @@ export const traverseDir = async (
     const path = paths.join("/");
     const root = paths.slice(0, -1).join("/");
     const type = checkFileType(file);
+    const media = type === "image" || type === "video";
+
     const data: FileWithPath = {
       dir: false,
       type,
       path,
       file,
-      url:
-        type === "image" || type === "video" ? URL.createObjectURL(file) : "",
+      url: media ? URL.createObjectURL(file) : "",
     };
-    if (root in bucket) {
-      bucket[root].push(data);
-    } else {
-      bucket[root] = [data];
+    if (media) {
+      if (root in bucket) {
+        bucket[root].push(data);
+      } else {
+        bucket[root] = [data];
+      }
+      files.push(data);
     }
-    files.push(data);
   } else if (entry.kind === "directory") {
     for await (const handle of entry.values()) {
       paths.push(handle.name);
@@ -119,16 +122,18 @@ export const traverse = async (items: DataTransferItemList) => {
       // @ts-ignore
       const file: File = await handle.getFile();
       const type = checkFileType(file);
+      const media = type === "image" || type === "video";
       const data: FileWithPath = {
         dir: false,
         type,
         path: pathname,
         file,
-        url:
-          type === "image" || type === "video" ? URL.createObjectURL(file) : "",
+        url: media ? URL.createObjectURL(file) : "",
       };
-      bucket["/"].push(data);
-      files.push(data);
+      if (media) {
+        bucket["/"].push(data);
+        files.push(data);
+      }
     }
   }
   return { bucket, files };
