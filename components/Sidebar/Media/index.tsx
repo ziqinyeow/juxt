@@ -39,13 +39,6 @@ const Media = () => {
       ),
     [allMedias, searchValue]
   );
-  console.log(
-    bucket,
-    "https://www.youtube.com/embed/" +
-      getYoutubeId(
-        "https://www.youtube.com/watch?v=FXcgzUmlD2o&ab_channel=CodieSanchez"
-      )
-  );
 
   const onClickMedia = (media: FileWithPath) => {
     if (media.type === "video") {
@@ -54,6 +47,7 @@ const Media = () => {
       addImage(media);
     }
   };
+  const { canvas } = useStore();
 
   return (
     <div className="px-2 h-[calc(100vh_-_64px_-_60px)] max-w-full overflow-auto no_scrollbar">

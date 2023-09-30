@@ -1,14 +1,15 @@
 import { fabric } from "fabric";
+import { FabricUtils, CoverVideo, CoverImage } from "@/lib/utils/fabric";
 import { create } from "zustand";
 import { StoreTypes } from "../types/store";
-import { Element } from "../types/track";
+import { Element, Placement } from "../types/track";
 import { tracks } from "../samples/tracks";
 import {
   PANEL_SLIDER_MAX_VALUE,
   PANEL_SLIDER_MIN_VALUE,
 } from "@/lib/constants/panel";
 import { FileWithPath } from "../types/file";
-import { isHtmlVideoElement } from "../utils/html";
+import { isHtmlImageElement, isHtmlVideoElement } from "../utils/html";
 import { nanoid } from "nanoid";
 
 export const useStore = create<StoreTypes>()((set, get) => ({
@@ -42,12 +43,12 @@ export const useStore = create<StoreTypes>()((set, get) => ({
         duration: video.duration * 1000 ?? 0,
       },
       properties: {
-        elementId: id,
-        src: media.url,
+        elementId: media.path,
+        src: media.url ?? "",
       },
     };
-    console.log("element", element);
     get().addTrackAndElement(element);
+    get().addElementToCanvas(element);
   },
 
   images: [],
@@ -71,11 +72,12 @@ export const useStore = create<StoreTypes>()((set, get) => ({
         duration: 5000,
       },
       properties: {
-        elementId: id,
-        src: media.url,
+        elementId: media.path,
+        src: media.url ?? "",
       },
     };
     get().addTrackAndElement(element);
+    get().addElementToCanvas(element);
   },
 
   // elements
@@ -108,6 +110,107 @@ export const useStore = create<StoreTypes>()((set, get) => ({
         },
       ],
     }));
+  },
+  addElementToCanvas: (element: Element) => {
+    switch (element.type) {
+      case "video":
+        const video = document.getElementById(element.properties.elementId);
+        if (!isHtmlVideoElement(video)) return;
+        const videoObject = new CoverVideo(video, {
+          name: element.id,
+          left: element.placement.x,
+          top: element.placement.y,
+          width: element.placement.width,
+          height: element.placement.height,
+          scaleX: element.placement.scaleX,
+          scaleY: element.placement.scaleY,
+          angle: element.placement.rotation,
+          objectCaching: false,
+          selectable: true,
+          lockUniScaling: true,
+        });
+        element.fabricObject = videoObject;
+
+        // console.log(get().canvas?.getWidth());
+
+        // get().canvas?.on("object:modified", function (e) {
+        //   if (!e.target) return;
+        //   const target = e.target;
+        //   if (target != fabricObject) return;
+        //   const placement = element.placement;
+        //   const newPlacement: Placement = {
+        //     ...placement,
+        //     x: target.left ?? placement.x,
+        //     y: target.top ?? placement.y,
+        //     rotation: target.angle ?? placement.rotation,
+        //     width:
+        //       target.width && target.scaleX
+        //         ? target.width * target.scaleX
+        //         : placement.width,
+        //     height:
+        //       target.height && target.scaleY
+        //         ? target.height * target.scaleY
+        //         : placement.height,
+        //     scaleX: 1,
+        //     scaleY: 1,
+        //   };
+        //   get().updateElement(element.id, {
+        //     ...element,
+        //     placement: newPlacement,
+        //   });
+        // });
+        get().canvas?.add(videoObject);
+        get().canvas?.requestRenderAll();
+
+        break;
+      case "image":
+        const image = document.getElementById(element.properties.elementId);
+        if (!isHtmlImageElement(image)) return;
+        const imageObject = new CoverImage(image, {
+          name: element.id,
+          left: element.placement.x,
+          top: element.placement.y,
+          width: element.placement.width,
+          height: element.placement.height,
+          angle: element.placement.rotation,
+          // objectCaching: false,
+          selectable: true,
+          lockUniScaling: true,
+        });
+        element.fabricObject = imageObject;
+        get().canvas?.add(imageObject);
+        get().canvas?.on("object:modified", function (e) {
+          if (!e.target) return;
+          const target = e.target;
+          if (target != imageObject) return;
+          const placement = element.placement;
+          const newPlacement: Placement = {
+            ...placement,
+            x: target.left ?? placement.x,
+            y: target.top ?? placement.y,
+            rotation: target.angle ?? placement.rotation,
+            width:
+              target.width && target.scaleX
+                ? target.width * target.scaleX
+                : placement.width,
+            height:
+              target.height && target.scaleY
+                ? target.height * target.scaleY
+                : placement.height,
+            scaleX: 1,
+            scaleY: 1,
+          };
+          get().updateElement(element.id, {
+            ...element,
+            placement: newPlacement,
+          });
+        });
+
+        get().canvas?.requestRenderAll();
+
+      default:
+        break;
+    }
   },
   setSelectedElement: (element: Element | null) =>
     set((state) => ({ ...state, selectedElement: element })),

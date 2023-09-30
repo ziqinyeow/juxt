@@ -16,6 +16,7 @@ export interface StoreTypes {
   selectedElement: Element | null;
   addElement: (trackId: string, element: Element) => void;
   addTrackAndElement: (element: Element) => void;
+  addElementToCanvas: (element: Element) => void;
   setSelectedElement: (element: Element | null) => void;
   updateElement: (elementId: string, data: any) => void;
 

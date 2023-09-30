@@ -40,7 +40,14 @@ export type TextElement = ElementBase<
   }
 >;
 
-export type Element = VideoElement | ImageElement | TextElement | any;
+export type PoseElement = ElementBase<
+  "pose",
+  {
+    coords?: [];
+  }
+>;
+
+export type Element = VideoElement | ImageElement | TextElement | PoseElement;
 
 export type Tracks = {
   id: string;

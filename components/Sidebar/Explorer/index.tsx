@@ -20,6 +20,7 @@ import { IconFolderFilled } from "@tabler/icons-react";
 import { getFileIcon } from "./utils";
 import Droparea from "../droparea";
 import { useStore } from "@/lib/store";
+import Image from "next/image";
 
 const Explorer = () => {
   const windowRef = useRef<HTMLDivElement | null>(null);
@@ -153,11 +154,25 @@ const Explorer = () => {
             return (
               <React.Fragment key={props.index}>
                 {/* To add to the track panel (for retrieving duration purposes) */}
-                <video
-                  id={file?.path}
-                  className="hidden"
-                  src={file?.url ?? ""}
-                ></video>
+                {file?.type === "video" ? (
+                  <video
+                    id={file?.path}
+                    className="hidden"
+                    src={file?.url ?? ""}
+                  ></video>
+                ) : file?.type === "image" ? (
+                  <>
+                    <Image
+                      id={file.path}
+                      src={file.url ?? ""}
+                      fill
+                      className="z-0 hidden object-contain text-white rounded"
+                      alt={file.path}
+                    />
+                  </>
+                ) : (
+                  <></>
+                )}
                 <Node
                   plugins={plugins}
                   tree={props.tree}

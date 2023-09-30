@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // reactStrictMode: false,
   webpack: (config) => {
     config.externals.push({
       // https://github.com/vercel/next.js/issues/44273
