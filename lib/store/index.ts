@@ -61,8 +61,8 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       placement: {
         x: 0,
         y: 0,
-        width: 550,
-        height: 300,
+        width: 1000,
+        height: 600,
         rotation: 0,
         scaleX: 1,
         scaleY: 1,
@@ -160,6 +160,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
         //   });
         // });
         get().canvas?.add(videoObject);
+        get().canvas?.centerObject(videoObject);
         get().canvas?.requestRenderAll();
 
         break;
@@ -179,6 +180,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
         });
         element.fabricObject = imageObject;
         get().canvas?.add(imageObject);
+        get().canvas?.centerObject(imageObject);
         get().canvas?.on("object:modified", function (e) {
           if (!e.target) return;
           const target = e.target;
