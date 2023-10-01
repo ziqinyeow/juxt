@@ -6,6 +6,10 @@ import { fabric } from "fabric";
 import React, { useEffect, useLayoutEffect } from "react";
 import Zoomable from "./zoomable";
 import { RESOLUTION } from "@/lib/constants/canvas";
+import {
+  movingRotatingWithinCanvasBound,
+  scaleWithinCanvasBound,
+} from "@/lib/utils/canvas";
 
 const Canvas = () => {
   const { canvas, setCanvas, setSelectedElement } = useStore();
@@ -34,6 +38,15 @@ const Canvas = () => {
         setSelectedElement(null);
       }
     });
+
+    canvas.on("object:moving", function (e) {
+      movingRotatingWithinCanvasBound(e);
+    });
+
+    canvas.on("object:scaling", function (e) {
+      scaleWithinCanvasBound(e);
+    });
+
     return canvas;
   };
 

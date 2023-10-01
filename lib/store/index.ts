@@ -176,8 +176,10 @@ export const useStore = create<StoreTypes>()((set, get) => ({
           angle: element.placement.rotation,
           // objectCaching: false,
           selectable: true,
-          lockUniScaling: true,
+          // lockUniScaling: true,
+          centeredScaling: true,
         });
+        imageObject.setControlsVisibility({ mtr: false });
         element.fabricObject = imageObject;
         get().canvas?.add(imageObject);
         get().canvas?.centerObject(imageObject);
