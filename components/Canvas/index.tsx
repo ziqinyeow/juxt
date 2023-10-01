@@ -67,11 +67,11 @@ const Canvas = () => {
     }
 
     const observer = new ResizeObserver((entries) => {
-      const fabricWidth = canvas?.getWidth() ?? 1920;
-      const fabricHeight = canvas?.getHeight() ?? 1080;
+      const fabricWidth = canvas?.getWidth() ?? RESOLUTION.width;
+      const fabricHeight = canvas?.getHeight() ?? RESOLUTION.height;
       // const cssWidth = Math.min(parent.clientWidth, fabricWidth);
       const cssWidth = parent.clientWidth;
-      // const cssHeight = parent.clientHeight
+      // const cssHeight = parent.clientHeight;
       const ratio = fabricWidth / parent.clientWidth;
       fabric.Object.prototype.set({
         cornerSize: ratio * 10,
@@ -83,6 +83,17 @@ const Canvas = () => {
         height: cssWidth / (fabricWidth / fabricHeight) + "px",
       };
       canvas?.setDimensions(dimension, { cssOnly: true }).requestRenderAll();
+      // const dimension = {
+      //   width: parent?.offsetWidth,
+      //   height: parent?.offsetHeight,
+      // };
+      // canvas?.setDimensions(dimension);
+      // let scaleRatio = Math.min(
+      //   dimension.width / RESOLUTION.width,
+      //   dimension.height / RESOLUTION.height
+      // );
+      // canvas?.setZoom(scaleRatio);
+      // canvas?.requestRenderAll();
     });
 
     observer.observe(parent);
@@ -93,10 +104,8 @@ const Canvas = () => {
 
   return (
     <>
-      {/* <Zoomable>
-      </Zoomable> */}
       <div className="h-[calc(100vh_-_64px_-_310px)] w-[calc(100vw_-_300px)] bg-primary-800 flex items-center justify-center">
-        <div className="flex items-center justify-center w-[95%] h-[95%] border rounded-md border-primary-400 overflow-hidden">
+        <div className="flex items-center justify-center w-[98%] h-[95%] border rounded-md border-primary-400 overflow-hidden">
           <canvas
             id="canvas"
             width={RESOLUTION.width}
@@ -104,6 +113,7 @@ const Canvas = () => {
           />
         </div>
       </div>
+      {/* <Zoomable></Zoomable> */}
     </>
   );
 };
