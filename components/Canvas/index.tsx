@@ -10,6 +10,8 @@ import {
   movingRotatingWithinCanvasBound,
   scaleWithinCanvasBound,
 } from "@/lib/utils/canvas";
+import Tools from "./tools";
+import { tools } from "./tools/tools";
 
 const Canvas = () => {
   const { canvas, setCanvas, setSelectedElement } = useStore();
@@ -104,8 +106,13 @@ const Canvas = () => {
 
   return (
     <>
-      <div className="h-[calc(100vh_-_64px_-_310px)] w-[calc(100vw_-_300px)] bg-primary-800 flex items-center justify-center">
-        <div className="flex items-center justify-center w-[98%] h-[95%] border rounded-md border-primary-400 overflow-hidden">
+      <div className="h-[calc(100vh_-_64px_-_310px)] w-[calc(100vw_-_300px)] bg-primary-600 flex items-center justify-center">
+        <div className="absolute flex items-center justify-center h-full gap-2 left-1">
+          <div className="z-[200] flex gap-2 flex-col">
+            <Tools tools={tools} />
+          </div>
+        </div>
+        <div className="flex items-center z-[100] justify-center w-[98%] h-[95%] border rounded-md border-primary-400 overflow-hidden">
           <canvas
             id="canvas"
             width={RESOLUTION.width}

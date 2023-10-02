@@ -1,1 +1,1 @@
-export type Cursor = "pointer" | "slice";
+export type Cursor = "pointer" | "grab" | "slice";
