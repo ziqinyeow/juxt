@@ -1,4 +1,5 @@
-export type ElementType = "video" | "image" | "text" | "bbox" | "pose";
+export type ElementType = "video" | "image" | "text" | "shape" | "pose";
+export type Shape = fabric.Rect | fabric.Polyline | fabric.Triangle;
 export type Placement = {
   x: number;
   y: number;
@@ -40,14 +41,27 @@ export type TextElement = ElementBase<
   }
 >;
 
-export type PoseElement = ElementBase<
-  "pose",
+export type BboxElement = ElementBase<
+  "shape",
   {
     coords?: [];
   }
 >;
 
-export type Element = VideoElement | ImageElement | TextElement | PoseElement;
+export type PoseElement = ElementBase<
+  "pose",
+  {
+    shape?: string;
+    coords?: [];
+  }
+>;
+
+export type Element =
+  | VideoElement
+  | ImageElement
+  | TextElement
+  | BboxElement
+  | PoseElement;
 
 export type Tracks = {
   id: string;

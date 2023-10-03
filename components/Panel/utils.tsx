@@ -96,7 +96,7 @@ export const getElementColor = (elementType: ElementType): ClassValue => {
       return "bg-element-2";
     case "text":
       return "bg-element-3";
-    case "bbox":
+    case "shape":
       return "bg-element-4";
     case "pose":
       return "bg-element-5";
@@ -113,7 +113,7 @@ export const getElementIcon = (elementType: ElementType) => {
       return <IconPhoto />;
     case "text":
       return <IconLanguageHiragana />;
-    case "bbox":
+    case "shape":
       return <IconBoxMargin />;
     case "pose":
       return <IconYoga />;

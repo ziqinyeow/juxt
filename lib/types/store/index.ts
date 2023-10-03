@@ -1,6 +1,7 @@
 import { fabric } from "fabric";
-import { Element, Tracks } from "../track";
+import { Element, Placement, Shape, Tracks } from "../track";
 import { FileWithPath } from "../file";
+import { IEvent } from "fabric/fabric-impl";
 
 export interface StoreTypes {
   canvas: fabric.Canvas | null;
@@ -15,7 +16,9 @@ export interface StoreTypes {
   tracks: Tracks[];
   selectedElement: Element | null;
   addElement: (trackId: string, element: Element) => void;
+  addShape: (shape: Shape, placement: Placement) => void;
   addTrackAndElement: (element: Element) => void;
+  updatePlacement: (e: IEvent, element: Element, object: any) => void;
   addElementToCanvas: (element: Element) => void;
   setSelectedElement: (element: Element | null) => void;
   updateElement: (elementId: string, data: any) => void;

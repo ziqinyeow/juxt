@@ -16,7 +16,13 @@ import { useEffect, useState } from "react";
 import Tooltip from "@/components/Tooltip";
 import { useStore } from "@/lib/store";
 import { IEvent } from "fabric/fabric-impl";
-import { drawRect } from "@/lib/utils/tools";
+import {
+  drawPolygon,
+  drawRect,
+  drawTriangle,
+  setToDefaultCanvas,
+  setToDrawingCanvas,
+} from "@/lib/utils/tools";
 // import { tools } from "./tools";
 
 const Row = ({
@@ -27,7 +33,7 @@ const Row = ({
   children,
 }: any) => {
   return (
-    <div className="flex items-center h-full gap-1 p-1 bg-primary-800">
+    <div className="flex items-center h-full gap-1 p-1 bg-primary-400">
       <Button
         onClick={() => {
           if (currentToolIndex === index) {
@@ -90,8 +96,8 @@ const Item = ({ tool, onClick }: { tool: Tool } & DivProps) => {
 };
 
 const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
-  const { canvas } = useStore();
-  const [currentToolIndex, setCurrentToolIndex] = useState<number | null>(null);
+  const { canvas, addShape } = useStore();
+  const [currentToolIndex, setCurrentToolIndex] = useState<number | null>(0);
   const [currentTools, setCurrentTools] = useState(
     tools?.map((t) => t.tools[0])
   );
@@ -101,52 +107,72 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
     if (currentToolIndex !== null) {
       switch (currentTools[currentToolIndex].name) {
         case "pointer":
-          canvas!.selection = true;
-          canvas!.defaultCursor = "default";
-          canvas!.hoverCursor = "all-scroll";
-          canvas?.forEachObject(function (obj) {
-            obj.selectable = true;
-          });
-          canvas.off("mouse:down");
-          canvas.off("mouse:move");
-          canvas.off("mouse:up");
-          canvas?.requestRenderAll();
+          setToDefaultCanvas(canvas);
           break;
         case "square roi":
-          canvas!.selection = false;
-          canvas!.defaultCursor = "crosshair";
-          canvas!.hoverCursor = "crosshair";
-          canvas?.discardActiveObject();
-          canvas?.forEachObject(function (obj) {
-            obj.selectable = false;
-          });
+          setToDrawingCanvas(canvas);
+          drawRect(canvas, (shape) => {
+            setCurrentToolIndex(0);
+            addShape(shape, {
+              x: shape.left ?? 0,
+              y: shape.top ?? 0,
+              width: shape.width ?? 0,
+              height: shape.height ?? 0,
+              rotation: 0,
+              scaleX: 1,
+              scaleY: 1,
+            });
+          }); // set to pointer
+          canvas?.requestRenderAll();
+          break;
 
-          drawRect(canvas);
+        case "tri roi":
+          setToDrawingCanvas(canvas);
+          drawTriangle(canvas, (shape: fabric.Triangle) => {
+            setCurrentToolIndex(0);
+            addShape(shape, {
+              x: shape.left ?? 0,
+              y: shape.top ?? 0,
+              width: shape.width ?? 0,
+              height: shape.height ?? 0,
+              rotation: 0,
+              scaleX: 1,
+              scaleY: 1,
+            });
+          }); // set to pointer
+          canvas?.requestRenderAll();
+          break;
 
+        case "poly roi":
+          setToDrawingCanvas(canvas);
+          drawPolygon(canvas, (shape: fabric.Polyline) => {
+            setCurrentToolIndex(0);
+            addShape(shape, {
+              x: shape.left ?? 0,
+              y: shape.top ?? 0,
+              width: shape.width ?? 0,
+              height: shape.height ?? 0,
+              rotation: 0,
+              scaleX: 1,
+              scaleY: 1,
+            });
+          }); // set to pointer
           canvas?.requestRenderAll();
           break;
 
         default:
           break;
       }
+      // setToDefaultCanvas(canvas);
     } else {
-      canvas!.selection = true;
-      canvas!.defaultCursor = "default";
-      canvas!.hoverCursor = "all-scroll";
-      canvas?.forEachObject(function (obj) {
-        obj.selectable = true;
-      });
-      canvas.off("mouse:down");
-      canvas.off("mouse:move");
-      canvas.off("mouse:up");
-      canvas?.requestRenderAll();
+      setToDefaultCanvas(canvas);
     }
-  }, [canvas, currentTools, currentToolIndex]);
+  }, [canvas, currentTools, currentToolIndex, addShape]);
 
   return (
     <div
       {...props}
-      className="overflow-hidden border-2 rounded-md z-[200] shadow border-primary-500"
+      className="overflow-hidden border-2 rounded-md z-[200] shadow border-primary-800"
     >
       {tools?.map((tool, i) => (
         <Row

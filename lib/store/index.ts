@@ -2,7 +2,7 @@ import { fabric } from "fabric";
 import { FabricUtils, CoverVideo, CoverImage } from "@/lib/utils/fabric";
 import { create } from "zustand";
 import { StoreTypes } from "../types/store";
-import { Element, Placement } from "../types/track";
+import { Element, Placement, Shape } from "../types/track";
 import { tracks } from "../samples/tracks";
 import {
   PANEL_SLIDER_MAX_VALUE,
@@ -11,6 +11,7 @@ import {
 import { FileWithPath } from "../types/file";
 import { isHtmlImageElement, isHtmlVideoElement } from "../utils/html";
 import { nanoid } from "nanoid";
+import { IEvent } from "fabric/fabric-impl";
 
 export const useStore = create<StoreTypes>()((set, get) => ({
   canvas: null,
@@ -78,6 +79,25 @@ export const useStore = create<StoreTypes>()((set, get) => ({
     };
     get().addTrackAndElement(element);
     get().addElementToCanvas(element);
+  },
+
+  addShape: (shape: Shape, placement: Placement) => {
+    const id = nanoid();
+    const element: Element = {
+      id,
+      name: "bbox",
+      type: "shape",
+      placement,
+      timeframe: {
+        start: 0,
+        duration: 5000,
+      },
+      properties: {},
+    };
+    get().canvas?.on("object:modified", (e) => {
+      get().updatePlacement(e, element, shape);
+    });
+    get().addTrackAndElement(element);
   },
 
   // elements
@@ -183,31 +203,8 @@ export const useStore = create<StoreTypes>()((set, get) => ({
         element.fabricObject = imageObject;
         get().canvas?.add(imageObject);
         get().canvas?.centerObject(imageObject);
-        get().canvas?.on("object:modified", function (e) {
-          if (!e.target) return;
-          const target = e.target;
-          if (target != imageObject) return;
-          const placement = element.placement;
-          const newPlacement: Placement = {
-            ...placement,
-            x: target.left ?? placement.x,
-            y: target.top ?? placement.y,
-            rotation: target.angle ?? placement.rotation,
-            width:
-              target.width && target.scaleX
-                ? target.width * target.scaleX
-                : placement.width,
-            height:
-              target.height && target.scaleY
-                ? target.height * target.scaleY
-                : placement.height,
-            scaleX: 1,
-            scaleY: 1,
-          };
-          get().updateElement(element.id, {
-            ...element,
-            placement: newPlacement,
-          });
+        get().canvas?.on("object:modified", (e) => {
+          get().updatePlacement(e, element, imageObject);
         });
 
         get().canvas?.requestRenderAll();
@@ -215,6 +212,33 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       default:
         break;
     }
+  },
+
+  updatePlacement: (e: IEvent, element: Element, object: any) => {
+    if (!e.target) return;
+    const target = e.target;
+    if (target != object) return;
+    const placement = element.placement;
+    const newPlacement: Placement = {
+      ...placement,
+      x: target.left ?? placement.x,
+      y: target.top ?? placement.y,
+      rotation: target.angle ?? placement.rotation,
+      width:
+        target.width && target.scaleX
+          ? target.width * target.scaleX
+          : placement.width,
+      height:
+        target.height && target.scaleY
+          ? target.height * target.scaleY
+          : placement.height,
+      scaleX: 1,
+      scaleY: 1,
+    };
+    get().updateElement(element.id, {
+      ...element,
+      placement: newPlacement,
+    });
   },
   setSelectedElement: (element: Element | null) =>
     set((state) => ({ ...state, selectedElement: element })),
