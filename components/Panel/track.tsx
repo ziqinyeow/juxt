@@ -56,7 +56,9 @@ export const Element = ({ element }: Props) => {
     <Rnd
       className={cn([
         "rounded select-none ring-2 ring-primary-200 ring-offset-primary-500 ring-offset-[3px]",
-        getElementColor(element.type),
+        getElementColor(
+          element.type === "shape" ? element.properties.type : element.type
+        ),
       ])}
       bounds="parent"
       enableResizing={{
@@ -110,9 +112,13 @@ export const Element = ({ element }: Props) => {
       <div className="absolute top-0 left-0 z-10 w-full h-full bg-repeat-space bg-contain bg-voice" />
       <div className="flex items-center w-full h-full gap-2 px-2 font-bold text-black">
         <div className="z-20 select-none line-clamp-1 [&>*]:w-4 [&>*]:h-4">
-          {getElementIcon(element.type)}
+          {getElementIcon(
+            element.type === "shape" ? element.properties.type : element.type
+          )}
         </div>
-        <div className="z-20 select-none line-clamp-1">{element.type}</div>
+        <div className="z-20 select-none line-clamp-1">
+          {element.type === "shape" ? element.properties.type : element.type}
+        </div>
       </div>
     </Rnd>
   );
@@ -125,7 +131,7 @@ type TrackProps = DivProps & {
 export const Track = ({ track, ...props }: TrackProps) => {
   return (
     <div {...props}>
-      {track.elements.map((element: any, i: number) => (
+      {track.elements.map((element: ElementType, i: number) => (
         <Element key={i} element={element} />
       ))}
     </div>

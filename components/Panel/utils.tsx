@@ -1,12 +1,15 @@
-import { ElementType } from "@/lib/types/track";
+import { ElementType, ShapeType } from "@/lib/types/track";
 import {
   IconBoxMargin,
   IconLanguageHiragana,
   IconPhoto,
+  IconPolygon,
+  IconTriangle,
   IconVideo,
   IconYoga,
 } from "@tabler/icons-react";
 import { ClassValue } from "clsx";
+import { Square } from "lucide-react";
 
 /**
  * Logic used to check if current index (corresponse to seconds) can be shown or not.
@@ -88,7 +91,9 @@ export const convertPixelWidthToDuration = (
   return duration;
 };
 
-export const getElementColor = (elementType: ElementType): ClassValue => {
+export const getElementColor = (
+  elementType: ElementType | string
+): ClassValue => {
   switch (elementType) {
     case "video":
       return "bg-element-1";
@@ -96,8 +101,12 @@ export const getElementColor = (elementType: ElementType): ClassValue => {
       return "bg-element-2";
     case "text":
       return "bg-element-3";
-    case "shape":
+    case "square":
       return "bg-element-4";
+    case "triangle":
+      return "bg-element-6";
+    case "polygon":
+      return "bg-element-8";
     case "pose":
       return "bg-element-5";
     default:
@@ -105,7 +114,7 @@ export const getElementColor = (elementType: ElementType): ClassValue => {
   }
 };
 
-export const getElementIcon = (elementType: ElementType) => {
+export const getElementIcon = (elementType: ElementType | ShapeType) => {
   switch (elementType) {
     case "video":
       return <IconVideo />;
@@ -113,8 +122,12 @@ export const getElementIcon = (elementType: ElementType) => {
       return <IconPhoto />;
     case "text":
       return <IconLanguageHiragana />;
-    case "shape":
-      return <IconBoxMargin />;
+    case "square":
+      return <Square />;
+    case "triangle":
+      return <IconTriangle />;
+    case "polygon":
+      return <IconPolygon />;
     case "pose":
       return <IconYoga />;
     default:

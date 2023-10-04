@@ -16,7 +16,7 @@ export interface StoreTypes {
   tracks: Tracks[];
   selectedElement: Element | null;
   addElement: (trackId: string, element: Element) => void;
-  addShape: (shape: Shape, placement: Placement) => void;
+  addShape: (type: string, shape: Shape, placement: Placement) => void;
   addTrackAndElement: (element: Element) => void;
   updatePlacement: (e: IEvent, element: Element, object: any) => void;
   addElementToCanvas: (element: Element) => void;

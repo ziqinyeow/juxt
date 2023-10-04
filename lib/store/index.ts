@@ -81,18 +81,20 @@ export const useStore = create<StoreTypes>()((set, get) => ({
     get().addElementToCanvas(element);
   },
 
-  addShape: (shape: Shape, placement: Placement) => {
+  addShape: (type: string, shape: Shape, placement: Placement) => {
     const id = nanoid();
     const element: Element = {
       id,
-      name: "bbox",
+      name: type + "_" + id,
       type: "shape",
       placement,
       timeframe: {
         start: 0,
         duration: 5000,
       },
-      properties: {},
+      properties: {
+        type,
+      },
     };
     get().canvas?.on("object:modified", (e) => {
       get().updatePlacement(e, element, shape);
