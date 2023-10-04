@@ -2,7 +2,7 @@ import { fabric } from "fabric";
 import { FabricUtils, CoverVideo, CoverImage } from "@/lib/utils/fabric";
 import { create } from "zustand";
 import { StoreTypes } from "../types/store";
-import { Element, Placement, Shape } from "../types/track";
+import { Element, Placement, Shape, ShapeType } from "../types/track";
 import { tracks } from "../samples/tracks";
 import {
   PANEL_SLIDER_MAX_VALUE,
@@ -81,7 +81,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
     get().addElementToCanvas(element);
   },
 
-  addShape: (type: string, shape: Shape, placement: Placement) => {
+  addShape: (type: ShapeType, shape: Shape, placement: Placement) => {
     const id = nanoid();
     const element: Element = {
       id,
