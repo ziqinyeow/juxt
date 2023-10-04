@@ -27,6 +27,7 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
         case "pointer":
           setToDefaultCanvas(canvas);
           break;
+
         case "square roi":
           setToDrawingCanvas(canvas);
           drawRect(canvas, (shape) => {
@@ -65,6 +66,7 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
           setToDrawingCanvas(canvas);
           drawPolygon(canvas, (shape: fabric.Polyline) => {
             setCurrentToolIndex(0);
+            console.log(shape);
             addShape("polygon", shape, {
               x: shape.left ?? 0,
               y: shape.top ?? 0,

@@ -24,6 +24,7 @@ export const setToDefaultCanvas = (canvas: fabric.Canvas) => {
   canvas.off("mouse:down");
   canvas.off("mouse:move");
   canvas.off("mouse:up");
+  canvas.off("mouse:dblclick");
   canvas?.requestRenderAll();
 };
 
