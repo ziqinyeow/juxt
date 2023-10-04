@@ -5,6 +5,7 @@ import { Tools } from "@/lib/types/tools";
 import { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
 import {
+  drawText,
   drawPolygon,
   drawRect,
   drawTriangle,
@@ -14,7 +15,7 @@ import {
 import { Item, Menu, Row } from "./utils";
 
 const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
-  const { canvas, addShape } = useStore();
+  const { canvas, addShape, addText } = useStore();
   const [currentToolIndex, setCurrentToolIndex] = useState<number | null>(0);
   const [currentTools, setCurrentTools] = useState(
     tools?.map((t) => t.tools[0])
@@ -26,6 +27,32 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
       switch (currentTools[currentToolIndex].name) {
         case "pointer":
           setToDefaultCanvas(canvas);
+          break;
+
+        case "text":
+          setToDrawingCanvas(canvas, "pointer");
+          drawText(canvas, (text) => {
+            setCurrentToolIndex(0);
+            addText(
+              text,
+              {
+                text: text.text,
+                fontSize: text.fontSize,
+                fontWeight: text.fontWeight,
+                splittedTexts: [],
+              },
+              {
+                x: text.left ?? 0,
+                y: text.top ?? 0,
+                width: text.width ?? 0,
+                height: text.height ?? 0,
+                rotation: 0,
+                scaleX: 1,
+                scaleY: 1,
+              }
+            );
+          });
+          canvas?.requestRenderAll();
           break;
 
         case "square roi":
@@ -66,7 +93,6 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
           setToDrawingCanvas(canvas);
           drawPolygon(canvas, (shape: fabric.Polyline) => {
             setCurrentToolIndex(0);
-            console.log(shape);
             addShape("polygon", shape, {
               x: shape.left ?? 0,
               y: shape.top ?? 0,
@@ -87,7 +113,7 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
     } else {
       setToDefaultCanvas(canvas);
     }
-  }, [canvas, currentTools, currentToolIndex, addShape]);
+  }, [canvas, currentTools, currentToolIndex, addShape, addText]);
 
   return (
     <div

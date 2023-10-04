@@ -4,10 +4,13 @@ import { IEvent } from "fabric/fabric-impl";
 const STROKE_COLOR = "#2BEBC8";
 const STROKE_WIDTH = 3;
 
-export const setToDrawingCanvas = (canvas: fabric.Canvas) => {
+export const setToDrawingCanvas = (
+  canvas: fabric.Canvas,
+  cursor = "crosshair"
+) => {
   canvas!.selection = false;
-  canvas!.defaultCursor = "crosshair";
-  canvas!.hoverCursor = "crosshair";
+  canvas!.defaultCursor = cursor;
+  canvas!.hoverCursor = cursor;
   canvas?.discardActiveObject();
   canvas?.forEachObject(function (obj) {
     obj.selectable = false;
@@ -26,6 +29,29 @@ export const setToDefaultCanvas = (canvas: fabric.Canvas) => {
   canvas.off("mouse:up");
   canvas.off("mouse:dblclick");
   canvas?.requestRenderAll();
+};
+
+export const drawText = (
+  canvas: fabric.Canvas,
+  mouseUp: (shape: fabric.IText) => void
+) => {
+  let text: any = null;
+  const onMouseDown = (o: IEvent) => {
+    const pointer = canvas.getPointer(o.e);
+    text = new fabric.IText("text", {
+      left: pointer.x,
+      top: pointer.y,
+      fontSize: 50,
+      fontFamily: "Andale Mono",
+      fill: "white",
+    });
+    canvas?.add(text);
+  };
+  const onMouseUp = (o: IEvent) => {
+    mouseUp(text);
+  };
+  canvas.on("mouse:down", onMouseDown);
+  canvas.on("mouse:up", onMouseUp);
 };
 
 export function drawRect(

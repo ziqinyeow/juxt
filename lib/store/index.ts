@@ -102,6 +102,25 @@ export const useStore = create<StoreTypes>()((set, get) => ({
     get().addTrackAndElement(element);
   },
 
+  addText: (text: fabric.IText, properties: any, placement: Placement) => {
+    const id = nanoid();
+    const element: Element = {
+      id,
+      name: "text_" + id,
+      type: "text",
+      placement,
+      timeframe: {
+        start: 0,
+        duration: 5000,
+      },
+      properties,
+    };
+    get().canvas?.on("object:modified", (e) => {
+      get().updatePlacement(e, element, text);
+    });
+    get().addTrackAndElement(element);
+  },
+
   // elements
   tracks: [],
   selectedElement: null,
