@@ -11,6 +11,7 @@ import {
   drawTriangle,
   setToDefaultCanvas,
   setToDrawingCanvas,
+  buildHumanSkeleton,
 } from "@/lib/utils/tools";
 import { Item, Menu, Row } from "./utils";
 
@@ -30,7 +31,7 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
           break;
 
         case "text":
-          setToDrawingCanvas(canvas, "pointer");
+          setToDrawingCanvas(canvas, "text");
           drawText(canvas, (text) => {
             setCurrentToolIndex(0);
             addText(
@@ -104,6 +105,26 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
             });
           }); // set to pointer
           canvas?.requestRenderAll();
+          break;
+
+        case "pose":
+          setToDrawingCanvas(canvas, "pointer");
+          const { left, top } = canvas.getCenter();
+          const skeleton = buildHumanSkeleton(canvas, { x: left, y: top });
+          // canvas.centerObject(skeleton);
+          canvas?.requestRenderAll();
+          canvas.on("object:moving", function (event) {
+            const { target, pointer } = event;
+            if (target && pointer && target?.type === "circle") {
+              skeleton.moveJoint(target, pointer);
+            }
+          });
+          setToDefaultCanvas(canvas);
+          setCurrentToolIndex(0);
+
+          // drawPose(canvas, (shape) => {
+          //   setCurrentToolIndex(0);
+          // });
           break;
 
         default:
