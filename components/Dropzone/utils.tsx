@@ -140,7 +140,7 @@ export const traverse = async (items: DataTransferItemList) => {
 };
 
 export const checkFileType = (file: File): "image" | "video" | "others" => {
-  if (file.type.includes("video")) {
+  if (file.type.includes("video") || file.name.toLowerCase().includes(".mov")) {
     return "video";
   } else if (file.type.includes("image")) {
     return "image";

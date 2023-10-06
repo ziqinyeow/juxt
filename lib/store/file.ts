@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { FileStoreType } from "../types/store/file";
 import { BucketType, FileWithPath } from "../types/file";
+import { checkFileType } from "@/components/Dropzone/utils";
 
 const merge = (a: FileWithPath[], b: FileWithPath[], predicate: Function) => {
   const c = [...a]; // copy to avoid side effects
@@ -27,30 +28,21 @@ export const useFile = create<FileStoreType>()((set, get) => ({
         "/": merge(
           [...curr["/"]],
           Array.from(fileList).map((file) => {
-            // if (file.type.startsWith("video")) {
-            //   const video = document.createElement("video");
-            //   video.onloadedmetadata = () => {
-            //     // return {
-            //     //   type: "file",
-            //     //   path: `/` + file.name,
-            //     //   file,
-            //     //   duration: video.duration,
-            //     // };
-            //   };
-            //   video.src = URL.createObjectURL(file);
-            //   video.remove();
-            // }
+            const type = checkFileType(file);
+            const media = type === "image" || type === "video";
             return {
               dir: false,
-              type: "others",
+              type,
               path: `/` + file.name,
               file,
+              url: media ? URL.createObjectURL(file) : "",
             };
           }),
           (a: FileWithPath, b: FileWithPath) => a.path === b.path
         ),
       },
     }));
+    console.log(get().bucket);
   },
   mergeBucket: (bucket: BucketType) => {
     let curr = { ...get().bucket }; // copy to avoid side effects

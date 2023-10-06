@@ -155,11 +155,13 @@ const Explorer = () => {
               <React.Fragment key={props.index}>
                 {/* To add to the track panel (for retrieving duration purposes) */}
                 {file?.type === "video" ? (
-                  <video
-                    id={file?.path}
-                    className="hidden"
-                    src={file?.url ?? ""}
-                  ></video>
+                  <div className="opacity-0">
+                    <video
+                      id={file?.path}
+                      className=""
+                      src={file?.url ?? ""}
+                    ></video>
+                  </div>
                 ) : file?.type === "image" ? (
                   <>
                     <Image

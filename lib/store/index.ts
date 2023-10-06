@@ -26,15 +26,17 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       return;
     }
     const id = nanoid();
+    const center = get().canvas?.getCenter();
+
     const element: Element = {
       id,
       name: media.path,
       type: "video",
       placement: {
-        x: 0,
-        y: 0,
-        width: 550,
-        height: 300,
+        x: (center?.left ?? 0) - 500,
+        y: (center?.top ?? 0) - 300,
+        width: 1000,
+        height: 600,
         rotation: 0,
         scaleX: 1,
         scaleY: 1,
@@ -49,19 +51,21 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       },
     };
     get().addTrackAndElement(element);
-    get().addElementToCanvas(element);
+    get().refreshTracks();
+    // get().addElementToCanvas(element);
   },
 
   images: [],
   addImage: (media: FileWithPath) => {
     const id = nanoid();
+    const center = get().canvas?.getCenter();
     const element: Element = {
       id,
       name: media.path,
       type: "image",
       placement: {
-        x: 0,
-        y: 0,
+        x: (center?.left ?? 0) - 500,
+        y: (center?.top ?? 0) - 300,
         width: 1000,
         height: 600,
         rotation: 0,
@@ -78,7 +82,8 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       },
     };
     get().addTrackAndElement(element);
-    get().addElementToCanvas(element);
+    get().refreshTracks();
+    // get().addElementToCanvas(element);
   },
 
   addShape: (type: ShapeType, shape: Shape, placement: Placement) => {
@@ -154,67 +159,52 @@ export const useStore = create<StoreTypes>()((set, get) => ({
   },
   addElementToCanvas: (element: Element) => {
     switch (element.type) {
-      case "video":
+      case "video": {
         const video = document.getElementById(element.properties.elementId);
         if (!isHtmlVideoElement(video)) return;
+        console.log("video", video);
+        const {
+          id,
+          placement: { height, rotation, scaleX, scaleY, width, x, y },
+        } = element;
         const videoObject = new CoverVideo(video, {
-          name: element.id,
-          left: element.placement.x,
-          top: element.placement.y,
-          width: element.placement.width,
-          height: element.placement.height,
-          scaleX: element.placement.scaleX,
-          scaleY: element.placement.scaleY,
-          angle: element.placement.rotation,
-          objectCaching: false,
+          name: id,
+          left: x,
+          top: y,
+          width,
+          height,
+          scaleX,
+          scaleY,
+          angle: rotation,
+          // objectCaching: false,
           selectable: true,
-          lockUniScaling: true,
+          // lockUniScaling: true,
         });
+        videoObject.setControlsVisibility({ mtr: false });
         element.fabricObject = videoObject;
-
-        // console.log(get().canvas?.getWidth());
-
-        // get().canvas?.on("object:modified", function (e) {
-        //   if (!e.target) return;
-        //   const target = e.target;
-        //   if (target != fabricObject) return;
-        //   const placement = element.placement;
-        //   const newPlacement: Placement = {
-        //     ...placement,
-        //     x: target.left ?? placement.x,
-        //     y: target.top ?? placement.y,
-        //     rotation: target.angle ?? placement.rotation,
-        //     width:
-        //       target.width && target.scaleX
-        //         ? target.width * target.scaleX
-        //         : placement.width,
-        //     height:
-        //       target.height && target.scaleY
-        //         ? target.height * target.scaleY
-        //         : placement.height,
-        //     scaleX: 1,
-        //     scaleY: 1,
-        //   };
-        //   get().updateElement(element.id, {
-        //     ...element,
-        //     placement: newPlacement,
-        //   });
-        // });
         get().canvas?.add(videoObject);
-        get().canvas?.centerObject(videoObject);
-        get().canvas?.requestRenderAll();
+        // get().canvas?.centerObject(videoObject);
+        // console.log(get().canvas?.getObjects());
 
-        break;
-      case "image":
+        get().canvas?.on("object:modified", (e) => {
+          get().updatePlacement(e, element, videoObject);
+        });
+        get().canvas?.requestRenderAll();
+      }
+      case "image": {
         const image = document.getElementById(element.properties.elementId);
         if (!isHtmlImageElement(image)) return;
+        const {
+          id,
+          placement: { height, rotation, scaleX, scaleY, width, x, y },
+        } = element;
         const imageObject = new CoverImage(image, {
-          name: element.id,
-          left: element.placement.x,
-          top: element.placement.y,
-          width: element.placement.width,
-          height: element.placement.height,
-          angle: element.placement.rotation,
+          name: id,
+          left: x,
+          top: y,
+          width,
+          height,
+          angle: rotation,
           // objectCaching: false,
           selectable: true,
           // lockUniScaling: true,
@@ -223,15 +213,94 @@ export const useStore = create<StoreTypes>()((set, get) => ({
         imageObject.setControlsVisibility({ mtr: false });
         element.fabricObject = imageObject;
         get().canvas?.add(imageObject);
-        get().canvas?.centerObject(imageObject);
+        // get().canvas?.centerObject(imageObject);
         get().canvas?.on("object:modified", (e) => {
           get().updatePlacement(e, element, imageObject);
         });
 
         get().canvas?.requestRenderAll();
+      }
 
       default:
         break;
+    }
+  },
+  refreshTracks: () => {
+    const canvas = get().canvas,
+      tracks = get().tracks;
+    if (!canvas) return;
+    get().canvas?.remove(...(get().canvas?.getObjects() ?? []));
+
+    // console.log(tracks);
+    for (let i = 0; i < tracks.length; i++) {
+      const element = tracks[i].elements[0];
+      switch (element.type) {
+        case "video": {
+          const video = document.getElementById(element.properties.elementId);
+          const {
+            id,
+            placement: { height, rotation, scaleX, scaleY, width, x, y },
+          } = element;
+          if (!isHtmlVideoElement(video)) return;
+          video.width = 1000;
+          video.height = 600;
+
+          const videoObject = new CoverVideo(video, {
+            name: id,
+            left: x,
+            top: y,
+            width,
+            height,
+            scaleX,
+            scaleY,
+            angle: rotation,
+            // objectCaching: false,
+            selectable: true,
+            // lockUniScaling: true,
+          });
+          videoObject.setControlsVisibility({ mtr: false });
+          element.fabricObject = videoObject;
+
+          get().canvas?.add(videoObject);
+
+          get().canvas?.on("object:modified", (e) => {
+            get().updatePlacement(e, element, videoObject);
+          });
+          get().canvas?.requestRenderAll();
+        }
+        case "image": {
+          const image = document.getElementById(element.properties.elementId);
+          if (!isHtmlImageElement(image)) return;
+          const {
+            id,
+            placement: { height, rotation, scaleX, scaleY, width, x, y },
+          } = element;
+          const imageObject = new CoverImage(image, {
+            name: id,
+            left: x,
+            top: y,
+            width,
+            height,
+            angle: rotation,
+            // objectCaching: false,
+            selectable: true,
+            // lockUniScaling: true,
+            centeredScaling: true,
+          });
+          imageObject.setControlsVisibility({ mtr: false });
+          element.fabricObject = imageObject;
+          get().canvas?.add(imageObject);
+          // get().canvas?.centerObject(imageObject);
+          get().canvas?.on("object:modified", (e) => {
+            get().updatePlacement(e, element, imageObject);
+          });
+
+          get().canvas?.requestRenderAll();
+        }
+
+        default:
+          break;
+      }
     }
   },
 
@@ -260,6 +329,12 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       ...element,
       placement: newPlacement,
     });
+    console.log(
+      "update placement",
+      get().tracks,
+      get().tracks.find((t) => t.elements.find((e) => e.id === element.id)),
+      newPlacement
+    );
   },
   setSelectedElement: (element: Element | null) =>
     set((state) => ({ ...state, selectedElement: element })),

@@ -64,6 +64,7 @@ export const CoverImage = fabric.util.createClass(fabric.Image, {
       width: this.getScaledWidth(),
       height: this.getScaledHeight(),
     });
+    // console.log(width, height, crop, this._element.width);
     const { cropX, cropY, cropWidth, cropHeight } = crop;
     ctx.save();
     ctx.filter = "none";
@@ -136,6 +137,7 @@ export const CoverVideo = fabric.util.createClass(fabric.Image, {
       this.callSuper("_render", ctx);
       return;
     }
+
     const width = this.width;
     const height = this.height;
     const crop = this.getCrop(this.getOriginalSize(), {
@@ -147,6 +149,8 @@ export const CoverVideo = fabric.util.createClass(fabric.Image, {
     const video = this._element as HTMLVideoElement;
     const videoScaledX = video.width / video.videoWidth;
     const videoScaledY = video.height / video.videoHeight;
+
+    console.log(this._element);
 
     ctx.save();
     ctx.filter = "none";

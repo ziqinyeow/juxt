@@ -19,6 +19,7 @@ export interface StoreTypes {
   addShape: (type: ShapeType, shape: Shape, placement: Placement) => void;
   addText: (text: fabric.IText, properties: any, placement: Placement) => void;
   addTrackAndElement: (element: Element) => void;
+  refreshTracks: () => void;
   updatePlacement: (e: IEvent, element: Element, object: any) => void;
   addElementToCanvas: (element: Element) => void;
   setSelectedElement: (element: Element | null) => void;
