@@ -42,7 +42,7 @@ export const useFile = create<FileStoreType>()((set, get) => ({
         ),
       },
     }));
-    console.log(get().bucket);
+    // console.log(get().bucket);
   },
   mergeBucket: (bucket: BucketType) => {
     let curr = { ...get().bucket }; // copy to avoid side effects

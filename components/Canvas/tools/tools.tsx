@@ -31,11 +31,11 @@ export const tools: Tools[] = [
         shortcut: "",
         icon: <IconHandStop className="w-4 h-4" />,
       },
-      {
-        name: "destroy this app",
-        shortcut: "",
-        icon: <IconHandMiddleFinger className="w-4 h-4" />,
-      },
+      // {
+      //   name: "destroy this app",
+      //   shortcut: "",
+      //   icon: <IconHandMiddleFinger className="w-4 h-4" />,
+      // },
     ],
   },
   {

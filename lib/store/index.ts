@@ -51,8 +51,8 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       },
     };
     get().addTrackAndElement(element);
-    get().refreshTracks();
-    // get().addElementToCanvas(element);
+    // get().refreshTracks();
+    get().addElementToCanvas(element);
   },
 
   images: [],
@@ -82,8 +82,8 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       },
     };
     get().addTrackAndElement(element);
-    get().refreshTracks();
-    // get().addElementToCanvas(element);
+    // get().refreshTracks();
+    get().addElementToCanvas(element);
   },
 
   addShape: (type: ShapeType, shape: Shape, placement: Placement) => {
@@ -162,11 +162,12 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       case "video": {
         const video = document.getElementById(element.properties.elementId);
         if (!isHtmlVideoElement(video)) return;
-        console.log("video", video);
         const {
           id,
           placement: { height, rotation, scaleX, scaleY, width, x, y },
         } = element;
+        video.width = 1000;
+        video.height = 600;
         const videoObject = new CoverVideo(video, {
           name: id,
           left: x,
@@ -329,12 +330,12 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       ...element,
       placement: newPlacement,
     });
-    console.log(
-      "update placement",
-      get().tracks,
-      get().tracks.find((t) => t.elements.find((e) => e.id === element.id)),
-      newPlacement
-    );
+    // console.log(
+    //   "update placement",
+    //   get().tracks,
+    //   get().tracks.find((t) => t.elements.find((e) => e.id === element.id)),
+    //   newPlacement
+    // );
   },
   setSelectedElement: (element: Element | null) =>
     set((state) => ({ ...state, selectedElement: element })),

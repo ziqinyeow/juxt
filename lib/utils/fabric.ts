@@ -90,7 +90,7 @@ export const CoverVideo = fabric.util.createClass(fabric.Image, {
   cropWidth: 0,
   cropHeight: 0,
 
-  initialize(element: HTMLVideoElement, options: any) {
+  initialize(element: HTMLVideoElement | string, options: any) {
     options = options || {};
 
     options = Object.assign(
@@ -150,7 +150,7 @@ export const CoverVideo = fabric.util.createClass(fabric.Image, {
     const videoScaledX = video.width / video.videoWidth;
     const videoScaledY = video.height / video.videoHeight;
 
-    console.log(this._element);
+    // console.log(this._element);
 
     ctx.save();
     ctx.filter = "none";
