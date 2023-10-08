@@ -3,25 +3,18 @@
 import React, { useState } from "react";
 import {
   IconBackspace,
-  IconChevronDown,
-  IconChevronUp,
   IconEye,
   IconGripVertical,
-  IconPlayerPauseFilled,
-  IconPlayerPlayFilled,
-  IconRewindBackward5,
-  IconRewindForward5,
   IconSearch,
 } from "@tabler/icons-react";
 import clsx from "clsx";
 import "./style.css";
 import { useStore } from "@/lib/store";
-import { cn, formatTimeToMinSecMili } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { Button, ToolbarButton } from "@/components/Button";
 import { Redo2, ScissorsLineDashed, Trash, Undo2, Unlock } from "lucide-react";
 import Track from "./track";
 import Slider from "./slider";
-import { Slider as UISlider } from "../ui/slider";
 import {
   getNumberOfTicks,
   getTicksGapWidth,
@@ -32,28 +25,23 @@ import CursorDropdown from "./cursor-dropdown";
 import Tooltip from "../Tooltip";
 import { useOperatingSystem } from "@/lib/hooks/useOperatingSystem";
 import { useFile } from "@/lib/store/file";
+import Seeker from "./seeker";
 
 const Panel = () => {
   const os = useOperatingSystem();
-  const { bucket } = useFile();
+  // const { bucket } = useFile();
 
   const {
     tracks,
     panelScale,
+    hidePanel,
+    // setHidePanel,
     addPanelScale,
-    playing,
     maxTime,
-    getCurrentTimeInMs,
-    setCurrentTimeInMs,
-    rewindCurrentTimeInMs,
   } = useStore();
-  const [hidePanel, setHidePanel] = useState(false);
-  const [cursor, setCursor] = useState<Cursor>("pointer");
 
-  const rewindBackward5 = () => rewindCurrentTimeInMs(5000, false);
-  const play = () => {};
-  const rewindForward5 = () => rewindCurrentTimeInMs(5000, true);
-  const toggleHidePanel = () => setHidePanel((p) => !p);
+  // const [hidePanel, setHidePanel] = useState(false);
+  const [cursor, setCursor] = useState<Cursor>("pointer");
 
   return (
     <div
@@ -62,77 +50,11 @@ const Panel = () => {
       ])}
     >
       <div className="absolute w-full h-1 transition-all -top-1 hover:bg-secondary-200 bg-primary-400 cursor-row-resize"></div>
-      <div className="h-[40px] bg-primary-400 px-4 flex items-center gap-5 justify-between">
-        <div className="flex items-end gap-2">
-          <Button onClick={rewindBackward5} className="text-white">
-            <IconRewindBackward5 className="w-4 h-4" />
-          </Button>
-
-          <Tooltip tooltip={playing ? `pause` : `play`}>
-            <Button onClick={play} className="text-secondary-200">
-              {playing ? (
-                <IconPlayerPauseFilled className="w-5 h-5" />
-              ) : (
-                <IconPlayerPlayFilled className="w-5 h-5" />
-              )}
-            </Button>
-          </Tooltip>
-          <Button onClick={rewindForward5} className="text-white">
-            <IconRewindForward5 className="w-4 h-4" />
-          </Button>
-        </div>
-        <div className="flex items-center justify-end w-full gap-4">
-          <UISlider step={1} className="w-full" />
-        </div>
-        <div className="flex items-center justify-end gap-4 whitespace-nowrap">
-          <div className="">
-            <span>{formatTimeToMinSecMili(getCurrentTimeInMs())}</span> /{" "}
-            <span className="text-white/70">
-              {formatTimeToMinSecMili(maxTime)}
-            </span>
-          </div>
-          <Tooltip tooltip={hidePanel ? `open panel` : `close panel`}>
-            <Button onClick={toggleHidePanel} className="text-secondary-200">
-              {hidePanel ? (
-                <IconChevronUp className="w-4 h-4" />
-              ) : (
-                <IconChevronDown className="w-4 h-4" />
-              )}
-            </Button>
-          </Tooltip>
-        </div>
-      </div>
+      <Seeker />
 
       <div className="h-[50px] bg-primary-400 border-b border-primary-400 px-4 py-2 flex items-center justify-between">
         <div className="flex items-center w-full gap-4">
           <CursorDropdown cursor={cursor} setCursor={setCursor} />
-          {/* <div className="flex gap-1 px-2 py-1 rounded bg-primary-500">
-            <Tooltip tooltip={`square (1)`}>
-              <ToolbarButton>
-                <Square className="w-4 h-4" />
-              </ToolbarButton>
-            </Tooltip>
-            <Tooltip tooltip={`triangle (2)`}>
-              <ToolbarButton>
-                <IconTriangle className="w-4 h-4" />
-              </ToolbarButton>
-            </Tooltip>
-            <Tooltip tooltip={`polygon (3)`}>
-              <ToolbarButton>
-                <IconPentagon className="w-4 h-4" />
-              </ToolbarButton>
-            </Tooltip>
-            <Tooltip tooltip={`line (4)`}>
-              <ToolbarButton>
-                <IconSlash className="w-4 h-4" />
-              </ToolbarButton>
-            </Tooltip>
-            <Tooltip tooltip={`arrow (5)`}>
-              <ToolbarButton>
-                <MoveUpRight className="w-4 h-4" />
-              </ToolbarButton>
-            </Tooltip>
-          </div> */}
           <div className="flex gap-1 p-1 rounded bg-primary-500">
             <Tooltip tooltip={`undo (${os === "mac" ? "cmd" : "ctrl"} + z)`}>
               <ToolbarButton disabled>

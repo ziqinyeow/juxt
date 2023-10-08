@@ -15,7 +15,7 @@ export interface StoreTypes {
   // elements
   tracks: Tracks[];
   selectedElement: Element | null;
-  addElement: (trackId: string, element: Element) => void;
+  // addElement: (element: Element) => void;
   addShape: (type: ShapeType, shape: Shape, placement: Placement) => void;
   addText: (text: fabric.IText, properties: any, placement: Placement) => void;
   addTrackAndElement: (element: Element) => void;
@@ -26,14 +26,23 @@ export interface StoreTypes {
   updateElement: (elementId: string, data: any) => void;
 
   //
+  hidePanel: boolean;
+  setHidePanel: (hidePanel: boolean) => void;
   panelScale: number;
   addPanelScale: (n: number) => void;
   setPanelScale: (panelScale: number) => void;
 
-  playing: boolean;
   fps: number;
   maxTime: number;
   setMaxTime: (time: number) => void;
+
+  startedTime: number;
+  startedTimePlay: number;
+  playing: boolean;
+  setPlaying: (playing: boolean) => void;
+  playframes: () => void;
+  updateTime: (time: number) => void;
+  handleSeek: (seek: number) => void;
 
   currentKeyFrame: number;
   getCurrentTimeInMs: () => number;

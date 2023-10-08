@@ -129,20 +129,6 @@ export const useStore = create<StoreTypes>()((set, get) => ({
   // elements
   tracks: [],
   selectedElement: null,
-  addElement: (trackId: string, element: Element) => {
-    set((state) => ({
-      ...state,
-      tracks: get().tracks.map((t) =>
-        t.id === trackId
-          ? {
-              id: t.id,
-              name: t.name,
-              elements: [...t.elements, element],
-            }
-          : t
-      ),
-    }));
-  },
   addTrackAndElement: (element: Element) => {
     const id = nanoid();
     set((state) => ({
@@ -157,6 +143,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       ],
     }));
   },
+
   addElementToCanvas: (element: Element) => {
     switch (element.type) {
       case "video": {
@@ -226,6 +213,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
         break;
     }
   },
+
   refreshTracks: () => {
     const canvas = get().canvas,
       tracks = get().tracks;
@@ -237,66 +225,10 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       const element = tracks[i].elements[0];
       switch (element.type) {
         case "video": {
-          const video = document.getElementById(element.properties.elementId);
-          const {
-            id,
-            placement: { height, rotation, scaleX, scaleY, width, x, y },
-          } = element;
-          if (!isHtmlVideoElement(video)) return;
-          video.width = 1000;
-          video.height = 600;
-
-          const videoObject = new CoverVideo(video, {
-            name: id,
-            left: x,
-            top: y,
-            width,
-            height,
-            scaleX,
-            scaleY,
-            angle: rotation,
-            // objectCaching: false,
-            selectable: true,
-            // lockUniScaling: true,
-          });
-          videoObject.setControlsVisibility({ mtr: false });
-          element.fabricObject = videoObject;
-
-          get().canvas?.add(videoObject);
-
-          get().canvas?.on("object:modified", (e) => {
-            get().updatePlacement(e, element, videoObject);
-          });
-          get().canvas?.requestRenderAll();
+          get().addElementToCanvas(element);
         }
         case "image": {
-          const image = document.getElementById(element.properties.elementId);
-          if (!isHtmlImageElement(image)) return;
-          const {
-            id,
-            placement: { height, rotation, scaleX, scaleY, width, x, y },
-          } = element;
-          const imageObject = new CoverImage(image, {
-            name: id,
-            left: x,
-            top: y,
-            width,
-            height,
-            angle: rotation,
-            // objectCaching: false,
-            selectable: true,
-            // lockUniScaling: true,
-            centeredScaling: true,
-          });
-          imageObject.setControlsVisibility({ mtr: false });
-          element.fabricObject = imageObject;
-          get().canvas?.add(imageObject);
-          // get().canvas?.centerObject(imageObject);
-          get().canvas?.on("object:modified", (e) => {
-            get().updatePlacement(e, element, imageObject);
-          });
-
-          get().canvas?.requestRenderAll();
+          get().addElementToCanvas(element);
         }
 
         default:
@@ -330,12 +262,6 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       ...element,
       placement: newPlacement,
     });
-    // console.log(
-    //   "update placement",
-    //   get().tracks,
-    //   get().tracks.find((t) => t.elements.find((e) => e.id === element.id)),
-    //   newPlacement
-    // );
   },
   setSelectedElement: (element: Element | null) =>
     set((state) => ({ ...state, selectedElement: element })),
@@ -357,6 +283,9 @@ export const useStore = create<StoreTypes>()((set, get) => ({
     })),
 
   // panel properties
+  hidePanel: false,
+  setHidePanel: (hidePanel: boolean) =>
+    set((state) => ({ ...state, hidePanel })),
   panelScale: 50,
   addPanelScale: (n: number) => {
     if (n < 0) {
@@ -374,23 +303,64 @@ export const useStore = create<StoreTypes>()((set, get) => ({
   setPanelScale: (panelScale: number) =>
     set((state) => ({ ...state, panelScale })),
 
+  fps: 30,
+  maxTime: 30 * 1000,
+  setMaxTime: (time: number) => set((state) => ({ ...state, maxTime: time })),
+
+  startedTime: 0,
+  startedTimePlay: 0,
   playing: false,
   setPlaying: (playing: boolean) => {
     set((state) => ({ ...state, playing }));
+    if (get().playing) {
+      set((state) => ({
+        ...state,
+        startedTime: Date.now(),
+        startedTimePlay: get().getCurrentTimeInMs(),
+      }));
+      requestAnimationFrame(() => {
+        get().playframes();
+      });
+    }
   },
+  playframes: () => {
+    if (!get().playing) return;
+    const elapsedTime = Date.now() - get().startedTime;
+    const newTime = get().startedTimePlay + elapsedTime;
+    get().updateTime(newTime);
 
-  fps: 60,
-  maxTime: 30 * 1000,
-  setMaxTime: (time: number) => set((state) => ({ ...state, maxTime: time })),
+    if (newTime > get().maxTime) {
+      set((state) => ({ ...state, currentKeyFrame: 0, playing: false }));
+    } else {
+      requestAnimationFrame(() => {
+        get().playframes();
+      });
+    }
+  },
+  updateTime: (time: number) => {
+    // time in milliseconds
+    get().setCurrentTimeInMs(time);
+  },
+  handleSeek: (seek: number) => {
+    if (get().playing) {
+      get().setPlaying(false);
+    }
+    get().updateTime(seek);
+  },
 
   currentKeyFrame: 0,
   getCurrentTimeInMs: () => (get().currentKeyFrame * 1000) / get().fps,
   setCurrentTimeInMs: (time: number) =>
     set((state) => ({
       ...state,
-      currentKeyFrame: Math.floor((time / 1000) * get().fps) + time,
+      currentKeyFrame: Math.floor((time / 1000) * get().fps),
+      // currentKeyFrame: Math.floor((time / 1000) * get().fps) + time,
     })),
   rewindCurrentTimeInMs: (time: number, forward: boolean) => {
+    const isPlaying = get().playing;
+    if (isPlaying) {
+      get().setPlaying(false);
+    }
     const currentKeyFrame = get().currentKeyFrame;
     const fps = get().fps;
     const maxTime = get().maxTime;
@@ -408,5 +378,8 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       ...state,
       currentKeyFrame: newTime,
     }));
+    if (isPlaying) {
+      get().setPlaying(true);
+    }
   },
 }));
