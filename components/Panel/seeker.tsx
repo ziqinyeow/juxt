@@ -7,6 +7,7 @@ import {
   IconChevronUp,
   IconPlayerPauseFilled,
   IconPlayerPlayFilled,
+  IconRepeat,
   IconRewindBackward5,
   IconRewindForward5,
 } from "@tabler/icons-react";
@@ -41,7 +42,9 @@ const Seeker = () => {
 
         <Tooltip tooltip={playing ? `pause` : `play`}>
           <Button onClick={play} className="text-secondary-200">
-            {playing ? (
+            {getCurrentTimeInMs() === maxTime ? (
+              <IconRepeat className="w-5 h-5" />
+            ) : playing ? (
               <IconPlayerPauseFilled className="w-5 h-5" />
             ) : (
               <IconPlayerPlayFilled className="w-5 h-5" />
