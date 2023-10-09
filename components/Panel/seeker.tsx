@@ -17,6 +17,7 @@ import useKeyboardJs from "react-use/lib/useKeyboardJs";
 
 const Seeker = () => {
   const {
+    disableKeyboardShortcut,
     playing,
     setPlaying,
     maxTime,
@@ -32,15 +33,17 @@ const Seeker = () => {
   const [right] = useKeyboardJs("right");
 
   useEffect(() => {
-    if (space) {
-      play();
-    } else if (left) {
-      rewindBackward5();
-    } else if (right) {
-      rewindForward5();
+    if (!disableKeyboardShortcut) {
+      if (space) {
+        play();
+      } else if (left) {
+        rewindBackward5();
+      } else if (right) {
+        rewindForward5();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [space, left, right]);
+  }, [disableKeyboardShortcut, space, left, right]);
 
   useEffect(() => {
     if (getCurrentTimeInMs() > maxTime) {

@@ -37,6 +37,8 @@ export interface StoreTypes {
   setMaxTime: (time: number) => void;
   updateMaxTime: () => void;
 
+  disableKeyboardShortcut: boolean;
+  setDisableKeyboardShortcut: (disable: boolean) => void;
   startedTime: number;
   startedTimePlay: number;
   playing: boolean;

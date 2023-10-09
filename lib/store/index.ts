@@ -120,6 +120,12 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       },
       properties,
     };
+    text.on("selected", (e) => {
+      get().setDisableKeyboardShortcut(true);
+    });
+    text.on("deselected", (e) => {
+      get().setDisableKeyboardShortcut(false);
+    });
     get().canvas?.on("object:modified", (e) => {
       get().updatePlacement(e, element, text);
     });
@@ -323,7 +329,10 @@ export const useStore = create<StoreTypes>()((set, get) => ({
     );
     get().setMaxTime(newMaxTime);
   },
-
+  disableKeyboardShortcut: false,
+  setDisableKeyboardShortcut: (disable: boolean) => {
+    set((state) => ({ ...state, disableKeyboardShortcut: disable }));
+  },
   startedTime: 0,
   startedTimePlay: 0,
   playing: false,
