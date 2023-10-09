@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import Droparea from "../droparea";
 import { useFile } from "@/lib/store/file";
-import { ChangeEvent, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { IconPhoto, IconPhotoOff, IconVideo } from "@tabler/icons-react";
 import { useStore } from "@/lib/store";
@@ -9,13 +9,26 @@ import { FileWithPath } from "@/lib/types/file";
 import { getYoutubeId } from "@/components/Dropzone/utils";
 
 const Media = () => {
+  const [focused, setFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const { addImage, addVideo } = useStore();
   const { bucket } = useFile();
+  const { disableKeyboardShortcut, setDisableKeyboardShortcut } = useStore();
 
   const search = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
+
+  const onFocus = () => setFocused(true);
+  const onBlur = () => setFocused(false);
+
+  useEffect(() => {
+    if (focused) {
+      setDisableKeyboardShortcut(true);
+    } else {
+      setDisableKeyboardShortcut(false);
+    }
+  }, [focused, setDisableKeyboardShortcut]);
 
   const allMedias = useMemo(
     () =>
@@ -47,7 +60,6 @@ const Media = () => {
       addImage(media);
     }
   };
-  const { canvas } = useStore();
 
   return (
     <div className="px-2 h-[calc(100vh_-_64px_-_60px)] max-w-full overflow-auto no_scrollbar">
@@ -69,6 +81,8 @@ const Media = () => {
         <div className="w-full h-full px-2">
           <div className="flex items-center gap-2 mt-2 mb-4">
             <input
+              onFocus={onFocus}
+              onBlur={onBlur}
               type="text"
               className="w-full px-3 py-2 overflow-auto tracking-widest text-white rounded ring-offset-2 ring-offset-primary-800 ring-2 ring-secondary-200 bg-primary-600 focus:outline-none"
               placeholder="search"
