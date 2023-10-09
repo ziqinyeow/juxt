@@ -142,6 +142,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
         },
       ],
     }));
+    get().updateMaxTime();
   },
 
   addElementToCanvas: (element: Element) => {
@@ -212,6 +213,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       default:
         break;
     }
+    get().updateMaxTime();
   },
 
   refreshTracks: () => {
@@ -304,8 +306,18 @@ export const useStore = create<StoreTypes>()((set, get) => ({
     set((state) => ({ ...state, panelScale })),
 
   fps: 60,
-  maxTime: 30 * 1000,
+  maxTime: 0 * 1000,
   setMaxTime: (time: number) => set((state) => ({ ...state, maxTime: time })),
+  updateMaxTime: () => {
+    const newMaxTime = Math.max(
+      ...get().tracks.map((t) =>
+        Math.max(
+          ...t.elements.map((_t) => _t.timeframe.start + _t.timeframe.duration)
+        )
+      )
+    );
+    get().setMaxTime(newMaxTime);
+  },
 
   startedTime: 0,
   startedTimePlay: 0,

@@ -35,6 +35,7 @@ export interface StoreTypes {
   fps: number;
   maxTime: number;
   setMaxTime: (time: number) => void;
+  updateMaxTime: () => void;
 
   startedTime: number;
   startedTimePlay: number;

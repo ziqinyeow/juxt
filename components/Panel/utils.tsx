@@ -47,8 +47,9 @@ export const showSecondsOnPanelTickLogic = (i: number, panelScale: number) => {
  * @param panelScale
  * @returns
  */
+const additionalSeconds = 8;
 export const getNumberOfTicks = (maxTime: number, panelScale: number) => {
-  return (maxTime / 10000 + 8) * panelScale + 1;
+  return (maxTime / 10000 + additionalSeconds) * panelScale + 1;
 };
 
 export const getTicksGapWidth = (panelScale: number) => {
@@ -75,7 +76,8 @@ export const convertDurationToPixelWidth = (
 ) => {
   const totalNumberOfTicks = getNumberOfTicks(maxTime, panelScale) - 1;
   const gap = getTicksGapWidth(panelScale);
-  const numberOfTicks = (milliSeconds * totalNumberOfTicks) / (maxTime + 10000);
+  const numberOfTicks =
+    (milliSeconds * totalNumberOfTicks) / (maxTime + 10000 * additionalSeconds);
   return numberOfTicks * gap;
 };
 
@@ -87,7 +89,9 @@ export const convertPixelWidthToDuration = (
   const totalNumberOfTicks = getNumberOfTicks(maxTime, panelScale) - 1;
   const gap = getTicksGapWidth(panelScale);
   const numberOfTicks = pixels / gap;
-  const duration = (numberOfTicks * (maxTime + 10000)) / totalNumberOfTicks;
+  const duration =
+    (numberOfTicks * (maxTime + 10000 * additionalSeconds)) /
+    totalNumberOfTicks;
   return duration;
 };
 

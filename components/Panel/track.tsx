@@ -19,7 +19,8 @@ type Props = {
 };
 
 export const Element = ({ element }: Props) => {
-  const { panelScale, maxTime, updateElement } = useStore();
+  const { tracks, panelScale, maxTime, updateElement, updateMaxTime } =
+    useStore();
   const [state, setState] = useState({
     width: convertDurationToPixelWidth(
       element.timeframe.duration,
@@ -49,8 +50,9 @@ export const Element = ({ element }: Props) => {
         panelScale
       ),
     }));
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [maxTime, panelScale]);
+  }, [panelScale]);
 
   return (
     <Rnd
@@ -81,6 +83,7 @@ export const Element = ({ element }: Props) => {
             start,
           },
         });
+        updateMaxTime();
         setState((p) => {
           return { ...p, x: d.x };
         });
@@ -103,6 +106,7 @@ export const Element = ({ element }: Props) => {
             duration,
           },
         });
+        updateMaxTime();
         setState({
           width,
           ...position,

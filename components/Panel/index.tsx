@@ -117,7 +117,9 @@ const Panel = () => {
                   style={{ gap: `${getTicksGapWidth(panelScale)}px` }}
                   className="relative flex items-end h-full px-4 pb-2 select-none"
                 >
-                  {Array(getNumberOfTicks(maxTime, panelScale))
+                  {Array(
+                    Number(getNumberOfTicks(maxTime, panelScale).toFixed(0))
+                  )
                     .fill(1)
                     .map((_, i) => (
                       <div
