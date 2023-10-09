@@ -19,8 +19,7 @@ type Props = {
 };
 
 export const Element = ({ element }: Props) => {
-  const { tracks, panelScale, maxTime, updateElement, updateMaxTime } =
-    useStore();
+  const { panelScale, maxTime, updateElement, updateMaxTime } = useStore();
   const [state, setState] = useState({
     width: convertDurationToPixelWidth(
       element.timeframe.duration,
@@ -34,6 +33,7 @@ export const Element = ({ element }: Props) => {
     ),
     y: 0,
   });
+  // console.log(element);
 
   // track elements' width if panelScale changed
   useEffect(() => {

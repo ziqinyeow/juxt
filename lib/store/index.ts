@@ -240,6 +240,11 @@ export const useStore = create<StoreTypes>()((set, get) => ({
   },
 
   updatePlacement: (e: IEvent, element: Element, object: any) => {
+    const props = get().tracks.find((t) => {
+      const ret = t.elements.find((_t) => _t.id === element.id);
+      return ret;
+    })?.elements?.[0];
+
     if (!e.target) return;
     const target = e.target;
     if (target != object) return;
@@ -261,7 +266,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       scaleY: 1,
     };
     get().updateElement(element.id, {
-      ...element,
+      ...props,
       placement: newPlacement,
     });
   },
