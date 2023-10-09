@@ -24,6 +24,7 @@ const Seeker = () => {
     setHidePanel,
     handleSeek,
     getCurrentTimeInMs,
+    setCurrentTimeInMs,
     rewindCurrentTimeInMs,
   } = useStore();
   const [space] = useKeyboardJs("space");
@@ -40,6 +41,13 @@ const Seeker = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [space, left, right]);
+
+  useEffect(() => {
+    if (getCurrentTimeInMs() > maxTime) {
+      setCurrentTimeInMs(maxTime);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [maxTime]);
 
   const rewindBackward5 = useCallback(
     () => rewindCurrentTimeInMs(5000, false),
