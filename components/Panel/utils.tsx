@@ -48,7 +48,7 @@ export const showSecondsOnPanelTickLogic = (i: number, panelScale: number) => {
  * @returns
  */
 export const getNumberOfTicks = (maxTime: number, panelScale: number) => {
-  return (maxTime / 10000 + 1) * panelScale + 1;
+  return (maxTime / 10000 + 8) * panelScale + 1;
 };
 
 export const getTicksGapWidth = (panelScale: number) => {
