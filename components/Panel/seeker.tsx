@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect } from "react";
 import { Button } from "../Button";
 import { useStore } from "@/lib/store";
 import { Slider as UISlider } from "../ui/slider";
@@ -13,6 +13,7 @@ import {
 } from "@tabler/icons-react";
 import { formatTimeToMinSecMili } from "@/lib/utils";
 import Tooltip from "../Tooltip";
+import useKeyboardJs from "react-use/lib/useKeyboardJs";
 
 const Seeker = () => {
   const {
@@ -25,12 +26,32 @@ const Seeker = () => {
     getCurrentTimeInMs,
     rewindCurrentTimeInMs,
   } = useStore();
+  const [space] = useKeyboardJs("space");
+  const [left] = useKeyboardJs("left");
+  const [right] = useKeyboardJs("right");
 
-  const rewindBackward5 = () => rewindCurrentTimeInMs(5000, false);
-  const play = () => {
+  useEffect(() => {
+    if (space) {
+      play();
+    } else if (left) {
+      rewindBackward5();
+    } else if (right) {
+      rewindForward5();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [space, left, right]);
+
+  const rewindBackward5 = useCallback(
+    () => rewindCurrentTimeInMs(5000, false),
+    [rewindCurrentTimeInMs]
+  );
+  const play = useCallback(() => {
     setPlaying(!playing);
-  };
-  const rewindForward5 = () => rewindCurrentTimeInMs(5000, true);
+  }, [playing, setPlaying]);
+  const rewindForward5 = useCallback(
+    () => rewindCurrentTimeInMs(5000, true),
+    [rewindCurrentTimeInMs]
+  );
   const toggleHidePanel = () => setHidePanel(!hidePanel);
 
   return (

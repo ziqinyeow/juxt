@@ -303,7 +303,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
   setPanelScale: (panelScale: number) =>
     set((state) => ({ ...state, panelScale })),
 
-  fps: 30,
+  fps: 60,
   maxTime: 30 * 1000,
   setMaxTime: (time: number) => set((state) => ({ ...state, maxTime: time })),
 
