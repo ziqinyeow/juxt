@@ -229,16 +229,20 @@ export const useStore = create<StoreTypes>()((set, get) => ({
     const canvas = get().canvas,
       tracks = get().tracks;
     if (!canvas) return;
-    get().canvas?.remove(...(get().canvas?.getObjects() ?? []));
+    // get().canvas?.remove(...(get().canvas?.getObjects() ?? []));
 
     // console.log(tracks);
     for (let i = 0; i < tracks.length; i++) {
       const element = tracks[i].elements[0];
       switch (element.type) {
         case "video": {
+          const obj = element.fabricObject as fabric.Object;
+          get().canvas?.remove(obj);
           get().addElementToCanvas(element);
         }
         case "image": {
+          const obj = element.fabricObject as fabric.Object;
+          get().canvas?.remove(obj);
           get().addElementToCanvas(element);
         }
 
@@ -319,7 +323,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
   setPanelScale: (panelScale: number) =>
     set((state) => ({ ...state, panelScale })),
 
-  fps: 60,
+  fps: 30,
   maxTime: 0 * 1000,
   setMaxTime: (time: number) => set((state) => ({ ...state, maxTime: time })),
   updateMaxTime: () => {
@@ -386,6 +390,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       get().setPlaying(false);
     }
     get().updateTime(seek);
+    get().updateVideoElement();
   },
   updateVideoElement: () => {
     const isPlaying = get().playing;
@@ -402,6 +407,11 @@ export const useStore = create<StoreTypes>()((set, get) => ({
             } else {
               video.pause();
             }
+            console.log(
+              get().getCurrentTimeInMs(),
+              element.timeframe.start,
+              currentTime
+            );
           }
         }
       });

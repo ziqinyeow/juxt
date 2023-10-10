@@ -13,7 +13,7 @@ const Media = () => {
   const [searchValue, setSearchValue] = useState("");
   const { addImage, addVideo } = useStore();
   const { bucket } = useFile();
-  const { setDisableKeyboardShortcut } = useStore();
+  const { setDisableKeyboardShortcut, refreshTracks } = useStore();
 
   const search = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -119,7 +119,7 @@ const Media = () => {
                 {media.type === "image" ? (
                   <>
                     <Image
-                      id={media.path}
+                      // id={media.path}
                       src={media.url ?? ""}
                       fill
                       className="z-0 object-contain w-full h-full text-white rounded"
@@ -129,8 +129,21 @@ const Media = () => {
                 ) : media.type === "video" ? (
                   <>
                     <video
-                      id={media.path}
+                      id={media.path + "thumbnail"}
+                      muted
                       className="rounded"
+                      src={media.url ?? ""}
+                    ></video>
+                    <video
+                      id={media.path}
+                      onLoad={() => {
+                        refreshTracks();
+                      }}
+                      onLoadedData={() => {
+                        refreshTracks();
+                      }}
+                      muted
+                      className="absolute z-[-10] opacity-0"
                       src={media.url ?? ""}
                     ></video>
                   </>

@@ -12,9 +12,12 @@ import {
 } from "@/lib/utils/canvas";
 import Tools from "./tools";
 import { tools } from "./tools/tools";
+import Image from "next/image";
+import { useFile } from "@/lib/store/file";
 
 const Canvas = () => {
-  const { canvas, setCanvas, setSelectedElement } = useStore();
+  const { canvas, setCanvas, setSelectedElement, refreshTracks } = useStore();
+  const { bucket } = useFile();
 
   const initCanvas = () => {
     const canvas = new fabric.Canvas("canvas", {
