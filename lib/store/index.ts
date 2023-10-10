@@ -92,6 +92,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       id,
       name: type + "_" + id,
       type: "shape",
+      fabricObject: shape,
       placement,
       timeframe: {
         start: 0,
@@ -113,6 +114,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       id,
       name: "text_" + id,
       type: "text",
+      fabricObject: text,
       placement,
       timeframe: {
         start: 0,
@@ -149,6 +151,8 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       ],
     }));
     get().updateMaxTime();
+    get().updateTime(get().getCurrentTimeInMs());
+    get().canvas?.requestRenderAll();
   },
 
   addElementToCanvas: (element: Element) => {
@@ -184,7 +188,6 @@ export const useStore = create<StoreTypes>()((set, get) => ({
         get().canvas?.on("object:modified", (e) => {
           get().updatePlacement(e, element, videoObject);
         });
-        get().canvas?.requestRenderAll();
       }
       case "image": {
         const image = document.getElementById(element.properties.elementId);
@@ -212,14 +215,14 @@ export const useStore = create<StoreTypes>()((set, get) => ({
         get().canvas?.on("object:modified", (e) => {
           get().updatePlacement(e, element, imageObject);
         });
-
-        get().canvas?.requestRenderAll();
       }
 
       default:
         break;
     }
     get().updateMaxTime();
+    get().updateTime(get().getCurrentTimeInMs());
+    // get().canvas?.requestRenderAll();
   },
 
   refreshTracks: () => {
@@ -366,6 +369,16 @@ export const useStore = create<StoreTypes>()((set, get) => ({
   updateTime: (time: number) => {
     // time in milliseconds
     get().setCurrentTimeInMs(time);
+    get().tracks.forEach((track) => {
+      track.elements.forEach((element) => {
+        if (!element.fabricObject) return;
+        const isInside =
+          element.timeframe.start <= time &&
+          time <= element.timeframe.start + element.timeframe.duration;
+        element.fabricObject.visible = isInside;
+      });
+    });
+    get().canvas?.requestRenderAll();
   },
   handleSeek: (seek: number) => {
     if (get().playing) {

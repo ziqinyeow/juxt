@@ -26,6 +26,7 @@ const Seeker = () => {
     handleSeek,
     getCurrentTimeInMs,
     setCurrentTimeInMs,
+    updateTime,
     rewindCurrentTimeInMs,
   } = useStore();
   const [space] = useKeyboardJs("space");
@@ -52,17 +53,17 @@ const Seeker = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [maxTime]);
 
-  const rewindBackward5 = useCallback(
-    () => rewindCurrentTimeInMs(5000, false),
-    [rewindCurrentTimeInMs]
-  );
+  const rewindBackward5 = useCallback(() => {
+    rewindCurrentTimeInMs(5000, false);
+    updateTime(getCurrentTimeInMs());
+  }, [getCurrentTimeInMs, rewindCurrentTimeInMs, updateTime]);
   const play = useCallback(() => {
     setPlaying(!playing);
   }, [playing, setPlaying]);
-  const rewindForward5 = useCallback(
-    () => rewindCurrentTimeInMs(5000, true),
-    [rewindCurrentTimeInMs]
-  );
+  const rewindForward5 = useCallback(() => {
+    rewindCurrentTimeInMs(5000, true);
+    updateTime(getCurrentTimeInMs());
+  }, [getCurrentTimeInMs, rewindCurrentTimeInMs, updateTime]);
   const toggleHidePanel = () => setHidePanel(!hidePanel);
 
   return (

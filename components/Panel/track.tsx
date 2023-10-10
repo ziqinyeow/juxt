@@ -19,7 +19,14 @@ type Props = {
 };
 
 export const Element = ({ element }: Props) => {
-  const { panelScale, maxTime, updateElement, updateMaxTime } = useStore();
+  const {
+    panelScale,
+    maxTime,
+    updateElement,
+    updateMaxTime,
+    getCurrentTimeInMs,
+    updateTime,
+  } = useStore();
   const [state, setState] = useState({
     width: convertDurationToPixelWidth(
       element.timeframe.duration,
@@ -84,6 +91,7 @@ export const Element = ({ element }: Props) => {
           },
         });
         updateMaxTime();
+        updateTime(getCurrentTimeInMs());
         setState((p) => {
           return { ...p, x: d.x };
         });
@@ -107,6 +115,7 @@ export const Element = ({ element }: Props) => {
           },
         });
         updateMaxTime();
+        updateTime(getCurrentTimeInMs());
         setState({
           width,
           ...position,
