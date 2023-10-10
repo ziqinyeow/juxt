@@ -13,7 +13,7 @@ const Media = () => {
   const [searchValue, setSearchValue] = useState("");
   const { addImage, addVideo } = useStore();
   const { bucket } = useFile();
-  const { disableKeyboardShortcut, setDisableKeyboardShortcut } = useStore();
+  const { setDisableKeyboardShortcut } = useStore();
 
   const search = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);

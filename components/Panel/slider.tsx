@@ -8,11 +8,27 @@ import {
   PANEL_SLIDER_MIN_VALUE,
   PANEL_SLIDER_STEP_SIZE,
 } from "@/lib/constants/panel";
+import useKeyboardJs from "react-use/lib/useKeyboardJs";
+import { useEffect } from "react";
 
 type SliderProps = React.ComponentProps<typeof UISlider>;
 
 export default function Slider({ className, ...props }: SliderProps) {
-  const { panelScale, addPanelScale, setPanelScale } = useStore();
+  const { disableKeyboardShortcut, panelScale, addPanelScale, setPanelScale } =
+    useStore();
+  const [zoomIn] = useKeyboardJs(",");
+  const [zoomOut] = useKeyboardJs(".");
+
+  useEffect(() => {
+    if (!disableKeyboardShortcut) {
+      if (zoomIn) {
+        addPanelScale(-PANEL_SLIDER_STEP_SIZE);
+      } else if (zoomOut) {
+        addPanelScale(PANEL_SLIDER_STEP_SIZE);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [disableKeyboardShortcut, zoomIn, zoomOut]);
 
   return (
     <div className="flex items-center gap-2">
