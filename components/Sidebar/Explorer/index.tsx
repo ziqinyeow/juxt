@@ -50,7 +50,7 @@ const Explorer = () => {
   const dnd = useDnd(tree, { windowRef });
   const virtualize = useVirtualize(tree, { windowRef, nodeHeight: 24 });
   const plugins = [traits, rovingFocus, selections, dnd];
-  useHotkeys(tree, { windowRef, rovingFocus, selections });
+  // useHotkeys(tree, { windowRef, rovingFocus, selections });
 
   useObserver(selections.didChange, (value) => {
     const selected = Array.from(value);

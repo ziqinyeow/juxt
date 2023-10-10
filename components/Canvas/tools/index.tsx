@@ -27,7 +27,6 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
     if (currentToolIndex !== null) {
       switch (currentTools[currentToolIndex].name) {
         case "pointer": {
-          console.log("pointer");
           setToDefaultCanvas(canvas);
           break;
         }

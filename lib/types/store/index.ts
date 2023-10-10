@@ -46,6 +46,7 @@ export interface StoreTypes {
   playframes: () => void;
   updateTime: (time: number) => void;
   handleSeek: (seek: number) => void;
+  updateVideoElement: () => void;
 
   currentKeyFrame: number;
   getCurrentTimeInMs: () => number;

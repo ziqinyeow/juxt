@@ -341,6 +341,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
   playing: false,
   setPlaying: (playing: boolean) => {
     set((state) => ({ ...state, playing }));
+    get().updateVideoElement();
     if (get().playing) {
       set((state) => ({
         ...state,
@@ -385,6 +386,26 @@ export const useStore = create<StoreTypes>()((set, get) => ({
       get().setPlaying(false);
     }
     get().updateTime(seek);
+  },
+  updateVideoElement: () => {
+    const isPlaying = get().playing;
+    get().tracks.forEach((track) => {
+      track.elements.forEach((element) => {
+        if (element.type === "video") {
+          const video = document.getElementById(element.properties.elementId);
+          if (isHtmlVideoElement(video)) {
+            const currentTime =
+              (get().getCurrentTimeInMs() - element.timeframe.start) / 1000;
+            video.currentTime = currentTime;
+            if (isPlaying) {
+              video.play();
+            } else {
+              video.pause();
+            }
+          }
+        }
+      });
+    });
   },
 
   currentKeyFrame: 0,
