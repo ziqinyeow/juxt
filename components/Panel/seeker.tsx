@@ -99,9 +99,12 @@ const Seeker = () => {
           className="w-full"
         />
       </div>
-      <div className="flex items-center justify-end gap-4 whitespace-nowrap">
-        <div className="">
-          <span>{formatTimeToMinSecMili(getCurrentTimeInMs())}</span> /{" "}
+      <div className="flex items-center justify-end gap-3 whitespace-nowrap">
+        <div className="w-[100px] flex items-center justify-end">
+          <span className="">
+            {formatTimeToMinSecMili(getCurrentTimeInMs())}
+          </span>{" "}
+          /{" "}
           <span className="text-white/70">
             {formatTimeToMinSecMili(maxTime)}
           </span>
