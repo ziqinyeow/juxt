@@ -26,11 +26,14 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
     if (!canvas) return;
     if (currentToolIndex !== null) {
       switch (currentTools[currentToolIndex].name) {
-        case "pointer":
+        case "pointer": {
+          console.log("pointer");
           setToDefaultCanvas(canvas);
           break;
+        }
 
-        case "text":
+        case "text": {
+          setToDefaultCanvas(canvas);
           setToDrawingCanvas(canvas, "text");
           drawText(canvas, (text) => {
             setCurrentToolIndex(0);
@@ -55,8 +58,10 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
           });
           canvas?.requestRenderAll();
           break;
+        }
 
-        case "square roi":
+        case "square roi": {
+          setToDefaultCanvas(canvas);
           setToDrawingCanvas(canvas);
           drawRect(canvas, (shape) => {
             setCurrentToolIndex(0);
@@ -72,8 +77,10 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
           }); // set to pointer
           canvas?.requestRenderAll();
           break;
+        }
 
-        case "tri roi":
+        case "tri roi": {
+          setToDefaultCanvas(canvas);
           setToDrawingCanvas(canvas);
           drawTriangle(canvas, (shape: fabric.Triangle) => {
             setCurrentToolIndex(0);
@@ -89,8 +96,10 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
           }); // set to pointer
           canvas?.requestRenderAll();
           break;
+        }
 
-        case "poly roi":
+        case "poly roi": {
+          setToDefaultCanvas(canvas);
           setToDrawingCanvas(canvas);
           drawPolygon(canvas, (shape: fabric.Polyline) => {
             setCurrentToolIndex(0);
@@ -103,11 +112,14 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
               scaleX: 1,
               scaleY: 1,
             });
+            setToDefaultCanvas(canvas);
           }); // set to pointer
           canvas?.requestRenderAll();
           break;
+        }
 
-        case "pose":
+        case "pose": {
+          setToDefaultCanvas(canvas);
           setToDrawingCanvas(canvas, "pointer");
           const { left, top } = canvas.getCenter();
           const skeleton = buildHumanSkeleton(canvas, { x: left, y: top });
@@ -121,16 +133,17 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
           });
           setToDefaultCanvas(canvas);
           setCurrentToolIndex(0);
+          break;
 
           // drawPose(canvas, (shape) => {
           //   setCurrentToolIndex(0);
           // });
-          break;
+        }
 
-        default:
+        default: {
           break;
+        }
       }
-      // setToDefaultCanvas(canvas);
     } else {
       setToDefaultCanvas(canvas);
     }
