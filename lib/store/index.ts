@@ -322,9 +322,13 @@ export const useStore = create<StoreTypes>()((set, get) => ({
   },
   setPanelScale: (panelScale: number) =>
     set((state) => ({ ...state, panelScale })),
+  disableKeyboardShortcut: false,
+  setDisableKeyboardShortcut: (disable: boolean) => {
+    set((state) => ({ ...state, disableKeyboardShortcut: disable }));
+  },
 
-  fps: 30,
-  maxTime: 0 * 1000,
+  fps: 25,
+  maxTime: 0,
   setMaxTime: (time: number) => set((state) => ({ ...state, maxTime: time })),
   updateMaxTime: () => {
     const newMaxTime = Math.max(
@@ -336,10 +340,43 @@ export const useStore = create<StoreTypes>()((set, get) => ({
     );
     get().setMaxTime(newMaxTime);
   },
-  disableKeyboardShortcut: false,
-  setDisableKeyboardShortcut: (disable: boolean) => {
-    set((state) => ({ ...state, disableKeyboardShortcut: disable }));
+  currentKeyFrame: 0,
+  getCurrentTimeInMs: () => (get().currentKeyFrame * 1000) / get().fps,
+  setCurrentTimeInMs: (time: number) =>
+    set((state) => ({
+      ...state,
+      currentKeyFrame: Math.floor((time / 1000) * get().fps),
+      // currentKeyFrame: Math.floor((time / 1000) * get().fps) + time,
+    })),
+  rewindCurrentTimeInMs: (time: number, forward: boolean) => {
+    const isPlaying = get().playing;
+    if (isPlaying) {
+      get().setPlaying(false);
+    }
+    // get().updateVideoElement();
+    const currentKeyFrame = get().currentKeyFrame;
+    const fps = get().fps;
+    const maxTime = get().maxTime;
+    const offset = forward
+      ? Math.floor((time / 1000) * fps)
+      : -Math.floor((time / 1000) * fps);
+    const newTime =
+      currentKeyFrame + offset < 0
+        ? 0
+        : currentKeyFrame + offset >= (maxTime * fps) / 1000
+        ? (maxTime * fps) / 1000
+        : currentKeyFrame + offset;
+
+    set((state) => ({
+      ...state,
+      currentKeyFrame: newTime,
+    }));
+
+    if (isPlaying) {
+      get().setPlaying(true);
+    }
   },
+
   startedTime: 0,
   startedTimePlay: 0,
   playing: false,
@@ -349,7 +386,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
     if (get().playing) {
       set((state) => ({
         ...state,
-        startedTime: Date.now(),
+        startedTime: performance.now(),
         startedTimePlay: get().getCurrentTimeInMs(),
       }));
       requestAnimationFrame(() => {
@@ -359,7 +396,7 @@ export const useStore = create<StoreTypes>()((set, get) => ({
   },
   playframes: () => {
     if (!get().playing) return;
-    const elapsedTime = Date.now() - get().startedTime;
+    const elapsedTime = performance.now() - get().startedTime;
     const newTime = get().startedTimePlay + elapsedTime;
     get().updateTime(newTime);
 
@@ -394,6 +431,8 @@ export const useStore = create<StoreTypes>()((set, get) => ({
   },
   updateVideoElement: () => {
     const isPlaying = get().playing;
+    // const elapsedTime = Date.now() - get().startedTime;
+    // const newTime = get().startedTimePlay + elapsedTime;
     get().tracks.forEach((track) => {
       track.elements.forEach((element) => {
         if (element.type === "video") {
@@ -407,49 +446,9 @@ export const useStore = create<StoreTypes>()((set, get) => ({
             } else {
               video.pause();
             }
-            console.log(
-              get().getCurrentTimeInMs(),
-              element.timeframe.start,
-              currentTime
-            );
           }
         }
       });
     });
-  },
-
-  currentKeyFrame: 0,
-  getCurrentTimeInMs: () => (get().currentKeyFrame * 1000) / get().fps,
-  setCurrentTimeInMs: (time: number) =>
-    set((state) => ({
-      ...state,
-      currentKeyFrame: Math.floor((time / 1000) * get().fps),
-      // currentKeyFrame: Math.floor((time / 1000) * get().fps) + time,
-    })),
-  rewindCurrentTimeInMs: (time: number, forward: boolean) => {
-    const isPlaying = get().playing;
-    if (isPlaying) {
-      get().setPlaying(false);
-    }
-    const currentKeyFrame = get().currentKeyFrame;
-    const fps = get().fps;
-    const maxTime = get().maxTime;
-    const offset = forward
-      ? Math.floor((time / 1000) * fps)
-      : -Math.floor((time / 1000) * fps);
-    const newTime =
-      currentKeyFrame + offset < 0
-        ? 0
-        : currentKeyFrame + offset >= (maxTime * fps) / 1000
-        ? (maxTime * fps) / 1000
-        : currentKeyFrame + offset;
-
-    set((state) => ({
-      ...state,
-      currentKeyFrame: newTime,
-    }));
-    if (isPlaying) {
-      get().setPlaying(true);
-    }
   },
 }));
