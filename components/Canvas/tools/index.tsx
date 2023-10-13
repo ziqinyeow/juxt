@@ -14,13 +14,36 @@ import {
   buildHumanSkeleton,
 } from "@/lib/utils/tools";
 import { Item, Menu, Row } from "./utils";
+import useKeyboardJs from "react-use/lib/useKeyboardJs";
 
 const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
-  const { canvas, addShape, addText } = useStore();
+  const { canvas, addShape, addText, disableKeyboardShortcut } = useStore();
   const [currentToolIndex, setCurrentToolIndex] = useState<number | null>(0);
   const [currentTools, setCurrentTools] = useState(
     tools?.map((t) => t.tools[0])
   );
+  const [one] = useKeyboardJs("1");
+  const [two] = useKeyboardJs("2");
+  const [three] = useKeyboardJs("3");
+  const [four] = useKeyboardJs("4");
+  const [five] = useKeyboardJs("5");
+  const [six] = useKeyboardJs("6");
+  // console.log(currentTools, currentToolIndex);
+
+  useEffect(() => {
+    if (!disableKeyboardShortcut) {
+      if (one) {
+        setCurrentToolIndex(0);
+      } else if (two) {
+        setCurrentToolIndex(1);
+      } else if (three) {
+        setCurrentToolIndex(2);
+      } else if (four) {
+        // setCurrentToolIndex(3);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [disableKeyboardShortcut, one, two, three, four]);
 
   useEffect(() => {
     if (!canvas) return;

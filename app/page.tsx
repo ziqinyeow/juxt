@@ -15,6 +15,7 @@ import { colors } from "@/lib/constants/colors";
 import { cn } from "@/lib/utils";
 import { nanoid } from "nanoid";
 import Link from "next/link";
+import Image from "next/image";
 
 const Card = ({ title }: { title: string }) => (
   <div className="p-5 rounded-md bg-primary-600">
@@ -217,6 +218,11 @@ export default function Home() {
                         `ring-primary-400`,
                       ])}
                     >
+                      {/* <Image
+                        src="https://plus.unsplash.com/premium_photo-1694825173178-3d2c9bbf5b5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=800&q=60"
+                        width={100}
+                        height={100}
+                      /> */}
                       <div className="flex items-center gap-2 mb-3">
                         <IconStack2
                           className="w-5 h-5"
