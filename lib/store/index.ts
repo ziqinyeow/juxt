@@ -12,8 +12,14 @@ import { FileWithPath } from "../types/file";
 import { isHtmlImageElement, isHtmlVideoElement } from "../utils/html";
 import { nanoid } from "nanoid";
 import { IEvent } from "fabric/fabric-impl";
+import { Project } from "../types/project";
 
 export const useStore = create<StoreTypes>()((set, get) => ({
+  projects: [],
+  addProject: (project: Project) => {
+    set((state) => ({ ...state, projects: [...state.projects, project] }));
+  },
+
   canvas: null,
   setCanvas: (canvas: fabric.Canvas | null) =>
     set((state) => ({ ...state, canvas })),

@@ -2,8 +2,12 @@ import { fabric } from "fabric";
 import { Element, Placement, Shape, ShapeType, Tracks } from "../track";
 import { FileWithPath } from "../file";
 import { IEvent } from "fabric/fabric-impl";
+import { Project } from "../project";
 
 export interface StoreTypes {
+  projects: Project[];
+  addProject: (project: Project) => void;
+
   canvas: fabric.Canvas | null;
   setCanvas: (canvas: fabric.Canvas | null) => void;
 

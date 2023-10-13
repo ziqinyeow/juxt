@@ -10,7 +10,7 @@ const Logo = () => {
         width={25}
         height={25}
       />
-      <div className="font-mono text-lg font-bold tracking-widest text-primary-100">
+      <div className="font-mono text-lg font-bold tracking-widest select-none text-primary-100">
         RTM
       </div>
     </Link>
