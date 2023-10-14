@@ -348,9 +348,9 @@ function toDegrees(radians: number) {
 //     line5 = makeLine([250, 175, 175, 225]),
 //     line6 = makeLine([250, 175, 325, 225]);
 
-//   canvas.add(line, line2, line3, line4, line5, line6);
+//   canvas?.add(line, line2, line3, line4, line5, line6);
 
-//   canvas.add(
+//   canvas?.add(
 //     makeCircle(line.get("x1"), line.get("y1"), null, line),
 //     makeCircle(line.get("x2"), line.get("y2"), line, line2, line5, line6),
 //     makeCircle(line2.get("x2"), line2.get("y2"), line2, line3, line4),
@@ -362,7 +362,7 @@ function toDegrees(radians: number) {
 
 //   // let i = 0;
 
-//   canvas.on("object:moving", function (e) {
+//   canvas?.on("object:moving", function (e) {
 //     var p = e.target;
 //     if (p.type == "activeSelection") {
 //       for (let i = 0; i < p._objects.length; i++) {
@@ -394,7 +394,7 @@ function toDegrees(radians: number) {
 //       p.line4 && p.line4.set({ x1: p.left, y1: p.top });
 //     }
 
-//     canvas.requestRenderAll();
+//     canvas?.requestRenderAll();
 //   });
 //   mouseUp("");
 // };

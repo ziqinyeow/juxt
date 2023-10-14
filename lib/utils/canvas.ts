@@ -11,8 +11,8 @@ let scalingProperties = {
 
 export function scaleWithinCanvasBound(e: fabric.IEvent<MouseEvent>) {
   let shape = e.target;
-  let maxWidth = shape.canvas.width;
-  let maxHeight = shape.canvas.height;
+  let maxWidth = shape.canvas?.width;
+  let maxHeight = shape.canvas?.height;
 
   //left border
   if (shape.left < 0) {
@@ -50,7 +50,7 @@ export function scaleWithinCanvasBound(e: fabric.IEvent<MouseEvent>) {
 export function movingRotatingWithinCanvasBound(e: fabric.IEvent<MouseEvent>) {
   const obj = e.target;
   // if object is too big ignore
-  if (obj.height > obj.canvas.height || obj.width > obj.canvas.width) {
+  if (obj.height > obj.canvas?.height || obj.width > obj.canvas?.width) {
     return;
   }
   obj.setCoords();
@@ -62,19 +62,19 @@ export function movingRotatingWithinCanvasBound(e: fabric.IEvent<MouseEvent>) {
   // bot-right corner
   if (
     obj.getBoundingRect().top + obj.getBoundingRect().height >
-      obj.canvas.height ||
-    obj.getBoundingRect().left + obj.getBoundingRect().width > obj.canvas.width
+      obj.canvas?.height ||
+    obj.getBoundingRect().left + obj.getBoundingRect().width > obj.canvas?.width
   ) {
     obj.top = Math.min(
       obj.top,
-      obj.canvas.height -
+      obj.canvas?.height -
         obj.getBoundingRect().height +
         obj.top -
         obj.getBoundingRect().top
     );
     obj.left = Math.min(
       obj.left,
-      obj.canvas.width -
+      obj.canvas?.width -
         obj.getBoundingRect().width +
         obj.left -
         obj.getBoundingRect().left

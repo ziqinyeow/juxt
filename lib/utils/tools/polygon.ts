@@ -75,12 +75,12 @@ export function drawPolygon(
   if (drawingObject.type == "roof") {
     drawingObject.type = "";
     lines.forEach(function (value, index, ar) {
-      canvas.remove(value);
+      canvas?.remove(value);
     });
-    //canvas.remove(lines[lineCounter - 1]);
+    //canvas?.remove(lines[lineCounter - 1]);
     roof = makeRoof(roofPoints);
-    canvas.add(roof);
-    canvas.renderAll();
+    canvas?.add(roof);
+    canvas?.renderAll();
   } else {
     drawingObject.type = "roof"; // roof type
   }
@@ -88,13 +88,13 @@ export function drawPolygon(
   const onMouseDoubleClick = () => {
     drawingObject.type = "";
     lines.forEach(function (value, index, ar) {
-      canvas.remove(value);
+      canvas?.remove(value);
     });
-    //canvas.remove(lines[lineCounter - 1]);
+    //canvas?.remove(lines[lineCounter - 1]);
     roof = makeRoof(roofPoints);
-    canvas.add(roof);
+    canvas?.add(roof);
     mouseUp(roof);
-    canvas.renderAll();
+    canvas?.renderAll();
 
     //clear arrays
     roofPoints = [];
@@ -120,9 +120,9 @@ export function drawPolygon(
       line.x1 = x;
       line.x2 = y;
       lines.push(line);
-      canvas.add(lines[lineCounter]);
+      canvas?.add(lines[lineCounter]);
       lineCounter++;
-      canvas.on("mouse:up", onMouseUp);
+      canvas?.on("mouse:up", onMouseUp);
     }
   };
 
@@ -137,11 +137,11 @@ export function drawPolygon(
         x2: x,
         y2: y,
       });
-      canvas.renderAll();
+      canvas?.renderAll();
     }
   };
 
-  canvas.on("mouse:dblclick", onMouseDoubleClick);
-  canvas.on("mouse:down", onMouseDown);
-  canvas.on("mouse:move", onMouseMove);
+  canvas?.on("mouse:dblclick", onMouseDoubleClick);
+  canvas?.on("mouse:down", onMouseDown);
+  canvas?.on("mouse:move", onMouseMove);
 }

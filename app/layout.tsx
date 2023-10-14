@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import clsx from "clsx";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Dropzone from "@/components/Dropzone";
+import Loader from "@/layout/loader";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +27,9 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TooltipProvider>
-            <Dropzone>{children}</Dropzone>
+            <Loader>
+              <Dropzone>{children}</Dropzone>
+            </Loader>
           </TooltipProvider>
         </ThemeProvider>
       </body>

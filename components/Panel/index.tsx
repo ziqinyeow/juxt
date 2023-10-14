@@ -42,6 +42,7 @@ const Panel = () => {
 
   // const [hidePanel, setHidePanel] = useState(false);
   const [cursor, setCursor] = useState<Cursor>("pointer");
+  // console.log(Number(getNumberOfTicks(maxTime, panelScale).toFixed(0)));
 
   return (
     <div

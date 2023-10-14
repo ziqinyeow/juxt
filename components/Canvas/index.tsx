@@ -17,7 +17,7 @@ import { useFile } from "@/lib/store/file";
 
 const Canvas = () => {
   const { canvas, setCanvas, setSelectedElement, refreshTracks } = useStore();
-  const { bucket } = useFile();
+  // const { bucket } = useFile();
 
   const initCanvas = () => {
     const canvas = new fabric.Canvas("canvas", {
@@ -38,17 +38,17 @@ const Canvas = () => {
     fabric.Object.prototype.cornerStrokeColor = "#2BEBC8";
     fabric.Object.prototype.cornerSize = 6;
     // canvas mouse down without target should deselect active object
-    canvas.on("mouse:down", function (e) {
+    canvas?.on("mouse:down", function (e) {
       if (!e.target) {
         setSelectedElement(null);
       }
     });
 
-    canvas.on("object:moving", function (e) {
+    canvas?.on("object:moving", function (e) {
       movingRotatingWithinCanvasBound(e);
     });
 
-    canvas.on("object:scaling", function (e) {
+    canvas?.on("object:scaling", function (e) {
       scaleWithinCanvasBound(e);
     });
 
@@ -59,7 +59,7 @@ const Canvas = () => {
     const _canvas = initCanvas();
     setCanvas(_canvas);
     return () => {
-      _canvas.dispose(); // without this: will need to disable reactStrictMode
+      _canvas?.dispose(); // without this: will need to disable reactStrictMode
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -88,17 +88,6 @@ const Canvas = () => {
         height: cssWidth / (fabricWidth / fabricHeight) + "px",
       };
       canvas?.setDimensions(dimension, { cssOnly: true }).requestRenderAll();
-      // const dimension = {
-      //   width: parent?.offsetWidth,
-      //   height: parent?.offsetHeight,
-      // };
-      // canvas?.setDimensions(dimension);
-      // let scaleRatio = Math.min(
-      //   dimension.width / RESOLUTION.width,
-      //   dimension.height / RESOLUTION.height
-      // );
-      // canvas?.setZoom(scaleRatio);
-      // canvas?.requestRenderAll();
     });
 
     observer.observe(parent);

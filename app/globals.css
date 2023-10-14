@@ -79,3 +79,13 @@
   width: 0px;
   height: 0px;
 }
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spinner {
+  animation: spin 0.7s linear infinite;
+}

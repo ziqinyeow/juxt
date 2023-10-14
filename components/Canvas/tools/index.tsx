@@ -143,11 +143,11 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
         case "pose": {
           setToDefaultCanvas(canvas);
           setToDrawingCanvas(canvas, "pointer");
-          const { left, top } = canvas.getCenter();
+          const { left, top } = canvas?.getCenter();
           const skeleton = buildHumanSkeleton(canvas, { x: left, y: top });
-          // canvas.centerObject(skeleton);
+          // canvas?.centerObject(skeleton);
           canvas?.requestRenderAll();
-          canvas.on("object:moving", function (event) {
+          canvas?.on("object:moving", function (event) {
             const { target, pointer } = event;
             if (target && pointer && target?.type === "circle") {
               skeleton.moveJoint(target, pointer);

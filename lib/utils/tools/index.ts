@@ -25,10 +25,10 @@ export const setToDefaultCanvas = (canvas: fabric.Canvas) => {
   canvas?.forEachObject(function (obj) {
     obj.selectable = true;
   });
-  canvas.off("mouse:down");
-  canvas.off("mouse:move");
-  canvas.off("mouse:up");
-  canvas.off("mouse:dblclick");
+  canvas?.off("mouse:down");
+  canvas?.off("mouse:move");
+  canvas?.off("mouse:up");
+  canvas?.off("mouse:dblclick");
   canvas?.requestRenderAll();
 };
 

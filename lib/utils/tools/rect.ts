@@ -28,12 +28,12 @@ export function drawRect(
       strokeWidth: STROKE_WIDTH,
       selectable: false,
     });
-    canvas.add(shape);
+    canvas?.add(shape);
   }
 
   function onMouseMove(o: IEvent) {
     if (!isDown) return;
-    const pointer = canvas.getPointer(o.e);
+    const pointer = canvas?.getPointer(o.e);
     const { x, y } = pointer;
 
     if (x < 0 || y < 0) return;
@@ -55,7 +55,7 @@ export function drawRect(
     shape.set({
       height: Math.abs(origY - y),
     });
-    canvas.renderAll();
+    canvas?.renderAll();
   }
 
   function onMouseUp(o: IEvent) {

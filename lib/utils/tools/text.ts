@@ -7,7 +7,7 @@ export const drawText = (
 ) => {
   let text: any = null;
   const onMouseDown = (o: IEvent) => {
-    const pointer = canvas.getPointer(o.e);
+    const pointer = canvas?.getPointer(o.e);
     text = new fabric.IText("text", {
       left: pointer.x,
       top: pointer.y,
@@ -20,6 +20,6 @@ export const drawText = (
   const onMouseUp = (o: IEvent) => {
     mouseUp(text);
   };
-  canvas.on("mouse:down", onMouseDown);
-  canvas.on("mouse:up", onMouseUp);
+  canvas?.on("mouse:down", onMouseDown);
+  canvas?.on("mouse:up", onMouseUp);
 };
