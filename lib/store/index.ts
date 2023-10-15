@@ -15,11 +15,16 @@ import { IEvent } from "fabric/fabric-impl";
 import { Project } from "../types/project";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { idbStorage } from "./storage";
+import { STROKE_COLOR, STROKE_WIDTH } from "../constants/colors";
 
 export const useStore = create<StoreTypes>()(
   persist<StoreTypes>(
     (set, get) => ({
       projects: [],
+      currentProjectId: "",
+      setCurrentProjectId: (projectId) => {
+        set((state) => ({ ...state, currentProjectId: projectId }));
+      },
       addProject: (project: Project) => {
         set((state) => ({ ...state, projects: [...state.projects, project] }));
       },
@@ -96,7 +101,12 @@ export const useStore = create<StoreTypes>()(
         get().addElementToCanvas(element);
       },
 
-      addShape: (type: ShapeType, shape: Shape, placement: Placement) => {
+      addShape: (
+        type: ShapeType,
+        shape: Shape,
+        placement: Placement,
+        properties = {}
+      ) => {
         const id = nanoid();
         const element: Element = {
           id,
@@ -110,12 +120,12 @@ export const useStore = create<StoreTypes>()(
           },
           properties: {
             type,
+            ...properties,
           },
         };
         get().canvas?.on("object:modified", (e) => {
           get().updatePlacement(e, element, shape);
         });
-        console.log("add track");
         get().addTrackAndElement(element);
       },
 
@@ -152,14 +162,21 @@ export const useStore = create<StoreTypes>()(
         const id = nanoid();
         set((state) => ({
           ...state,
-          tracks: [
-            ...state.tracks,
-            {
-              id,
-              name: element.name,
-              elements: [element],
-            },
-          ],
+          projects: state.projects.map((project) => {
+            return project.id === state.currentProjectId
+              ? {
+                  ...project,
+                  tracks: [
+                    ...project.tracks,
+                    {
+                      id,
+                      name: element.name,
+                      elements: [element],
+                    },
+                  ],
+                }
+              : project;
+          }),
         }));
         get().updateMaxTime();
         get().updateTime(get().getCurrentTimeInMs());
@@ -227,31 +244,97 @@ export const useStore = create<StoreTypes>()(
               get().updatePlacement(e, element, imageObject);
             });
           }
+          case "shape": {
+            // @ts-ignore
+            const type = element.properties!.type as ShapeType;
+            switch (type) {
+              case "square": {
+                const shape = new fabric.Rect({
+                  left: element.placement.x,
+                  top: element.placement.y,
+                  width: element.placement.width,
+                  height: element.placement.height,
+                  scaleX: element.placement.scaleX,
+                  scaleY: element.placement.scaleY,
+                  angle: element.placement.rotation,
+                  fill: "transparent",
+                  stroke: STROKE_COLOR,
+                  strokeWidth: STROKE_WIDTH,
+                });
+                element.fabricObject = shape;
+                get().canvas?.on("object:modified", (e) => {
+                  get().updatePlacement(e, element, shape);
+                });
+                get().canvas?.add(shape);
+                break;
+              }
+              case "triangle": {
+                const shape = new fabric.Triangle({
+                  left: element.placement.x,
+                  top: element.placement.y,
+                  width: element.placement.width,
+                  height: element.placement.height,
+                  scaleX: element.placement.scaleX,
+                  scaleY: element.placement.scaleY,
+                  angle: element.placement.rotation,
+                  fill: "transparent",
+                  stroke: STROKE_COLOR,
+                  strokeWidth: STROKE_WIDTH,
+                });
+                element.fabricObject = shape;
+                get().canvas?.on("object:modified", (e) => {
+                  get().updatePlacement(e, element, shape);
+                });
+                get().canvas?.add(shape);
+                break;
+              }
+              case "polygon": {
+                // @ts-ignore
+                const shape = new fabric.Polyline(element.properties?.coords, {
+                  left: element.placement.x,
+                  top: element.placement.y,
+                  width: element.placement.width,
+                  height: element.placement.height,
+                  scaleX: element.placement.scaleX,
+                  scaleY: element.placement.scaleY,
+                  angle: element.placement.rotation,
+                  stroke: STROKE_COLOR,
+                  strokeWidth: STROKE_WIDTH,
+                  fill: "rgba(0,0,0,0)",
+                });
+                element.fabricObject = shape;
+                get().canvas?.on("object:modified", (e) => {
+                  get().updatePlacement(e, element, shape);
+                });
+                get().canvas?.add(shape);
+                break;
+              }
+            }
+            break;
+          }
 
           default:
             break;
         }
         get().updateMaxTime();
         get().updateTime(get().getCurrentTimeInMs());
-        // get().canvas?.requestRenderAll();
+        get().canvas?.requestRenderAll();
       },
 
-      refreshTracks: () => {
-        const canvas = get().canvas,
-          tracks = get().tracks;
+      refreshTracks: (canvas) => {
+        const tracks =
+          get().projects.find(
+            (project) => project.id === get().currentProjectId
+          )?.tracks ?? [];
         if (!canvas) return;
         // get().canvas?.remove(...(get().canvas?.getObjects() ?? []));
 
-        // console.log(tracks);
         for (let i = 0; i < tracks.length; i++) {
           const element = tracks[i].elements[0];
           switch (element.type) {
-            case "video": {
-              const obj = element.fabricObject as fabric.Object;
-              get().canvas?.remove(obj);
-              get().addElementToCanvas(element);
-            }
-            case "image": {
+            case "video":
+            case "image":
+            case "shape": {
               const obj = element.fabricObject as fabric.Object;
               get().canvas?.remove(obj);
               get().addElementToCanvas(element);
@@ -264,10 +347,10 @@ export const useStore = create<StoreTypes>()(
       },
 
       updatePlacement: (e: IEvent, element: Element, object: any) => {
-        const props = get().tracks.find((t) => {
-          const ret = t.elements.find((_t) => _t.id === element.id);
-          return ret;
-        })?.elements?.[0];
+        // const props = get().tracks.find((t) => {
+        //   const ret = t.elements.find((_t) => _t.id === element.id);
+        //   return ret;
+        // })?.elements?.[0];
 
         if (!e.target) return;
         const target = e.target;
@@ -290,7 +373,6 @@ export const useStore = create<StoreTypes>()(
           scaleY: 1,
         };
         get().updateElement(element.id, {
-          ...props,
           placement: newPlacement,
         });
       },
@@ -300,17 +382,24 @@ export const useStore = create<StoreTypes>()(
       updateElement: (elementId: string, data: Element | any) =>
         set((state) => ({
           ...state,
-          tracks: get().tracks.map((t) => ({
-            ...t,
-            elements: t.elements.map((element) =>
-              element.id === elementId
-                ? {
-                    ...element,
-                    ...data,
-                  }
-                : element
-            ),
-          })),
+          projects: state.projects.map((project) => {
+            return project.id === state.currentProjectId
+              ? {
+                  ...project,
+                  tracks: project.tracks.map((t) => ({
+                    ...t,
+                    elements: t.elements.map((element) =>
+                      element.id === elementId
+                        ? {
+                            ...element,
+                            ...data,
+                          }
+                        : element
+                    ),
+                  })),
+                }
+              : project;
+          }),
         })),
 
       // panel properties
@@ -343,8 +432,13 @@ export const useStore = create<StoreTypes>()(
       setMaxTime: (time: number) =>
         set((state) => ({ ...state, maxTime: time })),
       updateMaxTime: () => {
+        const currentProjectId = get().currentProjectId;
+        const tracks =
+          get().projects.find((project) => project.id === currentProjectId)
+            ?.tracks ?? [];
+
         const newMaxTime = Math.max(
-          ...get().tracks.map((t) =>
+          ...tracks?.map((t) =>
             Math.max(
               ...t.elements.map(
                 (_t) => _t.timeframe.start + _t.timeframe.duration
@@ -425,7 +519,10 @@ export const useStore = create<StoreTypes>()(
       updateTime: (time: number) => {
         // time in milliseconds
         get().setCurrentTimeInMs(time);
-        get().tracks.forEach((track) => {
+        const tracks = get().projects.find(
+          (project) => project.id === get().currentProjectId
+        )?.tracks;
+        tracks?.forEach((track) => {
           track.elements.forEach((element) => {
             if (!element.fabricObject) return;
             const isInside =
@@ -474,7 +571,15 @@ export const useStore = create<StoreTypes>()(
       // @ts-ignore
       partialize: (state) =>
         Object.fromEntries(
-          Object.entries(state).filter(([key]) => !["canvas"].includes(key))
+          Object.entries(state).filter(
+            ([key]) =>
+              !["currentProjectId"].includes(key) &&
+              !["canvas"].includes(key) &&
+              !["maxTime"].includes(key) &&
+              !["currentKeyFrame"].includes(key) &&
+              !["startedTime"].includes(key) &&
+              !["startedTimePlay"].includes(key)
+          )
         ),
     }
   )

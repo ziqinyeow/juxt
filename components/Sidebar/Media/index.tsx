@@ -11,9 +11,14 @@ import { getYoutubeId } from "@/components/Dropzone/utils";
 const Media = () => {
   const [focused, setFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const { addImage, addVideo } = useStore();
+  const {
+    canvas,
+    addImage,
+    addVideo,
+    setDisableKeyboardShortcut,
+    refreshTracks,
+  } = useStore();
   const { bucket } = useFile();
-  const { setDisableKeyboardShortcut, refreshTracks } = useStore();
 
   const search = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -137,10 +142,10 @@ const Media = () => {
                     <video
                       id={media.path}
                       onLoad={() => {
-                        refreshTracks();
+                        refreshTracks(canvas);
                       }}
                       onLoadedData={() => {
-                        refreshTracks();
+                        refreshTracks(canvas);
                       }}
                       muted
                       className="absolute z-[-10] opacity-0"

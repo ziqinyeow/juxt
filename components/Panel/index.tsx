@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   IconBackspace,
   IconEye,
@@ -27,18 +27,23 @@ import { useOperatingSystem } from "@/lib/hooks/useOperatingSystem";
 import { useFile } from "@/lib/store/file";
 import Seeker from "./seeker";
 
-const Panel = () => {
+const Panel = ({ projectId }: { projectId: string }) => {
   const os = useOperatingSystem();
   // const { bucket } = useFile();
 
   const {
-    tracks,
+    projects,
     panelScale,
     hidePanel,
     // setHidePanel,
     addPanelScale,
     maxTime,
   } = useStore();
+
+  const tracks = useMemo(
+    () => projects.find((project) => project.id === projectId)?.tracks,
+    [projects, projectId]
+  );
 
   // const [hidePanel, setHidePanel] = useState(false);
   const [cursor, setCursor] = useState<Cursor>("pointer");

@@ -5,21 +5,25 @@ import Panel from "@/components/Panel";
 import Layout from "@/layout/layout";
 import { useStore } from "@/lib/store";
 import { notFound } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 
 const Page = ({ params }: { params: { id: string } }) => {
-  const { projects } = useStore();
-  console.log(params.id);
+  const { projects, setCurrentProjectId } = useStore();
+
+  useEffect(() => {
+    console.log("setting current project id");
+    setCurrentProjectId(params.id);
+  }, [params.id, setCurrentProjectId]);
 
   if (projects.find((project) => project.id === params.id)) {
     return (
       <Layout>
         <div className="flex flex-col justify-between h-full bg-primary-800">
           <div className="relative h-full">
-            <Canvas />
+            <Canvas projectId={params?.id} />
           </div>
           <div className="">
-            <Panel />
+            <Panel projectId={params?.id} />
           </div>
         </div>
       </Layout>

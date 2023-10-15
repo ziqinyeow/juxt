@@ -6,6 +6,8 @@ import { Project } from "../project";
 
 export interface StoreTypes {
   projects: Project[];
+  currentProjectId: string;
+  setCurrentProjectId: (projectId: string) => void;
   addProject: (project: Project) => void;
 
   canvas: fabric.Canvas | null;
@@ -20,10 +22,15 @@ export interface StoreTypes {
   tracks: Tracks[];
   selectedElement: Element | null;
   // addElement: (element: Element) => void;
-  addShape: (type: ShapeType, shape: Shape, placement: Placement) => void;
+  addShape: (
+    type: ShapeType,
+    shape: Shape,
+    placement: Placement,
+    properties?: {}
+  ) => void;
   addText: (text: fabric.IText, properties: any, placement: Placement) => void;
   addTrackAndElement: (element: Element) => void;
-  refreshTracks: () => void;
+  refreshTracks: (canvas: fabric.Canvas | null) => void;
   updatePlacement: (e: IEvent, element: Element, object: any) => void;
   addElementToCanvas: (element: Element) => void;
   setSelectedElement: (element: Element | null) => void;

@@ -8,3 +8,6 @@ export const colors = [
   "#0065F4",
   "#FFBE1B",
 ];
+
+export const STROKE_COLOR = "#2BEBC8";
+export const STROKE_WIDTH = 3;

@@ -24,7 +24,7 @@ import Image from "next/image";
 
 const Explorer = () => {
   const windowRef = useRef<HTMLDivElement | null>(null);
-  const { addImage, addVideo, refreshTracks } = useStore();
+  const { canvas, addImage, addVideo, refreshTracks } = useStore();
   const { bucket } = useFile();
 
   const tree = useMemo(
@@ -159,10 +159,10 @@ const Explorer = () => {
                     <video
                       id={file?.path}
                       onLoad={() => {
-                        refreshTracks();
+                        refreshTracks(canvas);
                       }}
                       onLoadedData={() => {
-                        refreshTracks();
+                        refreshTracks(canvas);
                       }}
                       muted
                       className=""

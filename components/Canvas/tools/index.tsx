@@ -125,15 +125,22 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
           setToDrawingCanvas(canvas);
           drawPolygon(canvas, (shape: fabric.Polyline) => {
             setCurrentToolIndex(0);
-            addShape("polygon", shape, {
-              x: shape.left ?? 0,
-              y: shape.top ?? 0,
-              width: shape.width ?? 0,
-              height: shape.height ?? 0,
-              rotation: 0,
-              scaleX: 1,
-              scaleY: 1,
-            });
+            addShape(
+              "polygon",
+              shape,
+              {
+                x: shape.left ?? 0,
+                y: shape.top ?? 0,
+                width: shape.width ?? 0,
+                height: shape.height ?? 0,
+                rotation: 0,
+                scaleX: 1,
+                scaleY: 1,
+              },
+              {
+                coords: shape.points,
+              }
+            );
             setToDefaultCanvas(canvas);
           }); // set to pointer
           canvas?.requestRenderAll();

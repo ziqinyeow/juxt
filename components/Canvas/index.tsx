@@ -15,12 +15,12 @@ import { tools } from "./tools/tools";
 import Image from "next/image";
 import { useFile } from "@/lib/store/file";
 
-const Canvas = () => {
+const Canvas = ({ projectId }: { projectId: string }) => {
   const { canvas, setCanvas, setSelectedElement, refreshTracks } = useStore();
   // const { bucket } = useFile();
 
   const initCanvas = () => {
-    const canvas = new fabric.Canvas("canvas", {
+    const canvas = new fabric.Canvas(`canvas-${projectId}`, {
       // width: 550,
       // height: 300,
       backgroundColor: "#000",
@@ -58,14 +58,20 @@ const Canvas = () => {
   useEffect(() => {
     const _canvas = initCanvas();
     setCanvas(_canvas);
+    refreshTracks(_canvas);
     return () => {
+      setCanvas(null);
       _canvas?.dispose(); // without this: will need to disable reactStrictMode
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {}, [canvas]);
+
   useLayoutEffect(() => {
-    const parent = document.getElementById("canvas")?.parentElement;
+    const parent = document.getElementById(
+      `canvas-${projectId}`
+    )?.parentElement;
 
     if (!parent) {
       return;
@@ -94,7 +100,7 @@ const Canvas = () => {
     return () => {
       observer.disconnect();
     };
-  }, [canvas]);
+  }, [canvas, projectId]);
 
   return (
     <>
@@ -106,7 +112,7 @@ const Canvas = () => {
         </div>
         <div className="flex items-center z-[100] justify-center w-[98%] h-[95%] border rounded-md border-primary-400 overflow-hidden">
           <canvas
-            id="canvas"
+            id={`canvas-${projectId}`}
             width={RESOLUTION.width}
             height={RESOLUTION.height}
           />

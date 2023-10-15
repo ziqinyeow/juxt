@@ -21,15 +21,6 @@ export function drawPolygon(
   let x = 0,
     y = 0;
 
-  class Point {
-    x: number;
-    y: number;
-    constructor(x: number, y: number) {
-      this.x = x;
-      this.y = y;
-    }
-  }
-
   function setStartingPoint(options: any) {
     x = options.pointer.x;
     y = options.pointer.y;
@@ -38,7 +29,7 @@ export function drawPolygon(
   function makeRoof(roofPoints: any) {
     var left = findLeftPaddingForRoof(roofPoints);
     var top = findTopPaddingForRoof(roofPoints);
-    roofPoints.push(new Point(roofPoints[0]?.x, roofPoints[0]?.y));
+    roofPoints.push({ x: roofPoints[0]?.x, y: roofPoints[0]?.y });
     var roof = new fabric.Polyline(roofPoints, {
       stroke: STROKE_COLOR,
       strokeWidth: STROKE_WIDTH,
@@ -92,6 +83,7 @@ export function drawPolygon(
     });
     //canvas?.remove(lines[lineCounter - 1]);
     roof = makeRoof(roofPoints);
+    console.log(roofPoints, roof);
     canvas?.add(roof);
     mouseUp(roof);
     canvas?.renderAll();
@@ -110,7 +102,7 @@ export function drawPolygon(
     if (drawingObject.type == "roof") {
       canvas.selection = false;
       setStartingPoint(o); // set x,y
-      roofPoints.push(new Point(x, y));
+      roofPoints.push({ x, y });
       var points = [x, y, x, y];
       const line = new fabric.Line(points, {
         stroke: STROKE_COLOR,
