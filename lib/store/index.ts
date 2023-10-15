@@ -149,6 +149,9 @@ export const useStore = create<StoreTypes>()(
         text.on("deselected", (e) => {
           get().setDisableKeyboardShortcut(false);
         });
+        text.on("changed", (e) => {
+          element.properties.text = text.text ?? "";
+        });
         get().canvas?.on("object:modified", (e) => {
           get().updatePlacement(e, element, text);
         });
@@ -244,6 +247,36 @@ export const useStore = create<StoreTypes>()(
               get().updatePlacement(e, element, imageObject);
             });
           }
+          case "text": {
+            // @ts-ignore
+            const text = new fabric.IText(element.properties?.text, {
+              left: element.placement.x,
+              top: element.placement.y,
+              width: element.placement.width,
+              height: element.placement.height,
+              scaleX: element.placement.scaleX,
+              scaleY: element.placement.scaleY,
+              angle: element.placement.rotation,
+              fontSize: 50,
+              fontFamily: "Andale Mono",
+              fill: "white",
+            });
+            text.on("selected", (e) => {
+              get().setDisableKeyboardShortcut(true);
+            });
+            text.on("deselected", (e) => {
+              get().setDisableKeyboardShortcut(false);
+            });
+            text.on("changed", (e) => {
+              // @ts-ignore
+              element.properties.text = text.text ?? "";
+            });
+            element.fabricObject = text;
+            get().canvas?.on("object:modified", (e) => {
+              get().updatePlacement(e, element, text);
+            });
+            get().canvas?.add(text);
+          }
           case "shape": {
             // @ts-ignore
             const type = element.properties!.type as ShapeType;
@@ -310,7 +343,6 @@ export const useStore = create<StoreTypes>()(
                 break;
               }
             }
-            break;
           }
 
           default:
@@ -334,6 +366,7 @@ export const useStore = create<StoreTypes>()(
           switch (element.type) {
             case "video":
             case "image":
+            case "text":
             case "shape": {
               const obj = element.fabricObject as fabric.Object;
               get().canvas?.remove(obj);
@@ -369,8 +402,8 @@ export const useStore = create<StoreTypes>()(
             target.height && target.scaleY
               ? target.height * target.scaleY
               : placement.height,
-          scaleX: 1,
-          scaleY: 1,
+          scaleX: element.type === "text" ? target.scaleX ?? 1 : 1,
+          scaleY: element.type === "text" ? target.scaleX ?? 1 : 1,
         };
         get().updateElement(element.id, {
           placement: newPlacement,
@@ -575,6 +608,8 @@ export const useStore = create<StoreTypes>()(
             ([key]) =>
               !["currentProjectId"].includes(key) &&
               !["canvas"].includes(key) &&
+              !["disableKeyboardShortcut"].includes(key) &&
+              !["playing"].includes(key) &&
               !["maxTime"].includes(key) &&
               !["currentKeyFrame"].includes(key) &&
               !["startedTime"].includes(key) &&
