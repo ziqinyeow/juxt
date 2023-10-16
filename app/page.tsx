@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { nanoid } from "nanoid";
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const Card = ({ title }: { title: string }) => (
   <div className="p-5 rounded-md bg-primary-600">
@@ -32,6 +33,7 @@ export default function Home() {
   });
   const [openCreateProjectModal, setOpenCreateProjectModal] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [hovering, setHovering] = useState("");
 
   const create = () => {
     if (form.name.length === 0 || form.color.length === 0) {
@@ -208,16 +210,31 @@ export default function Home() {
                     No project {searchValue} found.
                   </div>
                 )}
-                <div className="grid grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 gap-4 xl:grid-cols-5 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   {filteredProjects.map((project, i) => (
                     <Link
                       href={`/${project.id}`}
                       key={i}
+                      style={
+                        { "--color": project.color } as React.CSSProperties
+                      }
                       className={cn([
-                        "p-4 font-mono border-2 flex flex-col justify-between rounded-md cursor-pointer border-primary-400 text-primary-100 hover:ring-2 bg-primary-600",
-                        `ring-primary-400`,
+                        "counter-border",
+                        "p-4 font-mono flex flex-col justify-between rounded-md cursor-pointer text-primary-100 bg-primary-600",
+                        ``,
                       ])}
+                      onMouseEnter={() => setHovering(project.id)}
+                      onMouseLeave={() => setHovering("")}
                     >
+                      <motion.i
+                        initial="hidden"
+                        animate={hovering === project.id ? "active" : "hidden"}
+                        variants={{
+                          hidden: { opacity: 0 },
+                          active: { opacity: 1 },
+                        }}
+                        aria-hidden="true"
+                      ></motion.i>
                       {/* <Image
                         src="https://plus.unsplash.com/premium_photo-1694825173178-3d2c9bbf5b5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8&auto=format&fit=crop&w=800&q=60"
                         width={100}
