@@ -94,6 +94,11 @@ export default function Home() {
     if (id) {
       deleteProject(id);
     }
+    setForm({
+      name: "",
+      description: "",
+      color: colors[0],
+    });
     setOpenDeleteProjectModal(false);
   };
 
@@ -129,6 +134,11 @@ export default function Home() {
         break;
       }
       case "delete": {
+        setForm({
+          name: "",
+          description: "",
+          color: colors[0],
+        });
         const project = projects.find(
           (project) => project.id === contextMenu.id
         );
