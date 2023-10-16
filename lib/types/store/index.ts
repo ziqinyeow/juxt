@@ -9,6 +9,8 @@ export interface StoreTypes {
   currentProjectId: string;
   setCurrentProjectId: (projectId: string) => void;
   addProject: (project: Project) => void;
+  editProject: (id: string, project: {}) => void;
+  deleteProject: (id: string) => void;
 
   canvas: fabric.Canvas | null;
   setCanvas: (canvas: fabric.Canvas | null) => void;

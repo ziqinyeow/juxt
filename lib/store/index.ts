@@ -28,6 +28,20 @@ export const useStore = create<StoreTypes>()(
       addProject: (project: Project) => {
         set((state) => ({ ...state, projects: [...state.projects, project] }));
       },
+      editProject: (id, project) => {
+        set((state) => ({
+          ...state,
+          projects: state.projects.map((p) => {
+            return p.id === id ? { ...p, ...project } : p;
+          }),
+        }));
+      },
+      deleteProject: (id: string) => {
+        set((state) => ({
+          ...state,
+          projects: state.projects.filter((p) => p.id !== id),
+        }));
+      },
 
       canvas: null,
       setCanvas: (canvas: fabric.Canvas | null) =>
