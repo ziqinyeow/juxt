@@ -3,7 +3,7 @@
 import "./style.css";
 import { useStore } from "@/lib/store";
 import { fabric } from "fabric";
-import React, { useEffect, useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import Zoomable from "./zoomable";
 import { RESOLUTION } from "@/lib/constants/canvas";
 import {
@@ -12,8 +12,6 @@ import {
 } from "@/lib/utils/canvas";
 import Tools from "./tools";
 import { tools } from "./tools/tools";
-import Image from "next/image";
-import { useFile } from "@/lib/store/file";
 
 const Canvas = ({ projectId }: { projectId: string }) => {
   const { canvas, setCanvas, setSelectedElement, refreshTracks } = useStore();
@@ -24,11 +22,11 @@ const Canvas = ({ projectId }: { projectId: string }) => {
       // width: 550,
       // height: 300,
       backgroundColor: "#000",
-      renderOnAddRemove: false,
+      // renderOnAddRemove: false,
       // imageSmoothingEnabled: false,
       // enableRetinaScaling: false,
       // fireRightClick: true,
-      // stopContextMenu: true,
+      stopContextMenu: true,
     });
 
     fabric.Object.prototype.hasRotatingPoint = false;
@@ -60,13 +58,12 @@ const Canvas = ({ projectId }: { projectId: string }) => {
     setCanvas(_canvas);
     refreshTracks(_canvas);
     return () => {
-      setCanvas(null);
       _canvas?.dispose(); // without this: will need to disable reactStrictMode
+      setCanvas(null);
     };
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {}, [canvas]);
 
   useLayoutEffect(() => {
     const parent = document.getElementById(

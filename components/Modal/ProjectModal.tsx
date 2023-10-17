@@ -52,7 +52,7 @@ const ProjectModal = ({
         setOpen(open);
       }}
     >
-      <DialogContent className="font-mono text-white border-0 bg-primary-600">
+      <DialogContent className="z-[1000] font-mono text-white border-0 bg-primary-600">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-3 text-secondary-200">
             <span>

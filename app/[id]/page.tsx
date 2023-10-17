@@ -11,7 +11,6 @@ const Page = ({ params }: { params: { id: string } }) => {
   const { projects, setCurrentProjectId } = useStore();
 
   useEffect(() => {
-    console.log("setting current project id");
     setCurrentProjectId(params.id);
   }, [params.id, setCurrentProjectId]);
 
