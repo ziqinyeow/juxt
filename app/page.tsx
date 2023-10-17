@@ -206,8 +206,27 @@ export default function Home() {
                   onClick={() => {
                     setOpenCreateProjectModal(true);
                   }}
-                  className="w-full h-[calc(100vh_-_104px)] p-5 border bg-primary-700 transition duration-200 cursor-pointer hover:bg-primary-800 text-primary-100 border-primary-400 flex items-center justify-center rounded-md"
+                  style={
+                    {
+                      "--color": "#2BEBC8",
+                      "--color2": "#a853ba",
+                      "--color3": "#2a8af6",
+                    } as React.CSSProperties
+                  }
+                  className={cn(
+                    "counter-border",
+                    "w-full h-[calc(100vh_-_104px)] p-5 border bg-primary-700 transition duration-200 cursor-pointer hover:bg-primary-800 text-primary-100 border-primary-400 flex items-center justify-center rounded-md"
+                  )}
                 >
+                  <motion.i
+                    initial="hidden"
+                    animate={"active"}
+                    variants={{
+                      hidden: { opacity: 0 },
+                      active: { opacity: 1 },
+                    }}
+                    aria-hidden="true"
+                  ></motion.i>
                   <div className="flex flex-col items-center justify-center gap-3 select-none text-secondary-200">
                     <IconStack3 className="w-8 h-8" />
                     <div className="font-mono text-base font-bold tracking-widest">
@@ -260,7 +279,10 @@ export default function Home() {
                           href={`/${project.id}`}
                           // key={i}
                           style={
-                            { "--color": project.color } as React.CSSProperties
+                            {
+                              "--color": project.color,
+                              "--color2": "#a853ba",
+                            } as React.CSSProperties
                           }
                           className={cn([
                             "counter-border",

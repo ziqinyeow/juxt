@@ -94,13 +94,16 @@
   --border-radius: 6px;
   --border-size: 2px;
   --padding: 1.25rem;
-  --color: #9dfa31;
+  --color: #e92a67;
+  --color2: #211f21;
+  --color3: #18151b;
+  --color4: rgba(42, 138, 246, 0);
   --border-bg: conic-gradient(
     from 180deg at 50% 50%,
     var(--color) 0deg,
-    #211f21 112.5deg,
-    #18151b 228.75deg,
-    rgba(42, 138, 246, 0) 360deg
+    var(--color2) 112.5deg,
+    var(--color3) 228.75deg,
+    var(--color4) 360deg
   );
   /* --border-bg: conic-gradient(
     from 180deg at 50% 50%,
