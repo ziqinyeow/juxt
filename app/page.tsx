@@ -240,7 +240,7 @@ export default function Home() {
                 <div className="flex items-center gap-4 mb-8 font-mono text-primary-100">
                   <input
                     type="text"
-                    className="w-full px-4 py-3 rounded-md outline-none bg-primary-600"
+                    className="w-full px-4 py-3 transition duration-200 rounded-md outline-none bg-primary-600 hover:bg-primary-400 focus:bg-primary-400"
                     placeholder="Search"
                     value={searchValue}
                     onChange={(e) => {
@@ -257,7 +257,7 @@ export default function Home() {
                       <span>
                         <IconScriptPlus className="w-4 h-4" />
                       </span>
-                      <span>Create Project</span>
+                      <span className="hidden sm:block">Create Project</span>
                     </button>
                   </div>
                 </div>
