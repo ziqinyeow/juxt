@@ -91,7 +91,7 @@ const ProjectDropdown = () => {
             ])}
           >
             <div className="flex items-center gap-2">
-              <div className="text-xs font-light text-primary-200">
+              <div className="hidden text-xs font-light sm:block text-primary-200">
                 Current Project:
               </div>
               <IconStack2
@@ -107,7 +107,7 @@ const ProjectDropdown = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           sideOffset={8}
-          className="w-72 space-y-1 max-h-[160px] relative z-[900] overflow-y-auto thin_scrollbar font-mono bg-primary-600 border-primary-400"
+          className="sm:w-72 w-40 space-y-1 max-h-[160px] relative z-[900] overflow-y-auto thin_scrollbar font-mono bg-primary-600 border-primary-400"
         >
           <DropdownMenuLabel asChild className="p-0 bg-primary-600">
             <div className="sticky top-0 z-10 flex items-center w-full gap-2 mb-2 rounded-md bg-primary-800">
