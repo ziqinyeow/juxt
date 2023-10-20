@@ -7,8 +7,8 @@ import React, { useState } from "react";
 import Tooltip from "../Tooltip";
 import { Tab, getTabIcon } from "./utils";
 import Explorer from "./Explorer";
-import { useFile } from "@/lib/store/file";
 import Media from "./Media";
+import { useStore } from "@/lib/store";
 
 type SidebarButtonProps = {
   tooltip?: string;
@@ -38,7 +38,7 @@ type Props = {
 } & DivProps;
 
 const Sidebar = ({ projectId, className, ...props }: Props) => {
-  const { mergeFileListToBucket } = useFile();
+  const { mergeFileListToBucket } = useStore();
   const [tab, setTab] = useState<Tab>("explorer");
 
   return (
@@ -87,7 +87,7 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
               <input
                 id="upload-2"
                 onChange={(e) => {
-                  mergeFileListToBucket(e.target.files);
+                  mergeFileListToBucket(projectId, e.target.files);
                 }}
                 type="file"
                 name="upload-2"

@@ -3,7 +3,6 @@
 import { DivProps } from "@/lib/types/html";
 import { useEffect, useState } from "react";
 import { getYoutubeId, traverse } from "./utils";
-import { useFile } from "@/lib/store/file";
 import { useStore } from "@/lib/store";
 import { nanoid } from "nanoid";
 

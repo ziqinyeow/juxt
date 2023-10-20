@@ -13,9 +13,10 @@ import { nanoid } from "nanoid";
 import { IEvent } from "fabric/fabric-impl";
 import { Project } from "../types/project";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { getFile, idbStorage } from "./storage";
+import { getFile, idbStorage, storeFile } from "./storage";
 import { STROKE_COLOR, STROKE_WIDTH } from "../constants/colors";
 import { merge } from "../utils/file";
+import { checkFileType } from "@/components/Dropzone/utils";
 
 export const useStore = create<StoreTypes>()(
   persist<StoreTypes>(
@@ -107,6 +108,44 @@ export const useStore = create<StoreTypes>()(
           ...state,
           projects: state.projects.map((p) => {
             return p.id === projectId ? { ...p, bucket: curr } : p;
+          }),
+        }));
+      },
+      mergeFileListToBucket: (projectId: string, fileList: FileList | null) => {
+        if (!fileList) {
+          return;
+        }
+        const curr = {
+          ...get().projects.find((project) => project.id === projectId)?.bucket,
+        }; // copy to avoid side effects
+        set((state) => ({
+          ...state,
+          projects: state.projects.map((p) => {
+            return p.id === projectId
+              ? {
+                  ...p,
+                  bucket: {
+                    ...curr,
+                    "/": merge(
+                      [...curr["/"]],
+                      Array.from(fileList).map((file) => {
+                        // const id = (await storeFile(file)) ?? nanoid();
+                        const type = checkFileType(file);
+                        const media = type === "image" || type === "video";
+                        return {
+                          id: nanoid(),
+                          dir: false,
+                          type,
+                          path: `/` + file.name,
+                          // file,
+                          // url: media ? URL.createObjectURL(file) : "",
+                        };
+                      }),
+                      (a: FileWithPath, b: FileWithPath) => a.path === b.path
+                    ),
+                  },
+                }
+              : p;
           }),
         }));
       },

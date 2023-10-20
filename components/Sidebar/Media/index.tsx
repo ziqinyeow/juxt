@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import Droparea from "../droparea";
-import { useFile } from "@/lib/store/file";
-import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { IconPhoto, IconPhotoOff, IconVideo } from "@tabler/icons-react";
 import { useStore } from "@/lib/store";
@@ -86,7 +85,7 @@ const Media = ({ projectId }: { projectId: string }) => {
             }
             className="w-full rounded"
           ></iframe> */}
-          <Droparea id="upload-2" />
+          <Droparea projectId={projectId} id="upload-2" />
         </>
       ) : (
         <div className="w-full h-full px-2">

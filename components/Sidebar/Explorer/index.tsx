@@ -12,7 +12,6 @@ import {
   useTraits,
   useVirtualize,
 } from "exploration";
-import { useFile } from "@/lib/store/file";
 import { BucketType, FileWithPath } from "@/lib/types/file";
 import React, { useMemo, useRef } from "react";
 import { cn } from "@/lib/utils";
@@ -242,7 +241,9 @@ const Explorer = ({ projectId }: { projectId: string }) => {
           })}
         </div>
       </div>
-      {bucket?.["/"].length === 0 && <Droparea id="upload-1" />}
+      {bucket?.["/"].length === 0 && (
+        <Droparea projectId={projectId} id="upload-1" />
+      )}
     </div>
   );
 };

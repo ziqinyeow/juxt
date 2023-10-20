@@ -18,6 +18,7 @@ export interface StoreTypes {
   editProject: (id: string, project: {}) => void;
   deleteProject: (id: string) => void;
   mergeBucket: (projectId: string, bucket: BucketType) => void;
+  mergeFileListToBucket: (projectId: string, fileList: FileList | null) => void;
 
   canvas: fabric.Canvas | null;
   setCanvas: (canvas: fabric.Canvas | null) => void;

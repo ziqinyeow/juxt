@@ -1,11 +1,11 @@
 import { useOperatingSystem } from "@/lib/hooks/useOperatingSystem";
-import { useFile } from "@/lib/store/file";
+import { useStore } from "@/lib/store";
 import { IconPackageImport } from "@tabler/icons-react";
 import { Files, Folders, Youtube } from "lucide-react";
 
-const Droparea = ({ id }: { id: string }) => {
+const Droparea = ({ projectId, id }: { projectId: string; id: string }) => {
   const os = useOperatingSystem();
-  const { mergeFileListToBucket } = useFile();
+  const { mergeFileListToBucket } = useStore();
 
   return (
     <label htmlFor={id} className="w-full">
@@ -13,7 +13,7 @@ const Droparea = ({ id }: { id: string }) => {
         id={id}
         name={id}
         onChange={(e) => {
-          mergeFileListToBucket(e.target.files);
+          mergeFileListToBucket(projectId, e.target.files);
         }}
         type="file"
         className="hidden"
