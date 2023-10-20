@@ -4,7 +4,6 @@ import { BucketType, FileWithPath } from "../types/file";
 import { checkFileType } from "@/components/Dropzone/utils";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { idbStorage } from "./storage";
-import { nanoid } from "nanoid";
 
 const merge = (a: FileWithPath[], b: FileWithPath[], predicate: Function) => {
   const c = [...a]; // copy to avoid side effects
@@ -15,7 +14,7 @@ const merge = (a: FileWithPath[], b: FileWithPath[], predicate: Function) => {
   return c;
 };
 
-export const useFile = create<FileStoreType>()(
+export const useTest = create<FileStoreType>()(
   persist<FileStoreType>(
     (set, get) => ({
       bucket: { "/": [] },
@@ -36,7 +35,6 @@ export const useFile = create<FileStoreType>()(
                 const type = checkFileType(file);
                 const media = type === "image" || type === "video";
                 return {
-                  id: nanoid(),
                   dir: false,
                   type,
                   path: `/` + file.name,
@@ -67,7 +65,7 @@ export const useFile = create<FileStoreType>()(
       },
     }),
     {
-      name: "file",
+      name: "test",
       storage: createJSONStorage(() => idbStorage),
       // @ts-ignore
       // partialize: (state) =>

@@ -33,7 +33,11 @@ export const SidebarButton = ({
   </Tooltip>
 );
 
-const Sidebar = ({ className, ...props }: DivProps) => {
+type Props = {
+  projectId: string;
+} & DivProps;
+
+const Sidebar = ({ projectId, className, ...props }: Props) => {
   const { mergeFileListToBucket } = useFile();
   const [tab, setTab] = useState<Tab>("explorer");
 
@@ -99,8 +103,8 @@ const Sidebar = ({ className, ...props }: DivProps) => {
           </div>
         </div>
         <div>
-          {tab === "explorer" && <Explorer />}
-          {tab === "media" && <Media />}
+          {tab === "explorer" && <Explorer projectId={projectId} />}
+          {tab === "media" && <Media projectId={projectId} />}
         </div>
       </div>
     </div>

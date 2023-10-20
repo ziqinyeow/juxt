@@ -28,7 +28,8 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <TooltipProvider>
             <Loader>
-              <Dropzone>{children}</Dropzone>
+              {/* <Dropzone></Dropzone> */}
+              {children}
             </Loader>
           </TooltipProvider>
         </ThemeProvider>

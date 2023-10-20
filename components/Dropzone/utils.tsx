@@ -1,8 +1,10 @@
+import { storeFile } from "@/lib/store/storage";
 import {
   BucketType,
   FileSystemHandlePromises,
   FileWithPath,
 } from "@/lib/types/file";
+import { nanoid } from "nanoid";
 
 // export const supportsFileSystemAccessAPI =
 //   "getAsFileSystemHandle" in DataTransferItem.prototype;
@@ -50,20 +52,25 @@ export const traverseDir = async (
     const type = checkFileType(file);
     const media = type === "image" || type === "video";
 
-    const data: FileWithPath = {
-      dir: false,
-      type,
-      path,
-      file,
-      url: media ? URL.createObjectURL(file) : "",
-    };
-    if (media) {
-      if (root in bucket) {
-        bucket[root].push(data);
-      } else {
-        bucket[root] = [data];
+    const id = await storeFile(file);
+
+    if (id) {
+      const data: FileWithPath = {
+        id,
+        dir: false,
+        type,
+        path,
+        // file,
+        // url: media ? URL.createObjectURL(file) : "",
+      };
+      if (media) {
+        if (root in bucket) {
+          bucket[root].push(data);
+        } else {
+          bucket[root] = [data];
+        }
+        files.push(data);
       }
-      files.push(data);
     }
   } else if (entry.kind === "directory") {
     for await (const handle of entry.values()) {
@@ -78,6 +85,7 @@ export const traverseDir = async (
         const root = paths.slice(0, -1).join("/");
         bucket[path] = [];
         const data = {
+          id: nanoid(),
           dir: true,
           type: "others",
           path,
@@ -108,7 +116,9 @@ export const traverse = async (items: DataTransferItemList) => {
     const { kind, name } = handle;
     const pathname = `/` + name;
     if (kind === "directory") {
+      const id = nanoid();
       bucket["/"].push({
+        id,
         dir: true,
         type: "others",
         path: pathname,
@@ -123,16 +133,19 @@ export const traverse = async (items: DataTransferItemList) => {
       const file: File = await handle.getFile();
       const type = checkFileType(file);
       const media = type === "image" || type === "video";
-      const data: FileWithPath = {
-        dir: false,
-        type,
-        path: pathname,
-        file,
-        url: media ? URL.createObjectURL(file) : "",
-      };
-      if (media) {
-        bucket["/"].push(data);
-        files.push(data);
+      const id = await storeFile(file);
+
+      if (id) {
+        const data: FileWithPath = {
+          id,
+          dir: false,
+          type,
+          path: pathname,
+        };
+        if (media) {
+          bucket["/"].push(data);
+          files.push(data);
+        }
       }
     }
   }

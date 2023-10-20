@@ -4,10 +4,14 @@ import { DivProps } from "@/lib/types/html";
 import { useEffect, useState } from "react";
 import { getYoutubeId, traverse } from "./utils";
 import { useFile } from "@/lib/store/file";
+import { useStore } from "@/lib/store";
+import { nanoid } from "nanoid";
 
-const Dropzone = ({ children, ...props }: DivProps) => {
+type Props = { projectId: string } & DivProps;
+
+const Dropzone = ({ projectId, children, ...props }: Props) => {
   const [dragging, setDragging] = useState(false);
-  const { bucket, mergeBucket } = useFile();
+  const { projects, mergeBucket } = useStore();
 
   useEffect(() => {
     const handlePasteAnywhere = async (e: ClipboardEvent) => {
@@ -16,9 +20,10 @@ const Dropzone = ({ children, ...props }: DivProps) => {
       if (text.startsWith("https://www.youtube.com/")) {
         const id = getYoutubeId(text);
         if (id) {
-          mergeBucket({
+          mergeBucket(projectId, {
             "/": [
               {
+                id: nanoid(),
                 dir: false,
                 path: id + ".youtube",
                 type: "youtube",
@@ -32,7 +37,7 @@ const Dropzone = ({ children, ...props }: DivProps) => {
 
       const { bucket, files } = await traverse(e.clipboardData.items);
       if (bucket) {
-        mergeBucket(bucket);
+        mergeBucket(projectId, bucket);
       }
     };
 
@@ -40,7 +45,8 @@ const Dropzone = ({ children, ...props }: DivProps) => {
     return () => {
       window.removeEventListener("paste", handlePasteAnywhere);
     };
-  }, [mergeBucket]);
+  }, [projectId, mergeBucket]);
+  // console.log(projects);
 
   return (
     <div
@@ -58,9 +64,10 @@ const Dropzone = ({ children, ...props }: DivProps) => {
         if (text.startsWith("https://www.youtube.com/")) {
           const id = getYoutubeId(text);
           if (id) {
-            mergeBucket({
+            mergeBucket(projectId, {
               "/": [
                 {
+                  id: nanoid(),
                   dir: false,
                   type: "youtube",
                   path: id + ".youtube",
@@ -74,7 +81,7 @@ const Dropzone = ({ children, ...props }: DivProps) => {
 
         const { bucket, files } = await traverse(e.dataTransfer.items);
         if (bucket) {
-          mergeBucket(bucket);
+          mergeBucket(projectId, bucket);
         }
       }}
       {...props}

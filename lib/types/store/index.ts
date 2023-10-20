@@ -1,16 +1,23 @@
 import { fabric } from "fabric";
 import { Element, Placement, Shape, ShapeType, Tracks } from "../track";
-import { FileWithPath } from "../file";
+import { BucketType, FileWithPath } from "../file";
 import { IEvent } from "fabric/fabric-impl";
 import { Project } from "../project";
 
 export interface StoreTypes {
+  fileURLCache: Record<string, string>;
+  setFileURLCache: (cache: Record<string, string>) => void;
+  addFileURLCache: (cache: Record<string, string>) => void;
+  refreshFileURLCache: (projectId: string) => void;
+  refreshAllFileURLCache: () => void;
+
   projects: Project[];
   currentProjectId: string;
   setCurrentProjectId: (projectId: string) => void;
   addProject: (project: Project) => void;
   editProject: (id: string, project: {}) => void;
   deleteProject: (id: string) => void;
+  mergeBucket: (projectId: string, bucket: BucketType) => void;
 
   canvas: fabric.Canvas | null;
   setCanvas: (canvas: fabric.Canvas | null) => void;

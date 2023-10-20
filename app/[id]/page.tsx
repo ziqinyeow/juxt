@@ -1,6 +1,7 @@
 "use client";
 
 import Canvas from "@/components/Canvas";
+import Dropzone from "@/components/Dropzone";
 import Panel from "@/components/Panel";
 import Layout from "@/layout/layout";
 import { useStore } from "@/lib/store";
@@ -14,18 +15,22 @@ const Page = ({ params }: { params: { id: string } }) => {
     setCurrentProjectId(params.id);
   }, [params.id, setCurrentProjectId]);
 
+  // console.log(projects.find((project) => project.id === params.id));
+
   if (projects.find((project) => project.id === params.id)) {
     return (
-      <Layout>
-        <div className="flex flex-col justify-between h-full bg-primary-800">
-          <div className="relative h-full">
-            <Canvas projectId={params?.id} />
+      <Dropzone projectId={params.id}>
+        <Layout projectId={params.id}>
+          <div className="flex flex-col justify-between h-full bg-primary-800">
+            <div className="relative h-full">
+              <Canvas projectId={params?.id} />
+            </div>
+            <div className="">
+              <Panel projectId={params?.id} />
+            </div>
           </div>
-          <div className="">
-            <Panel projectId={params?.id} />
-          </div>
-        </div>
-      </Layout>
+        </Layout>
+      </Dropzone>
     );
   } else {
     return notFound();

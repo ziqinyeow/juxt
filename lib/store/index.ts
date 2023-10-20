@@ -3,23 +3,69 @@ import { FabricUtils, CoverVideo, CoverImage } from "@/lib/utils/fabric";
 import { create } from "zustand";
 import { StoreTypes } from "../types/store";
 import { Element, Placement, Shape, ShapeType } from "../types/track";
-import { tracks } from "../samples/tracks";
 import {
   PANEL_SLIDER_MAX_VALUE,
   PANEL_SLIDER_MIN_VALUE,
 } from "@/lib/constants/panel";
-import { FileWithPath } from "../types/file";
+import { BucketType, FileWithPath } from "../types/file";
 import { isHtmlImageElement, isHtmlVideoElement } from "../utils/html";
 import { nanoid } from "nanoid";
 import { IEvent } from "fabric/fabric-impl";
 import { Project } from "../types/project";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { idbStorage } from "./storage";
+import { getFile, idbStorage } from "./storage";
 import { STROKE_COLOR, STROKE_WIDTH } from "../constants/colors";
+import { merge } from "../utils/file";
 
 export const useStore = create<StoreTypes>()(
   persist<StoreTypes>(
     (set, get) => ({
+      fileURLCache: {},
+      setFileURLCache: (cache) => {
+        set((state) => ({ ...state, fileURLCache: cache }));
+      },
+      addFileURLCache: (cache) => {
+        // console.log({ file: { ...{ test: "test" }, ...cache } });
+        set((state) => ({
+          ...state,
+          fileURLCache: { ...state.fileURLCache, ...cache },
+        }));
+      },
+      refreshFileURLCache: (projectId) => {
+        const bucket = get().projects.find(
+          (project) => project.id === projectId
+        )?.bucket;
+        if (!bucket) return;
+        const fileURLCache = get().fileURLCache;
+        Object.entries(bucket).map(([key, value]) => {
+          return value.map(async (f) => {
+            if (!(f.id in fileURLCache)) {
+              const file = await getFile(f?.id);
+              if (file) {
+                const url = URL.createObjectURL(file);
+                get().addFileURLCache({ [f.id]: url });
+              }
+            }
+          });
+        });
+      },
+      refreshAllFileURLCache: () => {
+        const fileURLCache = get().fileURLCache;
+        get().projects.forEach((project) => {
+          Object.entries(project.bucket).forEach(([key, value]) => {
+            value.forEach(async (f) => {
+              if (!(f.id in fileURLCache)) {
+                const file = await getFile(f?.id);
+                if (file) {
+                  const url = URL.createObjectURL(file);
+                  get().addFileURLCache({ [f.id]: url });
+                }
+              }
+            });
+          });
+        });
+      },
+
       projects: [],
       currentProjectId: "",
       setCurrentProjectId: (projectId) => {
@@ -40,6 +86,28 @@ export const useStore = create<StoreTypes>()(
         set((state) => ({
           ...state,
           projects: state.projects.filter((p) => p.id !== id),
+        }));
+      },
+      mergeBucket: (projectId: string, bucket: BucketType) => {
+        let curr = {
+          ...get().projects.find((project) => project.id === projectId)?.bucket,
+        }; // copy to avoid side effects
+        Object.keys(bucket).forEach((k) => {
+          if (k in curr) {
+            curr[k] = merge(
+              curr[k],
+              bucket[k],
+              (a: FileWithPath, b: FileWithPath) => a.path === b.path
+            );
+          } else {
+            curr[k] = bucket[k];
+          }
+        });
+        set((state) => ({
+          ...state,
+          projects: state.projects.map((p) => {
+            return p.id === projectId ? { ...p, bucket: curr } : p;
+          }),
         }));
       },
 
@@ -233,6 +301,7 @@ export const useStore = create<StoreTypes>()(
             get().canvas?.on("object:modified", (e) => {
               get().updatePlacement(e, element, videoObject);
             });
+            break;
           }
           case "image": {
             const image = document.getElementById(element.properties.elementId);
@@ -260,6 +329,7 @@ export const useStore = create<StoreTypes>()(
             get().canvas?.on("object:modified", (e) => {
               get().updatePlacement(e, element, imageObject);
             });
+            break;
           }
           case "text": {
             // @ts-ignore
@@ -290,6 +360,7 @@ export const useStore = create<StoreTypes>()(
               get().updatePlacement(e, element, text);
             });
             get().canvas?.add(text);
+            break;
           }
           case "shape": {
             // @ts-ignore
@@ -620,6 +691,7 @@ export const useStore = create<StoreTypes>()(
         Object.fromEntries(
           Object.entries(state).filter(
             ([key]) =>
+              !["fileURLCache"].includes(key) &&
               !["currentProjectId"].includes(key) &&
               !["canvas"].includes(key) &&
               !["disableKeyboardShortcut"].includes(key) &&

@@ -53,6 +53,7 @@ const ProjectDropdown = () => {
       color: form.color,
       created: Date.now(),
       tracks: [],
+      bucket: { "/": [] },
     });
     setForm({
       name: "",

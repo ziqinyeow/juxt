@@ -1,3 +1,4 @@
+import { BucketType } from "./file";
 import { Tracks } from "./track";
 
 export type Project = {
@@ -7,4 +8,5 @@ export type Project = {
   color?: string;
   created: number;
   tracks: Tracks[];
+  bucket: BucketType;
 };

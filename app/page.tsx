@@ -60,6 +60,7 @@ export default function Home() {
       color: form.color,
       created: Date.now(),
       tracks: [],
+      bucket: { "/": [] },
     });
     setForm({
       name: "",

@@ -13,7 +13,7 @@ import {
   useVirtualize,
 } from "exploration";
 import { useFile } from "@/lib/store/file";
-import { FileWithPath } from "@/lib/types/file";
+import { BucketType, FileWithPath } from "@/lib/types/file";
 import React, { useMemo, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { IconFolderFilled } from "@tabler/icons-react";
@@ -22,16 +22,21 @@ import Droparea from "../droparea";
 import { useStore } from "@/lib/store";
 import Image from "next/image";
 
-const Explorer = () => {
+const Explorer = ({ projectId }: { projectId: string }) => {
   const windowRef = useRef<HTMLDivElement | null>(null);
   const { canvas, addImage, addVideo, refreshTracks } = useStore();
-  const { bucket } = useFile();
+  const { fileURLCache, projects } = useStore();
+
+  const bucket = useMemo(
+    () => projects.find((project) => project.id === projectId),
+    [projectId, projects]
+  )?.bucket as BucketType;
 
   const tree = useMemo(
     () =>
       createFileTree((parent, { createFile, createDir }) =>
         Promise.resolve(
-          bucket[parent.data.name].map((file: FileWithPath) => {
+          bucket?.[parent.data.name].map((file: FileWithPath) => {
             if (file.dir) {
               return createDir({ name: file?.path });
             }
@@ -166,17 +171,22 @@ const Explorer = () => {
                       }}
                       muted
                       className=""
-                      src={file?.url ?? ""}
+                      src={fileURLCache?.[file?.id] ?? ""}
                     ></video>
                   </div>
                 ) : file?.type === "image" ? (
                   <>
+                    {/* {fileURLCache?.[file?.id]} */}
                     <Image
                       id={file.path}
-                      src={file.url ?? ""}
+                      // src={file.url ?? ""}
+                      src={fileURLCache?.[file?.id] ?? ""}
                       fill
                       className="z-0 hidden object-contain text-white rounded"
                       alt={file.path}
+                      onLoad={() => {
+                        refreshTracks(canvas);
+                      }}
                     />
                   </>
                 ) : (
@@ -232,7 +242,7 @@ const Explorer = () => {
           })}
         </div>
       </div>
-      {bucket["/"].length === 0 && <Droparea id="upload-1" />}
+      {bucket?.["/"].length === 0 && <Droparea id="upload-1" />}
     </div>
   );
 };

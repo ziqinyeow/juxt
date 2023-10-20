@@ -5,20 +5,26 @@ import { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { IconPhoto, IconPhotoOff, IconVideo } from "@tabler/icons-react";
 import { useStore } from "@/lib/store";
-import { FileWithPath } from "@/lib/types/file";
+import { BucketType, FileWithPath } from "@/lib/types/file";
 import { getYoutubeId } from "@/components/Dropzone/utils";
 
-const Media = () => {
+const Media = ({ projectId }: { projectId: string }) => {
   const [focused, setFocused] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const {
+    projects,
+    fileURLCache,
     canvas,
     addImage,
     addVideo,
     setDisableKeyboardShortcut,
     refreshTracks,
   } = useStore();
-  const { bucket } = useFile();
+
+  const bucket = useMemo(
+    () => projects.find((project) => project.id === projectId),
+    [projectId, projects]
+  )?.bucket as BucketType;
 
   const search = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -124,11 +130,15 @@ const Media = () => {
                 {media.type === "image" ? (
                   <>
                     <Image
-                      // id={media.path}
-                      src={media.url ?? ""}
+                      id={media.path}
+                      // src={media.url ?? ""}
+                      src={fileURLCache[media.id] ?? ""}
                       fill
                       className="z-0 object-contain w-full h-full text-white rounded"
                       alt={media.path}
+                      onLoad={() => {
+                        refreshTracks(canvas);
+                      }}
                     />
                   </>
                 ) : media.type === "video" ? (
@@ -137,7 +147,8 @@ const Media = () => {
                       id={media.path + "thumbnail"}
                       muted
                       className="rounded"
-                      src={media.url ?? ""}
+                      // src={media.url ?? ""}
+                      src={fileURLCache[media.id] ?? ""}
                     ></video>
                     <video
                       id={media.path}
@@ -149,7 +160,8 @@ const Media = () => {
                       }}
                       muted
                       className="absolute z-[-10] opacity-0"
-                      src={media.url ?? ""}
+                      // src={media.url ?? ""}
+                      src={fileURLCache[media.id] ?? ""}
                     ></video>
                   </>
                 ) : media?.type === "youtube" ? (

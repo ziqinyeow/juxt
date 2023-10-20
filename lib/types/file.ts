@@ -3,6 +3,7 @@ export type FileSystemHandlePromises = Promise<
 >[];
 
 export type FileWithPath = {
+  id: string;
   dir: boolean;
   type: "image" | "video" | "youtube" | "others";
   path: string;
