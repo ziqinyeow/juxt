@@ -52,11 +52,11 @@ const ProjectModal = ({
         setOpen(open);
       }}
     >
-      <DialogContent className="z-[1000] font-mono text-white border-0 bg-primary-600">
+      <DialogContent className="z-[1000] font-mono text-white border-0 bg-light-200 dark:bg-primary-600">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-3 text-secondary-200">
+          <DialogTitle className="flex items-center gap-3 text-secondary-100 dark:text-secondary-200">
             <span>
-              <IconScriptPlus className="w-5 h-5 text-secondary-200" />
+              <IconScriptPlus className="w-5 h-5 text-secondary-100 dark:text-secondary-200" />
             </span>
             <span className="flex gap-3 item-center">
               {title} {form?.name ? "-" : ""}{" "}
@@ -68,7 +68,7 @@ const ProjectModal = ({
         </DialogHeader>
         <div className="mt-2">
           <div className="space-y-3">
-            <p className="text-sm font-bold tracking-wider text-secondary-200">
+            <p className="text-sm font-bold tracking-wider text-secondary-100 dark:text-secondary-200">
               Name
             </p>
             <input
@@ -80,13 +80,13 @@ const ProjectModal = ({
                 });
               }}
               placeholder="Project name"
-              className="w-full px-3 py-2 rounded-md outline-none ring ring-secondary-200/50 bg-primary-500"
+              className="w-full px-3 py-2 text-black rounded-md outline-none ring dark:text-white ring-secondary-100/50 dark:ring-secondary-200/50 bg-light-300 dark:bg-primary-500"
             />
           </div>
         </div>
         <div className="mt-2">
           <div className="space-y-3">
-            <p className="text-sm font-bold tracking-wider text-secondary-200">
+            <p className="text-sm font-bold tracking-wider text-secondary-100 dark:text-secondary-200">
               Description
             </p>
             <textarea
@@ -98,13 +98,13 @@ const ProjectModal = ({
                 });
               }}
               placeholder="About this project"
-              className="w-full px-3 py-2 rounded-md outline-none ring ring-secondary-200/50 bg-primary-500"
+              className="w-full px-3 py-2 text-black rounded-md outline-none ring dark:text-white ring-secondary-100/50 dark:ring-secondary-200/50 bg-light-300 dark:bg-primary-500"
             />
           </div>
         </div>
         <div className="mt-2">
           <div className="space-y-3">
-            <p className="text-sm font-bold tracking-wider text-secondary-200">
+            <p className="text-sm font-bold tracking-wider text-secondary-100 dark:text-secondary-200">
               Tag
             </p>
             <div className="flex flex-wrap gap-2">
@@ -117,7 +117,7 @@ const ProjectModal = ({
                     });
                   }}
                   className={cn([
-                    "w-6 h-6 transition duration-200 rounded-full cursor-pointer hover:border-4",
+                    "w-6 h-6 transition duration-200 border-primary-400 dark:border-primary-100 rounded-full cursor-pointer hover:border-4",
                     form.color === c && "border-4 relative -top-1",
                   ])}
                   style={{ background: c }}

@@ -27,7 +27,7 @@ const Tooltip = ({
       </TooltipTrigger>
       <TooltipContent
         className={cn([
-          "z-[100] whitespace-nowrap text-xs bg-primary-500 border-primary-400 text-primary-100 tracking-widest",
+          "z-[100] whitespace-nowrap text-xs bg-light-300 dark:bg-primary-500 border-light-200 dark:border-primary-400 text-primary-500 dark:text-primary-100 tracking-widest",
           className,
         ])}
         side={side}

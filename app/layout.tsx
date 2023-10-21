@@ -23,9 +23,9 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body
         suppressHydrationWarning={true}
-        className={clsx([inter.className, "text-xs bg-black"])}
+        className={clsx([inter.className, "text-xs bg-white dark:bg-black"])}
       >
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <TooltipProvider>
             <Loader>
               {/* <Dropzone></Dropzone> */}

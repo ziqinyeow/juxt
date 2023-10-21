@@ -30,9 +30,11 @@ import { motion } from "framer-motion";
 import ProjectModal, { ProjectForm } from "@/components/Modal/ProjectModal";
 import DeleteModal from "@/components/Modal/DeleteModal";
 import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
 
 export default function Home() {
   const router = useRouter();
+  const { theme } = useTheme();
   const { projects, addProject, editProject, deleteProject } = useStore();
   const [form, setForm] = useState<ProjectForm>({
     name: "",
@@ -196,7 +198,7 @@ export default function Home() {
           buttonOnClick: del,
         }}
       />
-      <div className="w-screen h-screen bg-primary-800">
+      <div className="w-screen h-screen bg-primary-100 dark:bg-primary-800">
         <Navbar />
         <div className="p-5">
           <div className=""></div>
@@ -216,7 +218,7 @@ export default function Home() {
                   }
                   className={cn(
                     "counter-border",
-                    "w-full h-[calc(100vh_-_104px)] p-5 border bg-primary-700 transition duration-200 cursor-pointer hover:bg-primary-800 text-primary-100 border-primary-400 flex items-center justify-center rounded-md"
+                    "w-full h-[calc(100vh_-_104px)] p-5 border bg-light-300 dark:bg-primary-700 transition duration-200 cursor-pointer hover:bg-light-400 dark:hover:bg-primary-800 text-primary-100 border-light-400 dark:border-primary-400 flex items-center justify-center rounded-md"
                   )}
                 >
                   <motion.i
@@ -228,7 +230,7 @@ export default function Home() {
                     }}
                     aria-hidden="true"
                   ></motion.i>
-                  <div className="flex flex-col items-center justify-center gap-3 select-none text-secondary-200">
+                  <div className="flex flex-col items-center justify-center gap-3 select-none text-secondary-100 dark:text-secondary-200">
                     <IconStack3 className="w-8 h-8" />
                     <div className="font-mono text-base font-bold tracking-widest">
                       Add project
@@ -238,10 +240,10 @@ export default function Home() {
               </>
             ) : (
               <>
-                <div className="flex items-center gap-4 mb-8 font-mono text-primary-100">
+                <div className="flex items-center gap-4 mb-8 font-mono text-black dark:text-primary-100">
                   <input
                     type="text"
-                    className="w-full px-4 py-3 transition duration-200 rounded-md outline-none bg-primary-600 hover:bg-primary-400 focus:bg-primary-400"
+                    className="w-full px-4 py-3 rounded-md outline-none bg-light-300 hover:bg-light-400 focus:bg-light-400 dark:bg-primary-600 dark:hover:bg-primary-400 dark:focus:bg-primary-400"
                     placeholder="Search"
                     value={searchValue}
                     onChange={(e) => {
@@ -253,17 +255,19 @@ export default function Home() {
                       onClick={() => {
                         setOpenCreateProjectModal(true);
                       }}
-                      className="flex items-center gap-3 px-4 py-3 rounded-md whitespace-nowrap bg-primary-600 hover:bg-primary-400"
+                      className="flex items-center gap-3 px-4 py-3 rounded-md whitespace-nowrap bg-light-300 hover:bg-light-400 dark:bg-primary-600 dark:hover:bg-primary-400"
                     >
                       <span>
                         <IconScriptPlus className="w-4 h-4" />
                       </span>
-                      <span className="hidden sm:block">Create Project</span>
+                      <span className="hidden select-none sm:block">
+                        Create Project
+                      </span>
                     </button>
                   </div>
                 </div>
                 {filteredProjects.length === 0 && (
-                  <div className="font-mono tracking-widest text-white">
+                  <div className="font-mono tracking-widest text-black dark:text-white">
                     No project {searchValue} found.
                   </div>
                 )}
@@ -283,11 +287,16 @@ export default function Home() {
                             {
                               "--color": project.color,
                               "--color2": "#a853ba",
+                              "--color3":
+                                theme === "dark"
+                                  ? "#18151b"
+                                  : "rgba(42, 138, 246, 0)",
+                              "--color4": "rgba(42, 138, 246, 0)",
                             } as React.CSSProperties
                           }
                           className={cn([
                             "counter-border",
-                            "p-4 font-mono flex flex-col justify-between rounded-md cursor-pointer text-primary-100 bg-primary-600",
+                            "p-4 font-mono flex flex-col justify-between rounded-md cursor-pointer text-black dark:text-primary-100 bg-light-300 dark:bg-primary-600",
                             ``,
                           ])}
                           onMouseEnter={() => setHovering(project.id)}
@@ -324,13 +333,13 @@ export default function Home() {
                           <p className="text-primary-200 line-clamp-3">
                             {project?.description}
                           </p>
-                          <p className="mt-3 text-primary-300">
+                          <p className="mt-3 text-primary-200 dark:text-primary-300">
                             created at{" "}
                             {new Date(project.created).toLocaleDateString()}
                           </p>
                         </Link>
                       </ContextMenuTrigger>
-                      <ContextMenuContent className="font-mono text-white border-2 bg-primary-600 border-primary-400">
+                      <ContextMenuContent className="font-mono text-black border-2 dark:text-white bg-light-200 dark:bg-primary-600 border-light-400 dark:border-primary-400">
                         <ContextMenuItem
                           onClick={() => {
                             setContextMenu({
@@ -363,7 +372,7 @@ export default function Home() {
                             Open In New Tab
                           </div>
                         </ContextMenuItem>
-                        <ContextMenuSeparator className="h-1 bg-primary-400" />
+                        <ContextMenuSeparator className="h-1 bg-light-300 dark:bg-primary-400" />
                         <ContextMenuItem
                           onClick={() => {
                             setContextMenu({
