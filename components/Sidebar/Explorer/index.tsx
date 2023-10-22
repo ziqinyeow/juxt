@@ -198,7 +198,7 @@ const Explorer = ({ projectId }: { projectId: string }) => {
                   index={props.index}
                   style={props.style}
                 >
-                  <div className="flex items-center w-full h-full gap-2 px-2 rounded hover:bg-primary-500">
+                  <div className="flex items-center w-full h-full gap-2 px-2 rounded hover:bg-light-300 dark:hover:bg-primary-500">
                     {isDir(props.node) ? (
                       props.node.expanded ? (
                         <>
@@ -207,7 +207,7 @@ const Explorer = ({ projectId }: { projectId: string }) => {
                             width="24"
                             height="24"
                             viewBox="0 0 24 24"
-                            className="w-4 h-4 text-secondary-200"
+                            className="w-4 h-4 text-secondary-100 dark:text-secondary-200"
                           >
                             <path
                               fill="currentColor"
@@ -217,20 +217,20 @@ const Explorer = ({ projectId }: { projectId: string }) => {
                         </>
                       ) : (
                         <>
-                          <IconFolderFilled className="w-4 h-4 text-secondary-200" />
+                          <IconFolderFilled className="w-4 h-4 text-secondary-100 dark:text-secondary-200" />
                         </>
                       )
                     ) : (
                       <>
                         {getFileIcon(
                           props.node.basename,
-                          "text-secondary-200/30"
+                          "text-secondary-100/60 dark:text-secondary-200/30"
                         )}
                       </>
                     )}
                     <span
                       title={props.node.basename}
-                      className="overflow-hidden tracking-widest whitespace-nowrap text-primary-200"
+                      className="overflow-hidden tracking-widest whitespace-nowrap text-primary-300 dark:text-primary-200"
                     >
                       {props.node.basename}
                     </span>

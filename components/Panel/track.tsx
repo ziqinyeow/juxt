@@ -64,7 +64,7 @@ export const Element = ({ element }: Props) => {
   return (
     <Rnd
       className={cn([
-        "rounded select-none ring-2 ring-primary-200 ring-offset-primary-500 ring-offset-[3px]",
+        "rounded select-none ring-2 ring-primary-200 ring-offset-light-300 dark:ring-offset-primary-500 ring-offset-[3px]",
         getElementColor(
           element.type === "shape" ? element.properties.type : element.type
         ),

@@ -10,6 +10,7 @@ import type { Cursor } from "@/lib/types/cursor";
 import { cn } from "@/lib/utils";
 import { ChevronDown, MousePointer, Slice } from "lucide-react";
 import Tooltip from "../Tooltip";
+import { IconPointer } from "@tabler/icons-react";
 
 type Props = {
   cursor: Cursor;
@@ -38,16 +39,16 @@ const CursorDropdown = ({ cursor, setCursor }: Props) => {
         <DropdownMenuTrigger asChild className="outline-none">
           <span tabIndex={0}>
             <Tooltip tooltip={`cursor`}>
-              <div className="flex items-center gap-2 p-2 rounded cursor-pointer bg-primary-500">
+              <div className="flex items-center gap-2 p-2 bg-white rounded cursor-pointer dark:bg-primary-500">
                 <button
                   className={cn([
                     "hover:text-opacity-75",
                     "transition-all",
-                    "text-secondary-200",
+                    "text-secondary-100 dark:text-secondary-200",
                   ])}
                 >
                   {cursor === "pointer" ? (
-                    <MousePointer className="w-4 h-4" />
+                    <IconPointer className="w-4 h-4" />
                   ) : (
                     <Slice className="w-4 h-4" />
                   )}
@@ -59,7 +60,7 @@ const CursorDropdown = ({ cursor, setCursor }: Props) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align={"start"}
-          className="shadow-lg text-primary-100 bg-primary-500 border-primary-400"
+          className="text-black bg-white shadow-lg dark:text-primary-100 dark:bg-primary-500 border-light-400 dark:border-primary-400"
         >
           {cursors.map((_cursor, i) => (
             <DropdownMenuItem
@@ -69,8 +70,9 @@ const CursorDropdown = ({ cursor, setCursor }: Props) => {
                 setCursor(_cursor.cursor as Cursor);
               }}
               className={cn([
-                cursor === _cursor.cursor && "text-secondary-200",
-                "flex items-center justify-between gap-2 focus:bg-primary-400 focus:text-secondary-200",
+                cursor === _cursor.cursor &&
+                  "text-secondary-100 dark:text-secondary-200",
+                "flex items-center justify-between gap-2 focus:bg-light-300 dark:focus:bg-primary-400 focus:text-secondary-100 dark:focus:text-secondary-200",
               ])}
             >
               <div className="flex items-center gap-2 text-sm">

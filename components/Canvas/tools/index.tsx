@@ -181,7 +181,7 @@ const Tools = ({ tools, ...props }: { tools: Tools[] } & DivProps) => {
   return (
     <div
       {...props}
-      className="overflow-hidden border-2 rounded-md z-[200] shadow border-primary-800"
+      className="overflow-hidden border-2 rounded-md z-[200] shadow border-light-400 dark:border-primary-800"
     >
       {tools?.map((tool, i) => (
         <Row

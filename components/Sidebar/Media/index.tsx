@@ -94,7 +94,7 @@ const Media = ({ projectId }: { projectId: string }) => {
               onFocus={onFocus}
               onBlur={onBlur}
               type="text"
-              className="w-full px-3 py-2 overflow-auto tracking-widest text-white rounded ring-offset-2 ring-offset-primary-800 ring-2 ring-secondary-200 bg-primary-600 focus:outline-none"
+              className="w-full px-3 py-2 overflow-auto tracking-widest text-black rounded dark:text-white ring-offset-2 dark:ring-offset-primary-800 ring-2 ring-secondary-100 dark:ring-secondary-200 bg-light-300 dark:bg-primary-600 focus:outline-none"
               placeholder="search"
               value={searchValue}
               onChange={search}
@@ -104,19 +104,19 @@ const Media = ({ projectId }: { projectId: string }) => {
             {medias?.map((media, i) => (
               <div
                 key={i}
-                className="relative flex items-center justify-center w-full h-32 overflow-hidden text-white whitespace-pre-wrap transition-all rounded cursor-pointer group ring-secondary-200 hover:ring-2 ring-offset-4 ring-offset-primary-800 bg-primary-100"
+                className="relative flex items-center justify-center w-full h-32 overflow-hidden text-white whitespace-pre-wrap transition-all rounded cursor-pointer group ring-secondary-100 dark:ring-secondary-200 hover:ring-2 ring-offset-4 ring-offset-light-300 dark:ring-offset-primary-800 bg-primary-100"
                 onClick={() => {
                   onClickMedia(media);
                 }}
               >
-                <div className="absolute z-20 p-1 rounded top-2 left-2 bg-primary-800 group-hover:hidden">
+                <div className="absolute z-20 p-1 rounded top-2 left-2 bg-light-300 dark:bg-primary-800 group-hover:hidden">
                   {media.type === "image" ? (
                     <>
-                      <IconPhoto className="w-4 h-4 text-secondary-200" />
+                      <IconPhoto className="w-4 h-4 text-secondary-100 dark:text-secondary-200" />
                     </>
                   ) : media.type === "video" ? (
                     <>
-                      <IconVideo className="w-4 h-4 text-secondary-200" />
+                      <IconVideo className="w-4 h-4 text-secondary-100 dark:text-secondary-200" />
                     </>
                   ) : (
                     <></>
@@ -183,9 +183,9 @@ const Media = ({ projectId }: { projectId: string }) => {
             ))}
           </div>
           {medias?.length === 0 && (
-            <div className="flex items-center w-full gap-2 text-xs tracking-widest line-clamp-2 text-primary-100">
+            <div className="flex items-center w-full gap-2 text-xs tracking-widest text-black line-clamp-2 dark:text-primary-100">
               <IconPhotoOff className="w-4 h-4" />
-              <span>No media found</span>
+              <span className="">No media found.</span>
             </div>
           )}
         </div>

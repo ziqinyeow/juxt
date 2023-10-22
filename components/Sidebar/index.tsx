@@ -23,7 +23,7 @@ export const SidebarButton = ({
   <Tooltip className="text-[11px]" tooltip={tooltip} side="right">
     <button
       className={cn([
-        "flex hover:bg-opacity-70 shadow transition-all hover:text-secondary-200/70 items-center justify-center w-full p-[10px] rounded bg-primary-500",
+        "flex hover:bg-opacity-70 shadow transition-all dark:hover:text-secondary-200/70 items-center justify-center w-full p-[10px] rounded bg-light-300 dark:bg-primary-500",
         className,
       ])}
       {...props}
@@ -45,11 +45,11 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
     <div
       {...props}
       className={cn([
-        "w-full border-r border-primary-400 grid grid-cols-[70px_auto] bg-primary-700",
+        "w-full border-r dark:border-primary-400 grid grid-cols-[70px_auto] bg-white dark:bg-primary-700",
         className,
       ])}
     >
-      <div className="flex flex-col w-full gap-4 p-4 border-r border-primary-400 text-secondary-200">
+      <div className="flex flex-col w-full gap-4 p-4 border-r dark:border-primary-400 text-secondary-100 dark:text-secondary-200">
         <SidebarButton
           onClick={() => {
             setTab("explorer");
@@ -57,7 +57,7 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
           tooltip="explorer"
           className={cn([
             tab === "explorer" &&
-              "ring ring-secondary-200 hover:ring-opacity-60",
+              "ring ring-secondary-100 dark:ring-secondary-200 hover:ring-opacity-60",
           ])}
         >
           {getTabIcon("explorer")}
@@ -68,7 +68,8 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
           }}
           tooltip="media"
           className={cn([
-            tab === "media" && "ring ring-secondary-200 hover:ring-opacity-60",
+            tab === "media" &&
+              "ring ring-secondary-100 dark:ring-secondary-200 hover:ring-opacity-60",
           ])}
         >
           {getTabIcon("media")}
@@ -77,8 +78,10 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
       <div className="">
         <div className="flex items-center justify-between p-4">
           <div className="flex items-center gap-3">
-            <span className="text-secondary-200">{getTabIcon(tab)}</span>
-            <span className="text-sm font-bold tracking-widest text-secondary-200">
+            <span className="text-secondary-100 dark:text-secondary-200">
+              {getTabIcon(tab)}
+            </span>
+            <span className="text-sm font-bold tracking-widest text-secondary-100 dark:text-secondary-200">
               {tab.toUpperCase()}
             </span>
           </div>
@@ -95,8 +98,8 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
                 multiple
               />
               <Tooltip tooltip={"files"} className="py-1 text-[11px]">
-                <div className="p-1 rounded cursor-pointer hover:bg-primary-500">
-                  <IconFileUpload className="w-[17px] h-[17px] text-secondary-200/90" />
+                <div className="p-1 rounded cursor-pointer hover:bg-light-300 dark:hover:bg-primary-500">
+                  <IconFileUpload className="w-[17px] h-[17px] text-secondary-100/90 dark:text-secondary-200/90" />
                 </div>
               </Tooltip>
             </label>

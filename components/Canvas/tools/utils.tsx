@@ -23,7 +23,7 @@ export const Row = ({
   children,
 }: any) => {
   return (
-    <div className="flex items-center h-full gap-1 p-1 bg-primary-400">
+    <div className="flex items-center h-full gap-1 p-1 bg-white dark:bg-primary-400">
       <Button
         onClick={() => {
           if (currentToolIndex === index) {
@@ -33,10 +33,10 @@ export const Row = ({
           }
         }}
         className={cn([
-          "text-secondary-200 p-2",
+          "text-secondary-100 dark:text-secondary-200 p-2",
           currentToolIndex === index
-            ? "bg-black hover:bg-black"
-            : "hover:bg-primary-600",
+            ? "bg-light-300 dark:bg-black hover:bg-light-400 dark:hover:bg-black"
+            : "hover:bg-light-300 dark:hover:bg-primary-600",
         ])}
       >
         {currentTools?.[index].icon}
@@ -54,7 +54,7 @@ export const Menu = ({ children }: { children?: React.ReactNode }) => {
         className={cn(["rounded focus:outline-none"])}
       >
         <span className="data-[state=open]:rotate-180 duration-200 transition">
-          <Button className="px-2 py-[9px] text-white hover:text-secondary-200">
+          <Button className="px-2 py-[9px] dark:text-white text-black hover:text-secondary-100 dark:hover:text-secondary-200">
             <ChevronLeft className="w-3 h-3" />
           </Button>
         </span>
@@ -62,7 +62,7 @@ export const Menu = ({ children }: { children?: React.ReactNode }) => {
       <DropdownMenuContent
         side="right"
         sideOffset={8}
-        className="flex items-center z-[200] gap-1 p-1 tracking-widest text-white border-0 bg-primary-600 hover:bg-primary-600"
+        className="flex items-center z-[200] gap-1 p-1 tracking-widest text-black dark:text-white border-0 bg-white dark:bg-primary-600 dark:hover:bg-primary-600"
       >
         {children}
       </DropdownMenuContent>
@@ -75,7 +75,7 @@ export const Item = ({ tool, onClick }: { tool: Tool } & DivProps) => {
     <Tooltip className="text-[10px]" tooltip={tool.name}>
       <DropdownMenuItem
         className={cn([
-          "p-2 focus:bg-black !text-white hover:!text-secondary-200 focus:!text-secondary-200 cursor-pointer",
+          "p-2 dark:focus:bg-black text-black dark:!text-white hover:!text-secondary-100 dark:hover:!text-secondary-200 focus:!text-secondary-100 dark:focus:!text-secondary-200 cursor-pointer",
         ])}
         onClick={onClick}
       >

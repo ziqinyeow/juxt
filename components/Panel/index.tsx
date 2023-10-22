@@ -51,16 +51,16 @@ const Panel = ({ projectId }: { projectId: string }) => {
   return (
     <div
       className={clsx([
-        "relative h-full w-full min-w-[300px] flex flex-col bg-primary-600 text-primary-100",
+        "relative h-full w-full min-w-[300px] flex flex-col bg-light-100 dark:bg-primary-600 text-black dark:text-primary-100",
       ])}
     >
-      <div className="absolute w-full h-1 transition-all -top-1 hover:bg-secondary-200 bg-primary-400 cursor-row-resize"></div>
+      <div className="absolute w-full h-1 transition-all -top-1 hover:bg-secondary-100 dark:hover:bg-secondary-200 bg-light-100 dark:bg-primary-400 cursor-row-resize"></div>
       <Seeker />
 
-      <div className="h-[50px] bg-primary-400 border-b border-primary-400 px-4 py-2 flex items-center justify-between">
+      <div className="h-[50px] bg-light-300 dark:bg-primary-400 border-b border-light-400 dark:border-primary-400 px-4 py-2 flex items-center justify-between">
         <div className="flex items-center w-full gap-4">
           <CursorDropdown cursor={cursor} setCursor={setCursor} />
-          <div className="flex gap-1 p-1 rounded bg-primary-500">
+          <div className="flex gap-1 p-1 bg-white rounded dark:bg-primary-500">
             <Tooltip tooltip={`undo (${os === "mac" ? "cmd" : "ctrl"} + z)`}>
               <ToolbarButton disabled>
                 <Undo2 className="w-4 h-4" />
@@ -72,7 +72,7 @@ const Panel = ({ projectId }: { projectId: string }) => {
               </ToolbarButton>
             </Tooltip>
           </div>
-          <div className="flex gap-1 p-1 rounded bg-primary-500">
+          <div className="flex gap-1 p-1 bg-white rounded dark:bg-primary-500">
             <Tooltip tooltip={`trim (T)`}>
               <ToolbarButton disabled>
                 <ScissorsLineDashed className="w-4 h-4 rotate-[270deg]" />
@@ -108,12 +108,12 @@ const Panel = ({ projectId }: { projectId: string }) => {
             }}
             className="relative h-[220px] w-[calc(100vw_-_300px)] overflow-y-auto panel_scrollbar flex"
           >
-            <div className="bg-primary-500 grid grid-rows-[36px_auto] panel_scrollbar">
-              <div className="sticky top-0 z-50 grid grid-cols-[200px_auto] border-b bg-primary-600 border-primary-400">
-                <div className="sticky left-0 z-50 flex items-end h-full gap-3 px-4 pb-2 border-r bg-primary-600 border-primary-400">
-                  <IconSearch className="w-4 h-4 stroke-[4px] text-primary-200 " />
+            <div className="bg-light-100 dark:bg-primary-500 grid grid-rows-[36px_auto] panel_scrollbar">
+              <div className="sticky top-0 z-50 grid grid-cols-[200px_auto] border-b bg-light-200 dark:bg-primary-600 border-light-400 dark:border-primary-400">
+                <div className="sticky left-0 z-50 flex items-end h-full gap-3 px-4 pb-2 border-r bg-light-200 dark:bg-primary-600 border-light-400 dark:border-primary-400">
+                  <IconSearch className="w-4 h-4 stroke-[4px] text-primary-200" />
                   <input
-                    className="w-full tracking-widest bg-primary-600 focus:outline-none"
+                    className="w-full tracking-widest bg-light-200 dark:bg-primary-600 focus:outline-none"
                     type="text"
                     placeholder="Search"
                   />
@@ -134,7 +134,7 @@ const Panel = ({ projectId }: { projectId: string }) => {
                         <div
                           className={cn([
                             showSecondsOnPanelTickLogic(i, panelScale)
-                              ? "text-[8px] whitespace-nowrap absolute -top-4 text-primary-200"
+                              ? "text-[8px] whitespace-nowrap absolute -top-4 text-primary-300 dark:text-primary-200"
                               : "hidden",
                           ])}
                         >
@@ -151,20 +151,20 @@ const Panel = ({ projectId }: { projectId: string }) => {
                 </div>
               </div>
               <div className="w-full grid grid-cols-[200px_auto]">
-                <div className="sticky left-0 z-40 pt-2 border-r bg-primary-500 border-primary-400">
+                <div className="sticky left-0 z-40 pt-2 border-r dark:bg-primary-500 border-light-400 bg-light-200 dark:border-primary-400">
                   {tracks?.map((track, i) => (
                     <div
-                      className="relative px-2 py-4 border-b border-primary-400"
+                      className="relative px-2 py-4 border-b border-light-400 dark:border-primary-400"
                       key={i}
                     >
-                      <div className="flex items-center justify-between h-[23px] gap-2 px-2 text-primary-200">
+                      <div className="flex items-center justify-between h-[23px] gap-2 px-2 text-primary-400 dark:text-primary-200">
                         <div className="flex items-center gap-2">
-                          <IconGripVertical className="w-4 h-4 text-primary-200/80 cursor-grab" />
+                          <IconGripVertical className="w-4 h-4 text-primary-400 dark:text-primary-200/80 cursor-grab" />
                           <div className="w-24 line-clamp-1">{track.name}</div>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Unlock className="w-4 h-4 cursor-not-allowed text-primary-200/50" />
-                          <IconEye className="w-5 h-5 cursor-not-allowed text-primary-200/50" />
+                          <Unlock className="w-4 h-4 cursor-not-allowed text-primary-400 dark:text-primary-200/50" />
+                          <IconEye className="w-5 h-5 cursor-not-allowed text-primary-400 dark:text-primary-200/50" />
                         </div>
                       </div>
                     </div>

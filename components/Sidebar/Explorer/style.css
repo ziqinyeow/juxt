@@ -7,14 +7,14 @@
   border-radius: 0.25rem;
 }
 
-.focused {
+/* .focused {
   outline: none;
   background: #211f21;
-}
+} */
 
-.drop-target {
+/* .drop-target {
   background: #211f21;
-}
+} */
 
 [data-exploration-depth="0"] {
   display: flex;

@@ -37,7 +37,7 @@ export default function Slider({ className, ...props }: SliderProps) {
           addPanelScale(-PANEL_SLIDER_STEP_SIZE);
         }}
       >
-        <IconMinus className="w-4 h-4 text-secondary-200" />
+        <IconMinus className="w-4 h-4 text-secondary-100 dark:text-secondary-200" />
       </Button>
       <UISlider
         min={PANEL_SLIDER_MIN_VALUE}
@@ -55,7 +55,7 @@ export default function Slider({ className, ...props }: SliderProps) {
           addPanelScale(PANEL_SLIDER_STEP_SIZE);
         }}
       >
-        <IconPlus className="w-4 h-4 text-secondary-200" />
+        <IconPlus className="w-4 h-4 text-secondary-100 dark:text-secondary-200" />
       </Button>
     </div>
   );

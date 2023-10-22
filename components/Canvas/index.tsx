@@ -12,8 +12,10 @@ import {
 } from "@/lib/utils/canvas";
 import Tools from "./tools";
 import { tools } from "./tools/tools";
+import { useTheme } from "next-themes";
 
 const Canvas = ({ projectId }: { projectId: string }) => {
+  const { theme } = useTheme();
   const { canvas, setCanvas, setSelectedElement, refreshTracks } = useStore();
   // const { bucket } = useFile();
 
@@ -21,7 +23,7 @@ const Canvas = ({ projectId }: { projectId: string }) => {
     const canvas = new fabric.Canvas(`canvas-${projectId}`, {
       // width: 550,
       // height: 300,
-      backgroundColor: "#000",
+      backgroundColor: theme === "dark" ? "#000" : "#fff",
       // renderOnAddRemove: false,
       // imageSmoothingEnabled: false,
       // enableRetinaScaling: false,
@@ -31,9 +33,11 @@ const Canvas = ({ projectId }: { projectId: string }) => {
 
     fabric.Object.prototype.hasRotatingPoint = false;
     fabric.Object.prototype.transparentCorners = false;
-    fabric.Object.prototype.cornerColor = "#2BEBC8";
+    fabric.Object.prototype.cornerColor =
+      theme === "dark" ? "#2BEBC8" : "#5D46F3";
     fabric.Object.prototype.cornerStyle = "rect";
-    fabric.Object.prototype.cornerStrokeColor = "#2BEBC8";
+    fabric.Object.prototype.cornerStrokeColor =
+      theme === "dark" ? "#2BEBC8" : "#5D46F3";
     fabric.Object.prototype.cornerSize = 6;
     // canvas mouse down without target should deselect active object
     canvas?.on("mouse:down", function (e) {
@@ -63,7 +67,7 @@ const Canvas = ({ projectId }: { projectId: string }) => {
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [theme]);
 
   useLayoutEffect(() => {
     const parent = document.getElementById(
@@ -101,13 +105,13 @@ const Canvas = ({ projectId }: { projectId: string }) => {
 
   return (
     <>
-      <div className="h-[calc(100vh_-_64px_-_310px)] w-[calc(100vw_-_300px)] bg-primary-600 flex items-center justify-center">
+      <div className="h-[calc(100vh_-_64px_-_310px)] w-[calc(100vw_-_300px)] bg-light-200 dark:bg-primary-600 flex items-center justify-center">
         <div className="absolute flex items-center justify-center h-full gap-2 left-1">
           <div className="z-[200] flex gap-2 flex-col">
             <Tools tools={tools} />
           </div>
         </div>
-        <div className="flex items-center z-[100] justify-center w-[98%] h-[95%] border rounded-md border-primary-400 overflow-hidden">
+        <div className="flex items-center z-[100] justify-center w-[98%] h-[95%] border rounded-md border-light-400 dark:border-primary-400 overflow-hidden">
           <canvas
             id={`canvas-${projectId}`}
             width={RESOLUTION.width}

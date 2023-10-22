@@ -19,7 +19,7 @@ const Droparea = ({ projectId, id }: { projectId: string; id: string }) => {
         className="hidden"
         multiple
       />
-      <div className="border cursor-pointer flex tracking-widest text-sm p-4 items-center hover:text-secondary-200/60 text-secondary-200/40 justify-center border-primary-400 h-[calc(100vh_-_64px_-_60px)] rounded">
+      <div className="border cursor-pointer flex tracking-widest text-sm p-4 items-center dark:hover:text-secondary-200/60 hover:text-secondary-100/80 text-secondary-100/60 dark:text-secondary-200/40 justify-center dark:border-primary-400 h-[calc(100vh_-_64px_-_60px)] rounded">
         <div className="flex flex-col items-center gap-8 transition-all">
           <div className="flex items-center gap-3">
             <IconPackageImport className="w-14 h-14" />

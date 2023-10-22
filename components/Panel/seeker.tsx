@@ -67,14 +67,20 @@ const Seeker = () => {
   const toggleHidePanel = () => setHidePanel(!hidePanel);
 
   return (
-    <div className="h-[40px] bg-primary-400 px-4 flex items-center gap-5 justify-between">
+    <div className="h-[40px] bg-light-300 dark:bg-primary-400 px-4 flex items-center gap-5 justify-between">
       <div className="flex items-end gap-2">
-        <Button onClick={rewindBackward5} className="text-white">
+        <Button
+          onClick={rewindBackward5}
+          className="text-primary-300 dark:text-white"
+        >
           <IconRewindBackward5 className="w-4 h-4" />
         </Button>
 
         <Tooltip tooltip={playing ? `pause` : `play`}>
-          <Button onClick={play} className="text-secondary-200">
+          <Button
+            onClick={play}
+            className="text-secondary-100 dark:text-secondary-200"
+          >
             {getCurrentTimeInMs() === maxTime ? (
               <IconRepeat className="w-5 h-5" />
             ) : playing ? (
@@ -84,7 +90,10 @@ const Seeker = () => {
             )}
           </Button>
         </Tooltip>
-        <Button onClick={rewindForward5} className="text-white">
+        <Button
+          onClick={rewindForward5}
+          className="text-primary-300 dark:text-white"
+        >
           <IconRewindForward5 className="w-4 h-4" />
         </Button>
       </div>
@@ -100,17 +109,20 @@ const Seeker = () => {
         />
       </div>
       <div className="flex items-center justify-end gap-3 whitespace-nowrap">
-        <div className="w-[100px] flex items-center justify-end">
+        <div className="w-[100px] text-black dark:text-white flex items-center justify-end">
           <span className="">
             {formatTimeToMinSecMili(getCurrentTimeInMs())}
           </span>{" "}
           /{" "}
-          <span className="text-white/70">
+          <span className="text-opacity-70">
             {formatTimeToMinSecMili(maxTime)}
           </span>
         </div>
         <Tooltip tooltip={hidePanel ? `open panel` : `close panel`}>
-          <Button onClick={toggleHidePanel} className="text-secondary-200">
+          <Button
+            onClick={toggleHidePanel}
+            className="text-secondary-100 dark:text-secondary-200"
+          >
             {hidePanel ? (
               <IconChevronUp className="w-4 h-4" />
             ) : (
