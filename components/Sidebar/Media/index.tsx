@@ -129,7 +129,7 @@ const Media = ({ projectId }: { projectId: string }) => {
                 {media.type === "image" ? (
                   <>
                     <Image
-                      id={media.path}
+                      id={media.path + "thumbnail"}
                       // src={media.url ?? ""}
                       src={fileURLCache[media.id] ?? ""}
                       fill
@@ -146,19 +146,6 @@ const Media = ({ projectId }: { projectId: string }) => {
                       id={media.path + "thumbnail"}
                       muted
                       className="rounded"
-                      // src={media.url ?? ""}
-                      src={fileURLCache[media.id] ?? ""}
-                    ></video>
-                    <video
-                      id={media.path}
-                      onLoad={() => {
-                        refreshTracks(canvas);
-                      }}
-                      onLoadedData={() => {
-                        refreshTracks(canvas);
-                      }}
-                      muted
-                      className="absolute z-[-10] opacity-0"
                       // src={media.url ?? ""}
                       src={fileURLCache[media.id] ?? ""}
                     ></video>

@@ -157,40 +157,6 @@ const Explorer = ({ projectId }: { projectId: string }) => {
             );
             return (
               <React.Fragment key={props.index}>
-                {/* To add to the track panel (for retrieving duration purposes) */}
-                {file?.type === "video" ? (
-                  <div className="absolute z-[-10] opacity-0">
-                    <video
-                      id={file?.path}
-                      onLoad={() => {
-                        refreshTracks(canvas);
-                      }}
-                      onLoadedData={() => {
-                        refreshTracks(canvas);
-                      }}
-                      muted
-                      className=""
-                      src={fileURLCache?.[file?.id] ?? ""}
-                    ></video>
-                  </div>
-                ) : file?.type === "image" ? (
-                  <>
-                    {/* {fileURLCache?.[file?.id]} */}
-                    <Image
-                      id={file.path}
-                      // src={file.url ?? ""}
-                      src={fileURLCache?.[file?.id] ?? ""}
-                      fill
-                      className="z-0 hidden object-contain text-white rounded"
-                      alt={file.path}
-                      onLoad={() => {
-                        refreshTracks(canvas);
-                      }}
-                    />
-                  </>
-                ) : (
-                  <></>
-                )}
                 <Node
                   plugins={plugins}
                   tree={props.tree}

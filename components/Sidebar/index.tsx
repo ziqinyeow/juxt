@@ -3,12 +3,14 @@
 import { ButtonProps, DivProps } from "@/lib/types/html";
 import { cn } from "@/lib/utils";
 import { IconFileUpload } from "@tabler/icons-react";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Tooltip from "../Tooltip";
 import { Tab, getTabIcon } from "./utils";
 import Explorer from "./Explorer";
 import Media from "./Media";
 import { useStore } from "@/lib/store";
+import { BucketType } from "@/lib/types/file";
+import Image from "next/image";
 
 type SidebarButtonProps = {
   tooltip?: string;
@@ -38,8 +40,32 @@ type Props = {
 } & DivProps;
 
 const Sidebar = ({ projectId, className, ...props }: Props) => {
-  const { mergeFileListToBucket } = useStore();
+  const {
+    projects,
+    fileURLCache,
+    refreshTracks,
+    canvas,
+    mergeFileListToBucket,
+  } = useStore();
   const [tab, setTab] = useState<Tab>("explorer");
+
+  const bucket = useMemo(
+    () => projects.find((project) => project.id === projectId),
+    [projectId, projects]
+  )?.bucket as BucketType;
+
+  const medias = useMemo(
+    () =>
+      Object.values(bucket)
+        .map((b) => {
+          return b.filter((d) => d.type === "video" || d.type === "image");
+        })
+        .reduce(function (prev, next) {
+          return prev.concat(next);
+        })
+        .filter((b) => b),
+    [bucket]
+  );
 
   return (
     <div
@@ -49,6 +75,43 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
         className,
       ])}
     >
+      {medias?.map((media, i) => (
+        <div key={i}>
+          {media.type === "image" ? (
+            <>
+              <Image
+                id={media.path}
+                // src={media.url ?? ""}
+                src={fileURLCache[media.id] ?? ""}
+                fill
+                className="z-0 hidden object-contain w-full h-full text-white rounded"
+                alt={media.path}
+                onLoad={() => {
+                  refreshTracks(canvas);
+                }}
+              />
+            </>
+          ) : media.type === "video" ? (
+            <>
+              <video
+                id={media.path}
+                onLoad={() => {
+                  refreshTracks(canvas);
+                }}
+                onLoadedData={() => {
+                  refreshTracks(canvas);
+                }}
+                muted
+                className="absolute z-[-10] opacity-0"
+                // src={media.url ?? ""}
+                src={fileURLCache[media.id] ?? ""}
+              ></video>
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
+      ))}
       <div className="flex flex-col w-full gap-4 p-4 border-r dark:border-primary-400 text-secondary-100 dark:text-secondary-200">
         <SidebarButton
           onClick={() => {
