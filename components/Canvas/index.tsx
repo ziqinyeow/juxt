@@ -13,10 +13,12 @@ import {
 import Tools from "./tools";
 import { tools } from "./tools/tools";
 import { useTheme } from "next-themes";
+import { cn } from "@/lib/utils";
 
 const Canvas = ({ projectId }: { projectId: string }) => {
   const { theme } = useTheme();
-  const { canvas, setCanvas, setSelectedElement, refreshTracks } = useStore();
+  const { canvas, setCanvas, setSelectedElement, refreshTracks, hidePanel } =
+    useStore();
   // const { bucket } = useFile();
 
   const initCanvas = () => {
@@ -105,7 +107,14 @@ const Canvas = ({ projectId }: { projectId: string }) => {
 
   return (
     <>
-      <div className="h-[calc(100vh_-_64px_-_310px)] w-[calc(100vw_-_300px)] bg-light-200 dark:bg-primary-600 flex items-center justify-center">
+      <div
+        className={cn([
+          "w-[calc(100vw_-_300px)] bg-light-200 dark:bg-primary-600 flex items-center justify-center",
+          hidePanel
+            ? "h-[calc(100vh_-_64px_-_90px)]"
+            : "h-[calc(100vh_-_64px_-_310px)]",
+        ])}
+      >
         <div className="absolute flex items-center justify-center h-full gap-2 left-1">
           <div className="z-[200] flex gap-2 flex-col">
             <Tools tools={tools} />

@@ -76,7 +76,7 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
       ])}
     >
       {medias?.map((media, i) => (
-        <div key={i} className="">
+        <div key={i} className="hidden">
           {media.type === "image" ? (
             <>
               <Image

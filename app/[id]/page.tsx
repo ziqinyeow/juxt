@@ -5,11 +5,12 @@ import Dropzone from "@/components/Dropzone";
 import Panel from "@/components/Panel";
 import Layout from "@/layout/layout";
 import { useStore } from "@/lib/store";
+import { cn } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import React, { useEffect } from "react";
 
 const Page = ({ params }: { params: { id: string } }) => {
-  const { projects, setCurrentProjectId } = useStore();
+  const { projects, setCurrentProjectId, hidePanel } = useStore();
 
   useEffect(() => {
     setCurrentProjectId(params.id);
@@ -21,7 +22,14 @@ const Page = ({ params }: { params: { id: string } }) => {
     return (
       <Dropzone projectId={params.id}>
         <Layout projectId={params.id}>
-          <div className="flex flex-col justify-between h-full bg-primary-800">
+          <div
+            className={cn([
+              "h-full bg-light-200 dark:bg-primary-800 grid",
+              hidePanel
+                ? "grid-rows-[auto_calc(90px)]"
+                : "grid-rows-[auto_calc(220px_+_90px)]",
+            ])}
+          >
             <div className="relative h-full">
               <Canvas projectId={params?.id} />
             </div>
