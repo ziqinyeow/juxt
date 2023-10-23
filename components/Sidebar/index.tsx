@@ -76,15 +76,16 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
       ])}
     >
       {medias?.map((media, i) => (
-        <div key={i}>
+        <div key={i} className="">
           {media.type === "image" ? (
             <>
               <Image
                 id={media.path}
                 // src={media.url ?? ""}
                 src={fileURLCache[media.id] ?? ""}
-                fill
-                className="z-0 hidden object-contain w-full h-full text-white rounded"
+                width={0}
+                height={0}
+                className="z-0 hidden object-contain text-white rounded"
                 alt={media.path}
                 onLoad={() => {
                   refreshTracks(canvas);
