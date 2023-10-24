@@ -381,7 +381,7 @@ export default function Home() {
                               menu: "open",
                             });
                           }}
-                          className="flex items-center gap-2 cursor-pointer focus:bg-secondary-200"
+                          className="flex items-center gap-2 cursor-pointer focus:bg-secondary-200 focus:text-black"
                         >
                           <div className="">
                             <IconClick className="w-4 h-4" />
@@ -397,7 +397,7 @@ export default function Home() {
                               menu: "new tab",
                             });
                           }}
-                          className="flex items-center gap-2 cursor-pointer focus:bg-secondary-200"
+                          className="flex items-center gap-2 cursor-pointer focus:bg-secondary-200 focus:text-black"
                         >
                           <div className="">
                             <IconLayoutGridAdd className="w-4 h-4" />
@@ -414,7 +414,7 @@ export default function Home() {
                               menu: "edit",
                             });
                           }}
-                          className="flex items-center gap-2 cursor-pointer focus:bg-secondary-200"
+                          className="flex items-center gap-2 cursor-pointer focus:bg-secondary-200 focus:text-black"
                         >
                           <div className="">
                             <IconEdit className="w-4 h-4" />
@@ -430,7 +430,7 @@ export default function Home() {
                               menu: "delete",
                             });
                           }}
-                          className="flex items-center gap-2 cursor-pointer focus:bg-secondary-200"
+                          className="flex items-center gap-2 cursor-pointer focus:bg-secondary-200 focus:text-black"
                         >
                           <div className="">
                             <IconTrash className="w-4 h-4" />

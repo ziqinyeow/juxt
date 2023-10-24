@@ -20,6 +20,7 @@ const ProjectDropdown = () => {
     name: "",
     description: "",
     color: colors[0],
+    tags: [],
   });
   const [openCreateProjectModal, setOpenCreateProjectModal] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);
@@ -54,11 +55,13 @@ const ProjectDropdown = () => {
       created: Date.now(),
       tracks: [],
       bucket: { "/": [] },
+      tags: form.tags,
     });
     setForm({
       name: "",
       description: "",
       color: colors[0],
+      tags: [],
     });
     setOpenCreateProjectModal(false);
     window.open(`/${id}`, "_self");
