@@ -14,7 +14,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { nanoid } from "nanoid";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,7 +53,7 @@ const ProjectModal = ({
   button,
   buttonOnClick,
 }: Props) => {
-  const [addTag, setAddTag] = useState(false);
+  const tagRef = useRef<HTMLInputElement | null>(null);
   const [tagInput, setTagInput] = useState("");
   const [tagColor, setTagColor] = useState("#FE409C");
   // console.log(form);
@@ -162,160 +162,94 @@ const ProjectModal = ({
             <p className="text-sm font-bold tracking-wider text-secondary-100 dark:text-secondary-200">
               Tag
             </p>
-            <div className="flex flex-wrap gap-2">
+            <div
+              onClick={() => {
+                tagRef?.current?.focus();
+              }}
+              className="flex flex-wrap w-full gap-2 p-2 text-black rounded-md outline-none min-h-8 ring dark:text-white ring-secondary-100/50 dark:ring-secondary-200/50 bg-light-300 dark:bg-primary-500"
+            >
               {form?.tags?.map((tag, i) => (
-                <div
-                  key={i}
-                  className="flex items-center gap-2 px-3 py-2 transition rounded ring-2 ring-secondary-100/50 dark:ring-secondary-200/50 group bg-light-300 dark:bg-primary-400 dark:text-white text-primary-400"
-                >
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild className="z-[1000000]">
+                <DropdownMenu key={i}>
+                  <DropdownMenuTrigger asChild className="z-[1000000]">
+                    <div
+                      style={{ background: tag.color }}
+                      className="relative flex items-center gap-2 px-6 py-1 text-white transition rounded cursor-pointer group"
+                    >
+                      <span className="">{tag.name}</span>
+
                       <span
-                        className="w-4 h-4 mr-2 rounded cursor-pointer hover:ring-2 ring-primary-400 dark:ring-primary-100"
-                        style={{ background: tag.color }}
-                      ></span>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent side="top" className="z-[1000000]">
-                      <div className="flex flex-wrap gap-2 p-2">
-                        {colors?.map((color, _i) => (
-                          <div
-                            key={_i}
-                            onClick={() => {
-                              setForm((p) => {
-                                return {
-                                  ...p,
-                                  tags: p.tags?.map((t) =>
-                                    t.id === tag.id
-                                      ? {
-                                          ...t,
-                                          color,
-                                        }
-                                      : t
-                                  ),
-                                };
-                              });
-                            }}
-                            className="w-4 h-4 rounded cursor-pointer hover:ring-2 ring-primary-600 dark:ring-primary-100"
-                            style={{ background: color }}
-                          />
-                        ))}
-                      </div>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-
-                  <span className="bg-light-300 dark:bg-primary-400">
-                    {tag.name}
-                  </span>
-
-                  <span
-                    onClick={() => {
-                      setForm((p) => {
-                        return {
-                          ...p,
-                          tags: p.tags?.filter((t) => t.id !== tag.id),
-                        };
-                      });
-                    }}
-                    className="p-1 rounded cursor-pointer hover:bg-light-400/20"
-                  >
-                    <IconX className="w-3 h-3" />
-                  </span>
-                </div>
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setForm((p) => {
+                            return {
+                              ...p,
+                              tags: p.tags?.filter((t) => t.id !== tag.id),
+                            };
+                          });
+                        }}
+                        className="absolute p-[1px] group-hover:block hidden rounded cursor-pointer right-1 hover:bg-light-400/20"
+                      >
+                        <IconX className="w-3 h-3" />
+                      </span>
+                    </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent side="top" className="z-[1000000]">
+                    <div className="flex flex-wrap gap-2 p-2">
+                      {colors?.map((color, _i) => (
+                        <div
+                          key={_i}
+                          onClick={() => {
+                            setForm((p) => {
+                              return {
+                                ...p,
+                                tags: p.tags?.map((t) =>
+                                  t.id === tag.id
+                                    ? {
+                                        ...t,
+                                        color,
+                                      }
+                                    : t
+                                ),
+                              };
+                            });
+                          }}
+                          className="w-4 h-4 rounded cursor-pointer hover:ring-2 ring-primary-600 dark:ring-primary-100"
+                          style={{ background: color }}
+                        />
+                      ))}
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               ))}
-              {addTag && (
-                <div className="flex items-center gap-2 px-3 py-2 transition rounded ring-2 ring-secondary-100 dark:ring-secondary-200 group bg-light-300 dark:bg-primary-400 dark:text-white text-primary-400">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild className="z-[1000000]">
-                      <span
-                        className="w-4 h-4 mr-2 rounded cursor-pointer hover:ring-2 ring-primary-400 dark:ring-primary-100"
-                        style={{ background: tagColor }}
-                      ></span>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent side="top" className="z-[1000000]">
-                      <div className="flex flex-wrap gap-2 p-2">
-                        {colors?.map((color, _i) => (
-                          <div
-                            key={_i}
-                            onClick={() => {
-                              setTagColor(color);
-                            }}
-                            className="w-4 h-4 rounded cursor-pointer hover:ring-2 ring-primary-600 dark:ring-primary-100"
-                            style={{ background: color }}
-                          />
-                        ))}
-                      </div>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-
-                  <input
-                    type="text"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        setForm({
-                          ...form,
-                          tags: [
-                            ...form.tags,
-                            {
-                              id: nanoid(),
-                              name: tagInput,
-                              color: tagColor,
-                            },
-                          ],
-                        });
-                        setTagInput("");
-                        setTagColor("#FE409C");
-                        setAddTag(false);
-                      }
-                    }}
-                    onChange={(e) => {
-                      setTagInput(e.target.value);
-                    }}
-                    value={tagInput}
-                    className="w-16 outline-none bg-light-300 dark:bg-primary-400"
-                    placeholder="tag"
-                  />
-                  <span
-                    onClick={() => {
-                      setForm({
-                        ...form,
-                        tags: [
-                          ...form.tags,
-                          {
-                            id: nanoid(),
-                            name: tagInput,
-                            color: tagColor,
-                          },
-                        ],
-                      });
-                      setTagInput("");
-                      setTagColor("#FE409C");
-                      setAddTag(false);
-                    }}
-                    className="p-1 rounded cursor-pointer hover:bg-light-400/20"
-                  >
-                    <IconCheck className="w-3 h-3" />
-                  </span>
-                  <span
-                    onClick={() => {
-                      setAddTag(false);
-                    }}
-                    className="p-1 rounded cursor-pointer hover:bg-light-400/20"
-                  >
-                    <IconX className="w-3 h-3" />
-                  </span>
-                </div>
-              )}
-              <div
-                onClick={() => {
-                  setAddTag(true);
+              <input
+                type="text"
+                ref={tagRef}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setForm({
+                      ...form,
+                      tags: [
+                        ...form.tags,
+                        {
+                          id: nanoid(),
+                          name: tagInput,
+                          color:
+                            colors[Math.floor(Math.random() * colors.length)],
+                        },
+                      ],
+                    });
+                    setTagInput("");
+                    setTagColor("#FE409C");
+                  }
                 }}
-                className="flex items-center gap-2 px-4 py-2 transition rounded cursor-pointer hover:bg-light-400 dark:bg-primary-400 dark:text-white dark:hover:bg-primary-800 bg-light-300 text-primary-400"
-              >
-                <span>
-                  <IconPlus className="w-3 h-3" />
-                </span>
-                <span>add tag</span>
-              </div>
+                onChange={(e) => {
+                  setTagInput(e.target.value);
+                }}
+                value={tagInput}
+                className="px-1 outline-none bg-light-300 dark:bg-primary-500"
+                placeholder="tag"
+              />
             </div>
           </div>
         </div>
