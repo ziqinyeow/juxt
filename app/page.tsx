@@ -357,12 +357,12 @@ export default function Home() {
                           <p className="text-primary-200 line-clamp-3">
                             {project?.description}
                           </p>
-                          <div className="flex flex-wrap gap-2 mt-3 max-h-[3rem] overflow-y-hidden no_scrollbar">
+                          <div className="flex gap-2 mt-3 max-h-[3rem] overflow-x-scroll no_scrollbar">
                             {project?.tags?.map((tag, i) => (
                               <div
                                 key={i}
                                 style={{ background: tag.color }}
-                                className="flex items-center gap-1 px-2 truncate text-white rounded text-[10px] font-medium dark:text-primary-400"
+                                className="flex items-center whitespace-nowrap gap-1 px-2 text-white rounded text-[10px] font-medium dark:text-primary-400"
                               >
                                 <span>{tag.name}</span>
                               </div>
