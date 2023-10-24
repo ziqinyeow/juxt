@@ -5,6 +5,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { colors } from "@/lib/constants/colors";
+import { Tag } from "@/lib/types/project";
 import { cn } from "@/lib/utils";
 import { IconScriptPlus } from "@tabler/icons-react";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -14,6 +15,7 @@ export type ProjectForm = {
   name: string;
   description?: string;
   color: string;
+  tags: Tag[];
 };
 
 type Props = {
@@ -48,6 +50,7 @@ const DeleteModal = ({
             name: "",
             description: "",
             color: colors[0],
+            tags: [],
           });
           onClose();
         }

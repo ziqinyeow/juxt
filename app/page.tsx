@@ -40,6 +40,7 @@ export default function Home() {
     name: "",
     description: "",
     color: colors[0],
+    tags: [],
   });
   const [openCreateProjectModal, setOpenCreateProjectModal] = useState(false);
   const [openEditProjectModal, setOpenEditProjectModal] = useState(false);
@@ -63,11 +64,13 @@ export default function Home() {
       created: Date.now(),
       tracks: [],
       bucket: { "/": [] },
+      tags: form.tags,
     });
     setForm({
       name: "",
       description: "",
       color: colors[0],
+      tags: [],
     });
     setOpenCreateProjectModal(false);
   };
@@ -80,6 +83,7 @@ export default function Home() {
       name: form.name,
       description: form.description,
       color: form.color,
+      tags: form.tags,
     });
     setContextMenu({
       id: "",
@@ -89,6 +93,7 @@ export default function Home() {
       name: "",
       description: "",
       color: colors[0],
+      tags: [],
     });
     setOpenEditProjectModal(false);
   };
@@ -101,6 +106,7 @@ export default function Home() {
       name: "",
       description: "",
       color: colors[0],
+      tags: [],
     });
     setOpenDeleteProjectModal(false);
   };
@@ -108,7 +114,21 @@ export default function Home() {
   const filteredProjects = useMemo(
     () =>
       projects.filter((project) =>
-        project.name.toLowerCase().includes(searchValue.toLowerCase())
+        searchValue.toLowerCase().startsWith("tag:") ||
+        searchValue.toLowerCase().startsWith("tags:") ||
+        searchValue.toLowerCase().startsWith(">")
+          ? project.tags.findIndex((tag) =>
+              tag.name
+                .toLowerCase()
+                .includes(
+                  searchValue
+                    .toLowerCase()
+                    .replace("tag:", "")
+                    .replace("tags:", "")
+                    .replace(">", "")
+                )
+            ) !== -1
+          : project.name.toLowerCase().includes(searchValue.toLowerCase())
       ),
     [projects, searchValue]
   );
@@ -132,6 +152,7 @@ export default function Home() {
           name: project?.name ?? "",
           description: project?.description ?? "",
           color: project?.color ?? "",
+          tags: project?.tags ?? [],
         });
         setOpenEditProjectModal(true);
         break;
@@ -141,6 +162,7 @@ export default function Home() {
           name: "",
           description: "",
           color: colors[0],
+          tags: [],
         });
         const project = projects.find(
           (project) => project.id === contextMenu.id
@@ -150,6 +172,7 @@ export default function Home() {
           name: project?.name ?? "",
           description: project?.description ?? "",
           color: project?.color ?? "",
+          tags: [],
         });
         setOpenDeleteProjectModal(true);
         // deleteProject(contextMenu.id);
@@ -333,6 +356,17 @@ export default function Home() {
                           <p className="text-primary-200 line-clamp-3">
                             {project?.description}
                           </p>
+                          <div className="flex flex-wrap gap-2 mt-3 max-h-[3rem] overflow-y-hidden no_scrollbar">
+                            {project?.tags?.map((tag, i) => (
+                              <div
+                                key={i}
+                                style={{ background: tag.color }}
+                                className="flex items-center gap-1 px-2 truncate text-white rounded text-[10px] font-medium dark:text-primary-400"
+                              >
+                                <span>{tag.name}</span>
+                              </div>
+                            ))}
+                          </div>
                           <p className="mt-3 text-primary-200 dark:text-primary-300">
                             created at{" "}
                             {new Date(project.created).toLocaleDateString()}
