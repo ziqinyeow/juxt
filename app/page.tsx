@@ -1,8 +1,8 @@
 "use client";
+
 import Navbar from "@/components/Navbar";
 import { useStore } from "@/lib/store";
 import {
-  IconBackspace,
   IconClick,
   IconEdit,
   IconLayoutGridAdd,
@@ -29,6 +29,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import ProjectModal, { ProjectForm } from "@/components/Modal/ProjectModal";
 import DeleteModal from "@/components/Modal/DeleteModal";
+import TimeAgo from "react-timeago";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 
@@ -368,8 +369,8 @@ export default function Home() {
                             ))}
                           </div>
                           <p className="mt-3 text-primary-200 dark:text-primary-300">
-                            created at{" "}
-                            {new Date(project.created).toLocaleDateString()}
+                            created <TimeAgo date={project.created} />
+                            {/* {new Date(project.created).toLocaleDateString()} */}
                           </p>
                         </Link>
                       </ContextMenuTrigger>
