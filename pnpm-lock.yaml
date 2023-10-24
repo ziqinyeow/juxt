@@ -89,6 +89,9 @@ dependencies:
   react-zoom-pan-pinch:
     specifier: ^3.1.0
     version: 3.1.0(react-dom@18.2.0)(react@18.2.0)
+  resize-observer-polyfill:
+    specifier: ^1.5.1
+    version: 1.5.1
   tailwind-merge:
     specifier: ^1.14.0
     version: 1.14.0

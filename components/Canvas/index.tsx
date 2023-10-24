@@ -3,7 +3,7 @@
 import "./style.css";
 import { useStore } from "@/lib/store";
 import { fabric } from "fabric";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect } from "react";
 import Zoomable from "./zoomable";
 import { RESOLUTION } from "@/lib/constants/canvas";
 import {
@@ -14,18 +14,21 @@ import Tools from "./tools";
 import { tools } from "./tools/tools";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
+import useCanvasConfig from "@/lib/hooks/fabric/useCanvasConfig";
 
 const Canvas = ({ projectId }: { projectId: string }) => {
   const { theme } = useTheme();
   const { canvas, setCanvas, setSelectedElement, refreshTracks, hidePanel } =
     useStore();
-  // const { bucket } = useFile();
+
+  useCanvasConfig();
 
   const initCanvas = () => {
     const canvas = new fabric.Canvas(`canvas-${projectId}`, {
       // width: 550,
       // height: 300,
       backgroundColor: theme === "dark" ? "#000" : "#fff",
+      preserveObjectStacking: true,
       // renderOnAddRemove: false,
       // imageSmoothingEnabled: false,
       // enableRetinaScaling: false,
@@ -33,14 +36,22 @@ const Canvas = ({ projectId }: { projectId: string }) => {
       stopContextMenu: true,
     });
 
-    fabric.Object.prototype.hasRotatingPoint = false;
+    canvas.selectionColor =
+      theme === "dark" ? "rgb(43, 235, 200, 0.15)" : "rgb(93, 70, 243, 0.15)";
+    canvas.selectionBorderColor =
+      theme === "dark" ? "rgb(43, 235, 200)" : "rgb(93, 70, 243)";
+    canvas.selectionLineWidth = 2;
+
+    // fabric.Object.prototype.hasRotatingPoint = false;
+
     fabric.Object.prototype.transparentCorners = false;
     fabric.Object.prototype.cornerColor =
       theme === "dark" ? "#2BEBC8" : "#5D46F3";
     fabric.Object.prototype.cornerStyle = "rect";
     fabric.Object.prototype.cornerStrokeColor =
       theme === "dark" ? "#2BEBC8" : "#5D46F3";
-    fabric.Object.prototype.cornerSize = 6;
+    fabric.Object.prototype.cornerSize = 12;
+    fabric.Object.prototype.borderScaleFactor = 2.4;
     // canvas mouse down without target should deselect active object
     canvas?.on("mouse:down", function (e) {
       if (!e.target) {
