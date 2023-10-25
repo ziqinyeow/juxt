@@ -30,6 +30,7 @@ const Navbar = ({ className, ...props }: DivProps) => {
     >
       <div className="flex items-center gap-8">
         <Logo />
+
         {pathname !== "/" && pathname !== "/404" && <ProjectDropdown />}
       </div>
       <div className="flex items-center gap-2">
