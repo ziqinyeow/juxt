@@ -47,7 +47,7 @@
   "devDependencies": {
     "@types/fabric": "^5.3.3",
     "@types/node": "20.5.8",
-    "@types/react": "18.2.21",
+    "@types/react": "18.2.33",
     "@types/react-dom": "18.2.7",
     "@types/react-timeago": "^4.1.5",
     "canvas": "^2.11.2",

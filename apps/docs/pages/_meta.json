@@ -1,0 +1,21 @@
+{
+  "*": {
+    "type": "page"
+  },
+  "index": {
+    "display": "hidden",
+    "theme": {
+      "layout": "raw",
+      "sidebar": false,
+      "toc": true
+    }
+  },
+  "app": "App",
+  "sdk": "SDK",
+  "blog": {
+    "title": "Blog",
+    "theme": {
+      "typesetting": "article"
+    }
+  }
+}
