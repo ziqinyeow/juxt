@@ -37,3 +37,6 @@ next-env.d.ts
 # turbo
 .turbo
 pnpm-lock.yaml
+
+# Translated README
+README.zh-CN.md
