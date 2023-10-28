@@ -1,5 +1,18 @@
 # RTM
 
+## 介绍
+
+RTM 是一个全栈 monorepo，有助于通过姿势跟踪和估计简化运动分析工作流程。
+
+## Tech Stack
+
+-   [Next.js](https://nextjs.org/)- 框架
+-   [打字稿](https://www.typescriptlang.org/)- 语言
+-   [顺风](https://tailwindcss.com/)– CSS
+-   [索引数据库](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)- 数据库
+-   [涡轮雷波](https://turbo.build/repo)– 单一仓库
+-   [韦尔塞尔](https://vercel.com/)– 部署
+
 ## 应用
 
 -   [网络](./apps/web/)- Next.js 接口
@@ -17,14 +30,5 @@
     pnpm i
     npm i -g turbo
     turbo dev
-
-## 技术堆栈
-
--   [Next.js](https://nextjs.org/)- 框架
--   [打字稿](https://www.typescriptlang.org/)- 语言
--   [顺风](https://tailwindcss.com/)– CSS
--   [索引数据库](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)- 数据库
--   [涡轮雷波](https://turbo.build/repo)– 单一仓库
--   [Vercel](https://vercel.com/)– 部署
 
 <!-- ![Alt](https://repobeats.axiom.co/api/embed/2f39348ed381d16e07997a9790c41fb503330a9c.svg "Repobeats analytics image") -->
