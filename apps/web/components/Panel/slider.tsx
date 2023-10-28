@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Slider as UISlider } from "@/components/ui/slider";
+import { Slider as UISlider } from "shadcn/ui/slider";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { Button } from "@/components/Button";
 import { useStore } from "@/lib/store";

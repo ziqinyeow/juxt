@@ -3,7 +3,7 @@
 import Canvas from "@/components/Canvas";
 import Tools from "@/components/Canvas/tools";
 import Panel from "@/components/Panel";
-import { Slider } from "@/components/ui/slider";
+import { Slider } from "shadcn/ui/slider";
 import Layout from "@/layout/layout";
 import { isHtmlVideoElement } from "@/lib/utils/html";
 import { useCallback, useEffect, useState } from "react";

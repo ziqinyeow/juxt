@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { Button } from "../Button";
 import { useStore } from "@/lib/store";
-import { Slider as UISlider } from "../ui/slider";
+import { Slider as UISlider } from "shadcn/ui/slider";
 import {
   IconChevronDown,
   IconChevronUp,

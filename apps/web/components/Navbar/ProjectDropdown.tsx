@@ -4,7 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "shadcn/ui/dropdown-menu";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { IconPlus, IconSearch, IconStack2 } from "@tabler/icons-react";

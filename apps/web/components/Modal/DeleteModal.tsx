@@ -3,7 +3,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "shadcn/ui/dialog";
 import { colors } from "@/lib/constants/colors";
 import { Tag } from "@/lib/types/project";
 import { cn } from "@/lib/utils";

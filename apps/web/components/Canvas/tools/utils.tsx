@@ -4,7 +4,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "shadcn/ui/dropdown-menu";
 
 import { Button } from "@/components/Button";
 import { ChevronLeft } from "lucide-react";

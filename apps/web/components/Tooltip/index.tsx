@@ -1,9 +1,14 @@
+// import {
+//   Tooltip as UITooltip,
+//   TooltipContent,
+//   TooltipTrigger,
+// } from "shadcn/ui/tooltip";
+import { cn } from "@/lib/utils";
 import {
   Tooltip as UITooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { cn } from "@/lib/utils";
+} from "shadcn/ui/tooltip";
 
 type Props = {
   className?: string;
