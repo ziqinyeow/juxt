@@ -12,12 +12,15 @@ export const useHydration = () => {
   useEffect(() => {
     // Note: This is just in case you want to take into account manual rehydration.
     // You can remove the following line if you don't need it.
+    // @ts-ignore
     const unsubHydrate = useStore.persist.onHydrate(() => setHydrated(false));
 
+    // @ts-ignore
     const unsubFinishHydration = useStore.persist.onFinishHydration(() =>
       setHydrated(true)
     );
 
+    // @ts-ignore
     setHydrated(useStore.persist.hasHydrated());
 
     return () => {

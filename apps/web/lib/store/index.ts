@@ -19,6 +19,7 @@ import { merge } from "../utils/file";
 import { checkFileType } from "@/components/Dropzone/utils";
 
 export const useStore = create<StoreTypes>()(
+  // @ts-ignore
   persist<StoreTypes>(
     (set, get) => ({
       fileURLCache: {},
