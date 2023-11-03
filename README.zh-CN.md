@@ -3,7 +3,8 @@
     <a align="center" href="" target="_blank">
       <img
         width="850"
-        src="https://raw.githubusercontent.com/ziqinyeow/juxt/main/asset/juxt-banner.png"
+        src="https://github.com/ziqinyeow/juxt/blob/main/asset/juxt-banner.png?raw=true"
+        <!-- src="https://raw.githubusercontent.com/ziqinyeow/juxt/main/asset/juxt-banner.png" -->
       >
     </a>
   </p>
@@ -21,7 +22,7 @@ Juxt 是一个全栈 monorepo，有助于通过姿势跟踪和估计简化运动
 -   [打字稿](https://www.typescriptlang.org/)- 语言
 -   [顺风](https://tailwindcss.com/)– CSS
 -   [索引数据库](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)- 数据库
--   [涡轮雷波](https://turbo.build/repo)– 单一仓库
+-   [涡轮雷波](https://turbo.build/repo) – monorepo
 -   [韦尔塞尔](https://vercel.com/)– 部署
 
 ## 应用
