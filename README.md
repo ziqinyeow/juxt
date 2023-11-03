@@ -1,8 +1,19 @@
-# RTM
+<div align="center">
+  <p>
+    <a align="center" href="" target="_blank">
+      <img
+        width="850"
+        src="https://raw.githubusercontent.com/ziqinyeow/juxt/main/asset/juxt-banner.png"
+      >
+    </a>
+  </p>
+</div>
+
+<!-- # Juxt -->
 
 ## Introduction
 
-RTM is a full stack monorepo that helps to streamline sport analysis workflow with pose tracking and estimation.
+Juxt is a full stack monorepo that helps to streamline sport analysis workflow with pose tracking and estimation.
 
 ## Tech Stack
 

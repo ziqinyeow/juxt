@@ -18,14 +18,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-FILE = Path(__file__).resolve()
-ROOT = FILE.parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.append(str(ROOT))
+# FILE = Path(__file__).resolve()
+# ROOT = FILE.parents[1]
+# if str(ROOT) not in sys.path:
+#     sys.path.append(str(ROOT))
 
 from juxtapose import RTM
 
-model = RTM(det="rtmdet-m", tracker="bytetrack", pose="rtmpose-m")
+model = RTM(det="rtmdet-m", tracker="None", pose="rtmpose-m")
 
 
 @app.post("/upload")
