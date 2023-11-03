@@ -1,10 +1,21 @@
-# RTM
+<div align="center">
+  <p>
+    <a align="center" href="" target="_blank">
+      <img
+        width="850"
+        src="https://raw.githubusercontent.com/ziqinyeow/juxt/main/asset/juxt-banner.png"
+      >
+    </a>
+  </p>
+</div>
+
+<!-- # Juxt -->
 
 ## 介绍
 
-RTM 是一个全栈 monorepo，有助于通过姿势跟踪和估计简化运动分析工作流程。
+Juxt 是一个全栈 monorepo，有助于通过姿势跟踪和估计简化运动分析工作流程。
 
-## Tech Stack
+## 技术堆栈
 
 -   [Next.js](https://nextjs.org/)- 框架
 -   [打字稿](https://www.typescriptlang.org/)- 语言
@@ -21,7 +32,7 @@ RTM 是一个全栈 monorepo，有助于通过姿势跟踪和估计简化运动�
 -   [软件开发工具包](./apps/sdk/)- 用于姿势估计的 Pip 包
 -   [服务器](./apps/server/)- FastAPI WebSocket 服务器
 
-## 本地发展
+## 地方发展
 
 要在本地开发 RTM，您需要克隆此存储库。
 
