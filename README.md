@@ -1,10 +1,9 @@
 <div align="center">
   <p>
-    <a align="center" href="" target="_blank">
+    <a align="center" target="_blank">
       <img
         width="850"
         src="https://github.com/ziqinyeow/juxt/blob/main/asset/juxt-banner.png?raw=true"
-        <!-- src="https://raw.githubusercontent.com/ziqinyeow/juxt/main/asset/juxt-banner.png" -->
       >
     </a>
   </p>
