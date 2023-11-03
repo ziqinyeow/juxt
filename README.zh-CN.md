@@ -1,10 +1,9 @@
 <div align="center">
   <p>
-    <a align="center" href="" target="_blank">
+    <a align="center" target="_blank">
       <img
         width="850"
         src="https://github.com/ziqinyeow/juxt/blob/main/asset/juxt-banner.png?raw=true"
-        <!-- src="https://raw.githubusercontent.com/ziqinyeow/juxt/main/asset/juxt-banner.png" -->
       >
     </a>
   </p>
@@ -22,18 +21,18 @@ Juxt 是一个全栈 monorepo，有助于通过姿势跟踪和估计简化运动
 -   [打字稿](https://www.typescriptlang.org/)- 语言
 -   [顺风](https://tailwindcss.com/)– CSS
 -   [索引数据库](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API)- 数据库
--   [涡轮雷波](https://turbo.build/repo) – monorepo
+-   [涡轮雷波](https://turbo.build/repo)– 单一仓库
 -   [韦尔塞尔](https://vercel.com/)– 部署
 
 ## 应用
 
 -   [网络](./apps/web/)- Next.js 接口
 -   [桌面](./apps/desktop/)- 电子接口
--   [文档](./apps/docs/)- Nextra 文档
--   [软件开发工具包](./apps/sdk/)- 用于姿势估计的 Pip 包
+-   [文档](./apps/docs/) - Nextra Docs
+-   [SDK](./apps/sdk/)- 用于姿势估计的 Pip 包
 -   [服务器](./apps/server/)- FastAPI WebSocket 服务器
 
-## 地方发展
+## 本地发展
 
 要在本地开发 RTM，您需要克隆此存储库。
 
