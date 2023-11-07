@@ -282,7 +282,12 @@ export const useStore = create<StoreTypes>()(
 
       // elements
       tracks: [],
-      selectedElement: null,
+      selectedElement: [],
+      setSelectedElement: (element: Element[] | fabric.Object[]) =>
+        set((state) => ({
+          ...state,
+          selectedElement: element,
+        })),
       addTrackAndElement: (element: Element) => {
         const id = nanoid();
         set((state) => ({
@@ -534,8 +539,6 @@ export const useStore = create<StoreTypes>()(
           placement: newPlacement,
         });
       },
-      setSelectedElement: (element: Element | null) =>
-        set((state) => ({ ...state, selectedElement: element })),
 
       updateElement: (elementId: string, data: Element | any) =>
         set((state) => ({

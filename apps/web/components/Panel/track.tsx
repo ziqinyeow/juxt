@@ -20,9 +20,12 @@ type Props = {
 
 export const Element = ({ element }: Props) => {
   const {
+    canvas,
     panelScale,
     maxTime,
     updateElement,
+    selectedElement,
+    setSelectedElement,
     updateMaxTime,
     getCurrentTimeInMs,
     updateTime,
@@ -64,7 +67,11 @@ export const Element = ({ element }: Props) => {
   return (
     <Rnd
       className={cn([
-        "rounded select-none ring-2 ring-primary-200 ring-offset-light-300 dark:ring-offset-primary-500 ring-offset-[3px]",
+        "rounded select-none ring-offset-[3px] ring-offset-light-300 dark:ring-offset-primary-500",
+        element.fabricObject &&
+        selectedElement.includes(element.fabricObject as any)
+          ? "ring-primary-400 dark:ring-primary-100 ring-4"
+          : "ring-primary-200 ring-2",
         getElementColor(
           element.type === "shape" ? element.properties.type : element.type
         ),
@@ -122,8 +129,16 @@ export const Element = ({ element }: Props) => {
         });
       }}
     >
-      <div className="absolute top-0 left-0 z-10 w-full h-full bg-repeat-space bg-contain bg-voice" />
-      <div className="flex items-center w-full h-full gap-2 px-2 font-bold text-black">
+      <div
+        onClick={() => {
+          if (element.fabricObject) {
+            setSelectedElement([element.fabricObject] as fabric.Object[]);
+            canvas?.setActiveObject(element.fabricObject);
+          }
+        }}
+        className="absolute top-0 left-0 z-10 w-full h-full bg-repeat-space bg-contain bg-voice"
+      />
+      <div className="flex items-center w-full h-full gap-2 px-2 font-bold text-white dark:text-black">
         <div className="z-20 select-none line-clamp-1 [&>*]:w-4 [&>*]:h-4">
           {getElementIcon(
             element.type === "shape" ? element.properties.type : element.type

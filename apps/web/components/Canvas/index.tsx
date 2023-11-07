@@ -15,11 +15,18 @@ import { tools } from "./tools/tools";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
 import useCanvasConfig from "@/lib/hooks/fabric/useCanvasConfig";
+import { Element } from "@/lib/types/track";
 
 const Canvas = ({ projectId }: { projectId: string }) => {
   const { theme } = useTheme();
-  const { canvas, setCanvas, setSelectedElement, refreshTracks, hidePanel } =
-    useStore();
+  const {
+    projects,
+    canvas,
+    setCanvas,
+    setSelectedElement,
+    refreshTracks,
+    hidePanel,
+  } = useStore();
 
   useCanvasConfig();
 
@@ -53,10 +60,21 @@ const Canvas = ({ projectId }: { projectId: string }) => {
     fabric.Object.prototype.cornerSize = 12;
     fabric.Object.prototype.borderScaleFactor = 2.4;
     // canvas mouse down without target should deselect active object
-    canvas?.on("mouse:down", function (e) {
-      if (!e.target) {
-        setSelectedElement(null);
+    // canvas?.on("mouse:down", function (e) {
+    //   if (!e.target) {
+    //     // setSelectedElement(null);
+    //     console.log(e.target);
+    //   }
+    // });
+
+    canvas.on("selection:created", (e) => {
+      if (e.selected) {
+        setSelectedElement(e.selected);
       }
+    });
+
+    canvas.on("selection:cleared", (e) => {
+      setSelectedElement([]);
     });
 
     canvas?.on("object:moving", function (e) {
