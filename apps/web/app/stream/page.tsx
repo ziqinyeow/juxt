@@ -15,6 +15,7 @@ const WebSocketComponent = () => {
     newSocket.onmessage = (event) => {
       // console.log(event.data);
       const json = JSON.parse(event.data);
+      console.log(json);
       setKeypoints((p) => [...p, json.kpts]);
       // setMessages((p) => [...p, `${json.kpts}`]);
     };
@@ -55,7 +56,7 @@ const WebSocketComponent = () => {
       canvas.toBlob(function (blob: any) {
         reader.onload = function () {
           const buffer = reader.result as ArrayBuffer;
-          console.log("buffer:", buffer);
+          // console.log("buffer:", buffer);
           socket?.send(buffer);
 
           requestAnimationFrame(extractFrame);

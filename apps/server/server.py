@@ -42,7 +42,8 @@ async def websocket_endpoint(websocket: WebSocket):
             bytes = await websocket.receive_bytes()
             data = np.frombuffer(bytes, dtype=np.uint8)
             img = cv2.imdecode(data, 1)
-            output = model(img, show=False)[0].model_dump(exclude="im")
+            output = model(img, show=False)[0]  # .model_dump(exclude="im")
+            print(output.kpts)
             # print(output)
             await websocket.send_json(output)
         except Exception as e:

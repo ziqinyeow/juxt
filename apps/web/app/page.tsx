@@ -34,6 +34,7 @@ import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 
 export default function Home() {
+  //
   const router = useRouter();
   const { theme } = useTheme();
   const { projects, addProject, editProject, deleteProject } = useStore();
