@@ -30,8 +30,8 @@ export interface StoreTypes {
 
   // elements
   tracks: Tracks[];
-  selectedElement: Element[] | fabric.Object[];
-  setSelectedElement: (element: Element[] | fabric.Object[]) => void;
+  selectedElement: Element[];
+  setSelectedElement: (element: Element[]) => void;
   // addElement: (element: Element) => void;
   addShape: (
     type: ShapeType,
@@ -41,9 +41,10 @@ export interface StoreTypes {
   ) => void;
   addText: (text: fabric.IText, properties: any, placement: Placement) => void;
   addTrackAndElement: (element: Element) => void;
-  refreshTracks: (canvas: fabric.Canvas | null) => void;
+  refreshTracks: (canvas?: fabric.Canvas | null) => void;
   updatePlacement: (e: IEvent, element: Element, object: any) => void;
   addElementToCanvas: (element: Element) => void;
+  removeTrackAndElement: (elementIds: string[]) => void;
   updateElement: (elementId: string, data: any) => void;
 
   //

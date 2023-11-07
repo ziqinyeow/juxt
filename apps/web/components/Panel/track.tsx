@@ -13,6 +13,8 @@ import {
 import { DivProps } from "@/lib/types/html";
 import { Element as ElementType } from "@/lib/types/track";
 import { useStore } from "@/lib/store";
+import useKeyboardJs from "react-use/lib/useKeyboardJs";
+import { fabric } from "fabric";
 
 type Props = {
   element: ElementType;
@@ -43,6 +45,7 @@ export const Element = ({ element }: Props) => {
     ),
     y: 0,
   });
+  const [shift] = useKeyboardJs("shift");
   // console.log(element);
 
   // track elements' width if panelScale changed
@@ -68,14 +71,31 @@ export const Element = ({ element }: Props) => {
     <Rnd
       className={cn([
         "rounded select-none ring-offset-[3px] ring-offset-light-300 dark:ring-offset-primary-500",
-        element.fabricObject &&
-        selectedElement.includes(element.fabricObject as any)
+        selectedElement.findIndex((s) => s.id === element.id) != -1
           ? "ring-primary-400 dark:ring-primary-100 ring-4"
           : "ring-primary-200 ring-2",
         getElementColor(
           element.type === "shape" ? element.properties.type : element.type
         ),
       ])}
+      onMouseDown={() => {
+        if (shift) {
+          // const selected = [...selectedElement, element];
+          // setSelectedElement(selected);
+          // const group = new fabric.Group();
+          // selected.map((el) => {
+          //   if (el.fabricObject) {
+          //     // el.fabricObject.onDeselect = () => false;
+          //     group.add(el.fabricObject);
+          //     // canvas?.remove(el.fabricObject);
+          //   }
+          // });
+          // canvas?.setActiveObject(group);
+        } else if (element.fabricObject) {
+          setSelectedElement([element]);
+          canvas?.setActiveObject(element.fabricObject);
+        }
+      }}
       bounds="parent"
       enableResizing={{
         top: false,
@@ -130,12 +150,7 @@ export const Element = ({ element }: Props) => {
       }}
     >
       <div
-        onClick={() => {
-          if (element.fabricObject) {
-            setSelectedElement([element.fabricObject] as fabric.Object[]);
-            canvas?.setActiveObject(element.fabricObject);
-          }
-        }}
+        // onClick={() => {}}
         className="absolute top-0 left-0 z-10 w-full h-full bg-repeat-space bg-contain bg-voice"
       />
       <div className="flex items-center w-full h-full gap-2 px-2 font-bold text-white dark:text-black">

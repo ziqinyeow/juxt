@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   IconBackspace,
   IconEye,
@@ -25,16 +25,22 @@ import CursorDropdown from "./cursor-dropdown";
 import Tooltip from "../Tooltip";
 import { useOperatingSystem } from "@/lib/hooks/useOperatingSystem";
 import Seeker from "./seeker";
+import useKeyboardJs from "react-use/lib/useKeyboardJs";
 
 const Panel = ({ projectId }: { projectId: string }) => {
   const os = useOperatingSystem();
+  const [backspace] = useKeyboardJs("backspace");
   // const { bucket } = useFile();
 
   const {
     projects,
+    canvas,
     panelScale,
     hidePanel,
     // setHidePanel,
+    selectedElement,
+    removeTrackAndElement,
+    setSelectedElement,
     addPanelScale,
     maxTime,
   } = useStore();
@@ -47,6 +53,14 @@ const Panel = ({ projectId }: { projectId: string }) => {
   // const [hidePanel, setHidePanel] = useState(false);
   const [cursor, setCursor] = useState<Cursor>("pointer");
   // console.log(Number(getNumberOfTicks(maxTime, panelScale).toFixed(0)));
+  useEffect(() => {
+    if (backspace && selectedElement.length !== 0) {
+      removeTrackAndElement(selectedElement.map((s) => s.id));
+      canvas?.discardActiveObject();
+      setSelectedElement([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [backspace]);
 
   return (
     <div

@@ -67,11 +67,11 @@ const Canvas = ({ projectId }: { projectId: string }) => {
     //   }
     // });
 
-    canvas.on("selection:created", (e) => {
-      if (e.selected) {
-        setSelectedElement(e.selected);
-      }
-    });
+    // canvas.on("selection:created", (e) => {
+    //   if (e.selected) {
+    //     setSelectedElement(e.selected);
+    //   }
+    // });
 
     canvas.on("selection:cleared", (e) => {
       setSelectedElement([]);

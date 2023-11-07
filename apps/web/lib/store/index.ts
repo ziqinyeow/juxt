@@ -245,6 +245,14 @@ export const useStore = create<StoreTypes>()(
             ...properties,
           },
         };
+        shape.on("selected", () => {
+          get().setSelectedElement([...get().selectedElement, element]);
+        });
+        shape.on("deselected", () => {
+          get().setSelectedElement(
+            get().selectedElement.filter((el) => el.id !== element.id)
+          );
+        });
         get().canvas?.on("object:modified", (e) => {
           get().updatePlacement(e, element, shape);
         });
@@ -267,9 +275,13 @@ export const useStore = create<StoreTypes>()(
         };
         text.on("selected", (e) => {
           get().setDisableKeyboardShortcut(true);
+          get().setSelectedElement([...get().selectedElement, element]);
         });
         text.on("deselected", (e) => {
           get().setDisableKeyboardShortcut(false);
+          get().setSelectedElement(
+            get().selectedElement.filter((el) => el.id !== id)
+          );
         });
         text.on("changed", (e) => {
           element.properties.text = text.text ?? "";
@@ -283,10 +295,12 @@ export const useStore = create<StoreTypes>()(
       // elements
       tracks: [],
       selectedElement: [],
-      setSelectedElement: (element: Element[] | fabric.Object[]) =>
+      setSelectedElement: (element: Element[]) =>
         set((state) => ({
           ...state,
-          selectedElement: element,
+          selectedElement: element.filter((obj, i) => {
+            return i === element.findIndex((o) => obj.id === o.id);
+          }),
         })),
       addTrackAndElement: (element: Element) => {
         const id = nanoid();
@@ -311,6 +325,25 @@ export const useStore = create<StoreTypes>()(
         get().updateMaxTime();
         get().updateTime(get().getCurrentTimeInMs());
         get().canvas?.requestRenderAll();
+      },
+      removeTrackAndElement: (elementIds: string[]) => {
+        set((state) => ({
+          ...state,
+          projects: state.projects.map((project) => {
+            return project.id === state.currentProjectId
+              ? {
+                  ...project,
+                  tracks:
+                    project.tracks.filter(
+                      (track) => !elementIds?.includes(track.elements[0].id)
+                    ) ?? [],
+                }
+              : project;
+          }),
+        }));
+        get().refreshTracks(get().canvas);
+        get().updateMaxTime();
+        get().updateTime(get().getCurrentTimeInMs());
       },
 
       addElementToCanvas: (element: Element) => {
@@ -339,6 +372,14 @@ export const useStore = create<StoreTypes>()(
             });
             videoObject.setControlsVisibility({ mtr: false });
             element.fabricObject = videoObject;
+            videoObject.on("selected", () => {
+              get().setSelectedElement([...get().selectedElement, element]);
+            });
+            videoObject.on("deselected", () => {
+              get().setSelectedElement(
+                get().selectedElement.filter((el) => el.id !== element.id)
+              );
+            });
             get().canvas?.add(videoObject);
             // get().canvas?.centerObject(videoObject);
             // console.log(get().canvas?.getObjects());
@@ -369,6 +410,14 @@ export const useStore = create<StoreTypes>()(
             });
             imageObject.setControlsVisibility({ mtr: false });
             element.fabricObject = imageObject;
+            imageObject.on("selected", () => {
+              get().setSelectedElement([...get().selectedElement, element]);
+            });
+            imageObject.on("deselected", () => {
+              get().setSelectedElement(
+                get().selectedElement.filter((el) => el.id !== element.id)
+              );
+            });
             get().canvas?.add(imageObject);
             // get().canvas?.centerObject(imageObject);
             get().canvas?.on("object:modified", (e) => {
@@ -392,9 +441,13 @@ export const useStore = create<StoreTypes>()(
             });
             text.on("selected", (e) => {
               get().setDisableKeyboardShortcut(true);
+              get().setSelectedElement([...get().selectedElement, element]);
             });
             text.on("deselected", (e) => {
               get().setDisableKeyboardShortcut(false);
+              get().setSelectedElement(
+                get().selectedElement.filter((el) => el.id !== element.id)
+              );
             });
             text.on("changed", (e) => {
               // @ts-ignore
@@ -425,6 +478,14 @@ export const useStore = create<StoreTypes>()(
                   strokeWidth: STROKE_WIDTH,
                 });
                 element.fabricObject = shape;
+                shape.on("selected", (e) => {
+                  get().setSelectedElement([...get().selectedElement, element]);
+                });
+                shape.on("deselected", (e) => {
+                  get().setSelectedElement(
+                    get().selectedElement.filter((el) => el.id !== element.id)
+                  );
+                });
                 get().canvas?.on("object:modified", (e) => {
                   get().updatePlacement(e, element, shape);
                 });
@@ -445,6 +506,14 @@ export const useStore = create<StoreTypes>()(
                   strokeWidth: STROKE_WIDTH,
                 });
                 element.fabricObject = shape;
+                shape.on("selected", (e) => {
+                  get().setSelectedElement([...get().selectedElement, element]);
+                });
+                shape.on("deselected", (e) => {
+                  get().setSelectedElement(
+                    get().selectedElement.filter((el) => el.id !== element.id)
+                  );
+                });
                 get().canvas?.on("object:modified", (e) => {
                   get().updatePlacement(e, element, shape);
                 });
@@ -466,6 +535,14 @@ export const useStore = create<StoreTypes>()(
                   fill: "rgba(0,0,0,0)",
                 });
                 element.fabricObject = shape;
+                shape.on("selected", (e) => {
+                  get().setSelectedElement([...get().selectedElement, element]);
+                });
+                shape.on("deselected", (e) => {
+                  get().setSelectedElement(
+                    get().selectedElement.filter((el) => el.id !== element.id)
+                  );
+                });
                 get().canvas?.on("object:modified", (e) => {
                   get().updatePlacement(e, element, shape);
                 });
@@ -483,13 +560,12 @@ export const useStore = create<StoreTypes>()(
         get().canvas?.requestRenderAll();
       },
 
-      refreshTracks: (canvas) => {
+      refreshTracks: () => {
         const tracks =
           get().projects.find(
             (project) => project.id === get().currentProjectId
           )?.tracks ?? [];
-        if (!canvas) return;
-        // get().canvas?.remove(...(get().canvas?.getObjects() ?? []));
+        get().canvas?.remove(...(get().canvas?.getObjects() ?? []));
 
         for (let i = 0; i < tracks.length; i++) {
           const element = tracks[i].elements[0];
@@ -607,7 +683,8 @@ export const useStore = create<StoreTypes>()(
             )
           )
         );
-        get().setMaxTime(newMaxTime);
+
+        get().setMaxTime(Math.max(0, newMaxTime));
       },
       currentKeyFrame: 0,
       getCurrentTimeInMs: () => (get().currentKeyFrame * 1000) / get().fps,
@@ -736,6 +813,7 @@ export const useStore = create<StoreTypes>()(
             ([key]) =>
               !["fileURLCache"].includes(key) &&
               !["currentProjectId"].includes(key) &&
+              !["selectedElement"].includes(key) &&
               !["canvas"].includes(key) &&
               !["disableKeyboardShortcut"].includes(key) &&
               !["playing"].includes(key) &&
