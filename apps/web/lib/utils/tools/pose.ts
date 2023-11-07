@@ -150,6 +150,7 @@ class Skeleton {
       this.#drawSubtree(this.#rootJoint, coords);
       return;
     }
+    console.log(coords);
 
     /** @type {Joint} */
     const parent = joint.getParent();
@@ -157,22 +158,24 @@ class Skeleton {
       Bijection.FORWARD,
       parent
     );
-    const px = parentCircle.left;
-    const py = parentCircle.top;
-
     const { x, y } = coords;
-    const rawAngle = toDegrees(Math.atan2(py - y, x - px));
-    const newAngle = rawAngle < 0 ? rawAngle + 360 : rawAngle;
+    this.#drawSubtree(joint, { x, y });
+    // const px = parentCircle.left;
+    // const py = parentCircle.top;
 
-    const jointPlacement = parent.getChildPlacement(joint);
-    if (jointPlacement) {
-      const { angle: oldAngle } = jointPlacement;
-      jointPlacement.angle = newAngle;
-      const dTheta = newAngle - oldAngle;
-      joint.transmitPlacementChange(dTheta);
+    // const { x, y } = coords;
+    // const rawAngle = toDegrees(Math.atan2(py - y, x - px));
+    // const newAngle = rawAngle < 0 ? rawAngle + 360 : rawAngle;
 
-      this.#drawSubtree(parent, { x: px, y: py });
-    }
+    // const jointPlacement = parent.getChildPlacement(joint);
+    // if (jointPlacement) {
+    //   const { angle: oldAngle } = jointPlacement;
+    //   jointPlacement.angle = newAngle;
+    //   const dTheta = newAngle - oldAngle;
+    //   joint.transmitPlacementChange(dTheta);
+
+    //   this.#drawSubtree(parent, { x: px, y: py });
+    // }
   }
 
   /** Draws the skeleton starting from the root joint. */
@@ -230,30 +233,40 @@ export function buildHumanSkeleton(canvas: fabric.Canvas, posn: Posn) {
   const root = new Joint("hips");
   const leftFoot = new Joint("left foot");
   const rightFoot = new Joint("left foot");
+  const leftHip = new Joint("left hip");
+  const rightHip = new Joint("left hip");
   const leftKnee = new Joint("left knee");
   const rightKnee = new Joint("left knee");
   const chest = new Joint("chest");
   const leftWrist = new Joint("left wrist");
   const rightWrist = new Joint("right wrist");
-  const leftElbow = new Joint("left elbow");
-  const rightElbow = new Joint("right elbow");
+  const leftShoulder = new Joint("left shoulder");
+  const rightShoulder = new Joint("right shoulder");
   const leftHand = new Joint("left hand");
   const rightHand = new Joint("right hand");
-  const head = new Joint("head");
+  // const head = new Joint("head");
+  const nose = new Joint("nose");
+  const leftEye = new Joint("left eye");
+  const rightEye = new Joint("right eye");
+  const leftEar = new Joint("left ear");
+  const rightEar = new Joint("right ear");
 
-  rightElbow.addChild(rightWrist.addChild(rightHand, 1.1, 315), 1.75, 315);
-  leftElbow.addChild(leftWrist.addChild(leftHand, 1.1, 225), 1.75, 225);
+  rightShoulder.addChild(rightWrist.addChild(rightHand, 1.1, 315), 2.5, 315);
+  leftShoulder.addChild(leftWrist.addChild(leftHand, 1.1, 225), 2.5, 225);
   chest
-    .addChild(leftElbow, 2, 225)
-    .addChild(rightElbow, 2, 315)
-    .addChild(head, 2, 90);
+    .addChild(leftShoulder, 2, 180)
+    .addChild(rightShoulder, 2, 360)
+    .addChild(nose, 2.5, 90);
+
+  nose.addChild(leftEye.addChild(leftEar, 1.2, 215), 1.2, 145);
+  nose.addChild(rightEye.addChild(rightEar, 1.2, 325), 1.2, 35);
 
   leftKnee.addChild(leftFoot, 2, 240);
   rightKnee.addChild(rightFoot, 2, 300);
   root
     .addChild(leftKnee, 3.5, 240)
     .addChild(rightKnee, 3.5, 300)
-    .addChild(chest, 2.75, 90);
+    .addChild(chest, 3.5, 90);
 
   return new Skeleton(canvas, root, posn);
 }
