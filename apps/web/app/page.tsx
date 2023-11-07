@@ -19,7 +19,7 @@ import {
   ContextMenuSeparator,
   ContextMenuShortcut,
   ContextMenuTrigger,
-} from "ui/components/ui/context-menu";
+} from "@/ui/context-menu";
 import { useEffect, useMemo, useState } from "react";
 import { colors } from "@/lib/constants/colors";
 import { cn } from "@/lib/utils";

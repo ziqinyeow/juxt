@@ -1,7 +1,10 @@
 {
   "name": "web",
   "version": "1.0.0",
-  "scripts": {},
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",

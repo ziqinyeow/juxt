@@ -22,6 +22,7 @@
       "react": ["./node_modules/@types/react"],
       "@/*": ["./*"],
       "@/lib/*": ["./lib/*"],
+      // "@/ui/*": ["../../packages/ui/components/*"]
       "@/ui/*": ["./components/ui/*"]
     }
   },
