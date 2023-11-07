@@ -10,7 +10,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "shadcn/ui/dropdown-menu";
+} from "@/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import Tooltip from "../Tooltip";
 import { IconFocusCentered } from "@tabler/icons-react";

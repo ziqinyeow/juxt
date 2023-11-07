@@ -43,7 +43,7 @@
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
     "zustand": "^4.4.1",
-    "shadcn": "workspace:*"
+    "tailwind": "workspace:*"
   },
   "devDependencies": {
     "@types/fabric": "^5.3.3",

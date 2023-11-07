@@ -3,7 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import clsx from "clsx";
-import { TooltipProvider } from "shadcn/ui/tooltip";
+import { TooltipProvider } from "@/ui/tooltip";
 import Dropzone from "@/components/Dropzone";
 import Loader from "@/layout/loader";
 

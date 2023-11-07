@@ -24,7 +24,9 @@ const nextConfig = {
     return config;
   },
   // ignoreBuildErrors: true,
-  transpilePackages: ["shadcn"],
+  transpilePackages: [
+    // "ui"
+  ],
 };
 
 module.exports = nextConfig;

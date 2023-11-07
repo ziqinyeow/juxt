@@ -8,7 +8,7 @@ import {
   Tooltip as UITooltip,
   TooltipContent,
   TooltipTrigger,
-} from "shadcn/ui/tooltip";
+} from "@/ui/tooltip";
 
 type Props = {
   className?: string;

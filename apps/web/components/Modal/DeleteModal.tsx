@@ -1,9 +1,4 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "shadcn/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/ui/dialog";
 import { colors } from "@/lib/constants/colors";
 import { Tag } from "@/lib/types/project";
 import { cn } from "@/lib/utils";

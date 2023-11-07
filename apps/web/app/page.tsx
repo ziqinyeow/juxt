@@ -19,7 +19,7 @@ import {
   ContextMenuSeparator,
   ContextMenuShortcut,
   ContextMenuTrigger,
-} from "shadcn/ui/context-menu";
+} from "ui/components/ui/context-menu";
 import { useEffect, useMemo, useState } from "react";
 import { colors } from "@/lib/constants/colors";
 import { cn } from "@/lib/utils";
@@ -300,7 +300,7 @@ export default function Home() {
                   {filteredProjects.map((project, i) => (
                     <ContextMenu
                       key={i}
-                      onOpenChange={(o) => {
+                      onOpenChange={() => {
                         // setContextMenuOpen(project.id);
                       }}
                     >

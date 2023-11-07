@@ -5,7 +5,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "shadcn/ui/dropdown-menu";
+} from "@/ui/dropdown-menu";
 import type { Cursor } from "@/lib/types/cursor";
 import { cn } from "@/lib/utils";
 import { ChevronDown, MousePointer, Slice } from "lucide-react";
