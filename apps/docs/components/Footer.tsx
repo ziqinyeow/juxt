@@ -32,7 +32,7 @@ const navigation = {
     { name: "Blog", href: "/blog" },
     {
       name: "Releases",
-      href: "https://github.com/ziqinyeow/video-editor/release",
+      href: "https://github.com/ziqinyeow/juxt/release",
     },
   ],
   app: [
@@ -50,7 +50,7 @@ const navigation = {
   support: [
     {
       name: "GitHub",
-      href: "https://github.com/ziqinyeow/video-editor",
+      href: "https://github.com/ziqinyeow/juxt",
     },
     // {
     //   name: "Discord",

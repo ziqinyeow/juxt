@@ -91,7 +91,7 @@ function Card({
           {title == "sdk" ? (
             <>
               <div className="font-extrabold text-2xl lg:text-3xl leading-tight xl:leading-snug text-center pb-4 bg-clip-text text-transparent bg-gradient-to-b from-black/80 to-black dark:from-white dark:to-[#AAAAAA]">
-                RTM - SDK
+                Juxtapose - SDK
               </div>
               {/* <SDKLogo
                 alt={alt}
@@ -101,7 +101,7 @@ function Card({
           ) : (
             <>
               <div className="font-extrabold text-2xl lg:text-3xl leading-tight xl:leading-snug text-center pb-4 bg-clip-text text-transparent bg-gradient-to-b from-black/80 to-black dark:from-white dark:to-[#AAAAAA]">
-                RTM - App
+                Juxt - App
               </div>
               {/* <AppLogo
                 alt={alt}
@@ -168,7 +168,7 @@ function LandingPage() {
             Analyze With Ease
           </h1>
           <p className="mx-6 text-xl max-h-[112px] md:max-h-[96px] w-[315px] md:w-[660px] md:text-2xl font-space-grotesk text-center text-[#666666] dark:text-[#888888]">
-            RTM is a sport platform optimized for real time multi pose
+            Juxt is a sport platform optimized for real time multi pose
             estimation, written in Typescript & Python
           </p>
         </FadeIn>

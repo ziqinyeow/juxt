@@ -136,7 +136,7 @@ const LogoAnimated = ({ height = 32, className = "" }: LogoProps) => {
         </g>
       </svg>
       <span className="font-space-grotesk font-extrabold text-lg tracking-widest">
-        RTM
+        JUXT
       </span>
     </div>
   );

@@ -16,7 +16,7 @@ const config = {
   },
   logoLink: false,
   i18n: [],
-  docsRepositoryBase: `${REPO_LINK}/tree/main`,
+  docsRepositoryBase: `${REPO_LINK}/tree/main/apps/docs/`,
   toc: {
     float: true,
     backToTop: true,
