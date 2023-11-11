@@ -699,7 +699,6 @@ export const useStore = create<StoreTypes>()(
         if (isPlaying) {
           get().setPlaying(false);
         }
-        // get().updateVideoElement();
         const currentKeyFrame = get().currentKeyFrame;
         const fps = get().fps;
         const maxTime = get().maxTime;
@@ -721,6 +720,7 @@ export const useStore = create<StoreTypes>()(
         if (isPlaying) {
           get().setPlaying(true);
         }
+        get().updateVideoElement();
       },
 
       startedTime: 0,
@@ -782,7 +782,12 @@ export const useStore = create<StoreTypes>()(
         const isPlaying = get().playing;
         // const elapsedTime = Date.now() - get().startedTime;
         // const newTime = get().startedTimePlay + elapsedTime;
-        get().tracks.forEach((track) => {
+        // console.log("updating");
+        const tracks = get().projects.find(
+          (project) => project.id === get().currentProjectId
+        )?.tracks;
+
+        tracks?.forEach((track) => {
           track.elements.forEach((element) => {
             if (element.type === "video") {
               const video = document.getElementById(

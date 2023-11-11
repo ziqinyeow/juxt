@@ -3,7 +3,7 @@
 import { ButtonProps, DivProps } from "@/lib/types/html";
 import { cn } from "@/lib/utils";
 import { IconFileUpload } from "@tabler/icons-react";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Tooltip from "../Tooltip";
 import { Tab, getTabIcon } from "./utils";
 import Explorer from "./Explorer";
@@ -48,6 +48,7 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
     mergeFileListToBucket,
   } = useStore();
   const [tab, setTab] = useState<Tab>("explorer");
+  // console.log(fileURLCache);
 
   const bucket = useMemo(
     () => projects.find((project) => project.id === projectId),
@@ -76,7 +77,7 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
       ])}
     >
       {medias?.map((media, i) => (
-        <div key={i} className="hidden">
+        <div key={i} className="absolute z-[-10]">
           {media.type === "image" ? (
             <>
               <Image

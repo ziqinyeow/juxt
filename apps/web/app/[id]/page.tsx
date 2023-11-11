@@ -14,6 +14,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   useEffect(() => {
     setCurrentProjectId(params.id);
+    // refreshTracks(canvas);
   }, [params.id, setCurrentProjectId]);
 
   // console.log(projects.find((project) => project.id === params.id));
