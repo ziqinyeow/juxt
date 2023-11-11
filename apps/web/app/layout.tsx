@@ -10,7 +10,7 @@ import Loader from "@/layout/loader";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "RTM",
+  title: "JUXT",
   description: "Video Annotation Tools",
 };
 

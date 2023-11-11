@@ -18,7 +18,7 @@ const Logo = () => {
         height={25}
       />
       <div className="font-mono text-lg font-bold tracking-widest text-black select-none dark:text-primary-100">
-        RTM
+        JUXT
       </div>
       <div className="px-2 py-1 font-mono tracking-widest rounded bg-light-300 dark:bg-primary-400">
         alpha
