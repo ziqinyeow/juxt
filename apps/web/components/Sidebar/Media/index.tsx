@@ -143,6 +143,7 @@ const Media = ({ projectId }: { projectId: string }) => {
                 ) : media.type === "video" ? (
                   <>
                     <video
+                      // id={media.path}
                       id={media.path + "thumbnail"}
                       muted
                       className="rounded"

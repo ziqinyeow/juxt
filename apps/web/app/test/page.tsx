@@ -1,59 +1,74 @@
 "use client";
+import React, { useRef, useState } from "react";
+// import "./VideoPlayer.css";
 
-import Canvas from "@/components/Canvas";
-import Tools from "@/components/Canvas/tools";
-import Panel from "@/components/Panel";
-import { Slider } from "@/ui/slider";
-import Layout from "@/layout/layout";
-import { isHtmlVideoElement } from "@/lib/utils/html";
-import { useCallback, useEffect, useState } from "react";
-import useKeyboardJs from "react-use/lib/useKeyboardJs";
+const playframes = () => {};
 
-const fps = 30;
+const VideoPlayer = () => {
+  const [currentKeyframe, setCurrentKeyframe] = useState(0);
 
-export default function Home() {
-  const [space] = useKeyboardJs("space");
-  const [playing, setPlaying] = useState(false);
-  const [time, setTime] = useState(false);
-  const [currentTimeInMs, setCurrentTimeInMs] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(1);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const playframes = useCallback(() => {
-    const start = performance.now();
-    requestAnimationFrame(() => {
-      playframes();
-    });
-  }, []);
-
-  useEffect(() => {
-    if (space) {
-      setPlaying(!playing);
+  // console.log(currentTime, videoRef.current?.playbackRate);
+  const handlePlayPause = () => {
+    if (isPlaying) {
+      videoRef.current?.pause();
+      setIsPlaying(false);
+    } else {
+      videoRef.current?.play();
+      setIsPlaying(true);
     }
-  }, [space]);
-
-  useEffect(() => {
-    if (playing) {
-    }
-  }, [playing]);
-
-  useEffect(() => {
-    const video = document.getElementById("track");
-    if (isHtmlVideoElement(video)) {
-      video.currentTime = currentTimeInMs / 1000;
-    }
-  }, [currentTimeInMs]);
-
+  };
+  const handleTimeUpdate = () => {
+    setCurrentTime((videoRef.current?.currentTime ?? 1) * 1000);
+  };
+  const handleDurationChange = () => {
+    setDuration(videoRef.current?.duration ?? 1);
+  };
+  const handleVolumeChange = (event: any) => {
+    setVolume(event.target.value);
+    // @ts-ignore
+    videoRef.current.volume = event.target.value;
+  };
+  const handleSeek = (event: any) => {
+    // @ts-ignore
+    videoRef.current.currentTime = event.target.value / 1000;
+  };
   return (
-    <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-black">
-      <video id="track" src="/track.mp4"></video>
-      <Slider
-        onValueChange={(e) => {
-          setCurrentTimeInMs(e[0]);
-        }}
-        min={0}
-        max={30000}
-        value={[currentTimeInMs]}
-        className="w-[90%] h-32"
+    <div className="video-player">
+      <>{currentTime}</>
+      <video
+        ref={videoRef}
+        src="/track.mp4"
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={handleDurationChange}
       />
+      <div className="controls">
+        <button onClick={handlePlayPause}>
+          {isPlaying ? "Pause" : "Play"}
+        </button>
+        <input
+          className="w-[800px]"
+          type="range"
+          min="0"
+          max={duration * 1000}
+          value={currentTime}
+          onChange={handleSeek}
+        />
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.1"
+          value={volume}
+          onChange={handleVolumeChange}
+        />
+      </div>
     </div>
   );
-}
+};
+export default VideoPlayer;
