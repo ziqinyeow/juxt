@@ -1,29 +1,34 @@
-from typing import Any, Optional
-from rtm.rtm import Result
-from .constants import BODY_JOINTS_MAP
-from .derivatives import calculate_angle
-
-# setup logger
-from rtm.utils import LOGGER
 import csv
 import json
+import os
 from pathlib import Path
+from typing import Any, Generator, List, Literal, Optional, Union
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import os
+from pydantic import BaseModel
+
+from rtm.rtm import Result
+# setup logger
+from rtm.utils import LOGGER
+
+from .utils import calculate_angle
+from .constants import BODY_JOINTS_MAP
 
 
 class Record:
     def __init__(self, *args: Any, **kwds: Any) -> Any:
         self.frequency = None
-
         pass
 
     def calc(self) -> Any:
         pass
 
     def export(self):
+        pass
+
+    def update(self):
         pass
 
 
@@ -102,6 +107,9 @@ class HumanProfile(Record):
         # Create a new column 'left_angle' in the DataFrame
         df["left_angle"] = angles
         self.df = df
+
+    def derive(self):
+        pass
 
     def calculate_and_save(self, save_dirs=None, human=None):
         if save_dirs is None:
@@ -258,6 +266,7 @@ class Kinematics:
             if save_dir_check.exists() is False or overwrite:
                 for each in self.profileSet.keys():
                     self.profileSet[each].calculate()
-                    self.profileSet[each].calculate_and_save(
-                        save_dirs=str(Path(self.save_dirs)), human=str(each)
-                    )
+                    # self.profileSet[each].calculate_and_save(
+                    #     save_dirs=str(Path(self.save_dirs)), human=str(each)
+                    # )
+
