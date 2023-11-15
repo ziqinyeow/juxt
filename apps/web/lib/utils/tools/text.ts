@@ -1,12 +1,12 @@
 import { fabric } from "fabric";
-import { IEvent } from "fabric/fabric-impl";
+// import { IEvent } from "fabric/fabric-impl";
 
 export const drawText = (
   canvas: fabric.Canvas,
   mouseUp: (shape: fabric.IText) => void
 ) => {
   let text: any = null;
-  const onMouseDown = (o: IEvent) => {
+  const onMouseDown = (o: any) => {
     const pointer = canvas?.getPointer(o.e);
     text = new fabric.IText("text", {
       left: pointer.x,
@@ -17,7 +17,7 @@ export const drawText = (
     });
     canvas?.add(text);
   };
-  const onMouseUp = (o: IEvent) => {
+  const onMouseUp = (o: any) => {
     mouseUp(text);
   };
   canvas?.on("mouse:down", onMouseDown);

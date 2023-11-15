@@ -1,6 +1,7 @@
 "use client";
 
 import Canvas from "@/components/Canvas";
+// import Canvas from "@/components/LegacyCanvas";
 import Dropzone from "@/components/Dropzone";
 import Panel from "@/components/Panel";
 import Layout from "@/layout/layout";
@@ -32,7 +33,8 @@ const Page = ({ params }: { params: { id: string } }) => {
             ])}
           >
             <div className="relative h-full">
-              <Canvas projectId={params?.id} />
+              {/* <Canvas projectId={params?.id} /> */}
+              <Canvas />
             </div>
             <div className="">
               <Panel projectId={params?.id} />

@@ -1,5 +1,5 @@
 import { fabric } from "fabric";
-import { IEvent, Object } from "fabric/fabric-impl";
+// import { IEvent, Object } from "fabric/fabric-impl";
 
 const STROKE_COLOR = "#2BEBC8";
 const STROKE_WIDTH = 5;

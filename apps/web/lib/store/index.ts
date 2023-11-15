@@ -10,18 +10,21 @@ import {
 import { BucketType, FileWithPath } from "../types/file";
 import { isHtmlImageElement, isHtmlVideoElement } from "../utils/html";
 import { nanoid } from "nanoid";
-import { IEvent } from "fabric/fabric-impl";
+// import { IEvent } from "fabric/fabric-impl";
 import { Project } from "../types/project";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { getFile, idbStorage, storeFile } from "./storage";
 import { STROKE_COLOR, STROKE_WIDTH } from "../constants/colors";
 import { merge } from "../utils/file";
 import { checkFileType } from "@/components/Dropzone/utils";
+import { FabricCanvas, Handler } from "@/canvas";
 
 export const useStore = create<StoreTypes>()(
   // @ts-ignore
   persist<StoreTypes>(
     (set, get) => ({
+      test: {},
+      setTest: (test: any) => set((state) => ({ ...state, test })),
       fileURLCache: {},
       setFileURLCache: (cache) => {
         set((state) => ({ ...state, fileURLCache: cache }));
@@ -151,8 +154,11 @@ export const useStore = create<StoreTypes>()(
         }));
       },
 
+      handler: null,
+      setHandler: (handler: Handler | null) =>
+        set((state) => ({ ...state, handler })),
       canvas: null,
-      setCanvas: (canvas: fabric.Canvas | null) =>
+      setCanvas: (canvas: FabricCanvas | null) =>
         set((state) => ({ ...state, canvas })),
 
       // medias
@@ -490,6 +496,7 @@ export const useStore = create<StoreTypes>()(
                   get().updatePlacement(e, element, shape);
                 });
                 get().canvas?.add(shape);
+                // get().canvas?.centerObject(shape);
                 break;
               }
               case "triangle": {
@@ -565,7 +572,11 @@ export const useStore = create<StoreTypes>()(
           get().projects.find(
             (project) => project.id === get().currentProjectId
           )?.tracks ?? [];
-        get().canvas?.remove(...(get().canvas?.getObjects() ?? []));
+        get().canvas?.remove(
+          ...(get()
+            .canvas?.getObjects()
+            .filter((o: any) => o.id !== "workarea") ?? [])
+        );
 
         for (let i = 0; i < tracks.length; i++) {
           const element = tracks[i].elements[0];
@@ -585,12 +596,7 @@ export const useStore = create<StoreTypes>()(
         }
       },
 
-      updatePlacement: (e: IEvent, element: Element, object: any) => {
-        // const props = get().tracks.find((t) => {
-        //   const ret = t.elements.find((_t) => _t.id === element.id);
-        //   return ret;
-        // })?.elements?.[0];
-
+      updatePlacement: (e: any, element: Element, object: any) => {
         if (!e.target) return;
         const target = e.target;
         if (target != object) return;
@@ -819,6 +825,7 @@ export const useStore = create<StoreTypes>()(
               !["fileURLCache"].includes(key) &&
               !["currentProjectId"].includes(key) &&
               !["selectedElement"].includes(key) &&
+              !["handler"].includes(key) &&
               !["canvas"].includes(key) &&
               !["disableKeyboardShortcut"].includes(key) &&
               !["playing"].includes(key) &&

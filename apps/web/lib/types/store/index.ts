@@ -1,10 +1,14 @@
 import { fabric } from "fabric";
 import { Element, Placement, Shape, ShapeType, Tracks } from "../track";
 import { BucketType, FileWithPath } from "../file";
-import { IEvent } from "fabric/fabric-impl";
+// import { IEvent } from "fabric/fabric-impl";
 import { Project } from "../project";
+import { FabricCanvas } from "@/canvas";
+// import { IEvent } from "fabric/fabric-impl";
 
 export interface StoreTypes {
+  test: any;
+  setTest: any;
   fileURLCache: Record<string, string>;
   setFileURLCache: (cache: Record<string, string>) => void;
   addFileURLCache: (cache: Record<string, string>) => void;
@@ -20,8 +24,8 @@ export interface StoreTypes {
   mergeBucket: (projectId: string, bucket: BucketType) => void;
   mergeFileListToBucket: (projectId: string, fileList: FileList | null) => void;
 
-  canvas: fabric.Canvas | null;
-  setCanvas: (canvas: fabric.Canvas | null) => void;
+  canvas: FabricCanvas | null;
+  setCanvas: (canvas: FabricCanvas | null) => void;
 
   videos: string[];
   addVideo: (media: FileWithPath) => void;
@@ -42,7 +46,7 @@ export interface StoreTypes {
   addText: (text: fabric.IText, properties: any, placement: Placement) => void;
   addTrackAndElement: (element: Element) => void;
   refreshTracks: (canvas?: fabric.Canvas | null) => void;
-  updatePlacement: (e: IEvent, element: Element, object: any) => void;
+  updatePlacement: (e: any, element: Element, object: any) => void;
   addElementToCanvas: (element: Element) => void;
   removeTrackAndElement: (elementIds: string[]) => void;
   updateElement: (elementId: string, data: any) => void;

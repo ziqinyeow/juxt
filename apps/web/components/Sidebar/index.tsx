@@ -80,18 +80,20 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
         <div key={i} className="absolute z-[-10]">
           {media.type === "image" ? (
             <>
-              <Image
-                id={media.path}
-                // src={media.url ?? ""}
-                src={fileURLCache[media.id] ?? ""}
-                width={0}
-                height={0}
-                className="z-0 hidden object-contain text-white rounded"
-                alt={media.path}
-                onLoad={() => {
-                  refreshTracks(canvas);
-                }}
-              />
+              {fileURLCache[media.id] && (
+                <Image
+                  id={media.path}
+                  // src={media.url ?? ""}
+                  src={fileURLCache[media.id] ?? ""}
+                  width={0}
+                  height={0}
+                  className="z-0 hidden object-contain text-white rounded"
+                  alt={media.path}
+                  onLoad={() => {
+                    refreshTracks(canvas);
+                  }}
+                />
+              )}
             </>
           ) : media.type === "video" ? (
             <>

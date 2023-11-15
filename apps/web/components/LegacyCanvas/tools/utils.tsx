@@ -12,7 +12,6 @@ import { Tool, Tools } from "@/lib/types/tools";
 import { useEffect, useState } from "react";
 import Tooltip from "@/components/Tooltip";
 import { useStore } from "@/lib/store";
-import { IEvent } from "fabric/fabric-impl";
 import { DivProps } from "@/lib/types/html";
 
 export const Row = ({
