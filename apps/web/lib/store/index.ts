@@ -259,7 +259,7 @@ export const useStore = create<StoreTypes>()(
             get().selectedElement.filter((el) => el.id !== element.id)
           );
         });
-        get().canvas?.on("object:modified", (e) => {
+        shape.on("modified", (e) => {
           get().updatePlacement(e, element, shape);
         });
         get().addTrackAndElement(element);
@@ -424,11 +424,11 @@ export const useStore = create<StoreTypes>()(
                 get().selectedElement.filter((el) => el.id !== element.id)
               );
             });
-            get().canvas?.add(imageObject);
-            // get().canvas?.centerObject(imageObject);
-            get().canvas?.on("object:modified", (e) => {
+            imageObject.on("modified", (e: any) => {
               get().updatePlacement(e, element, imageObject);
             });
+            get().canvas?.add(imageObject);
+            // get().canvas?.centerObject(imageObject);
             break;
           }
           case "text": {
@@ -469,6 +469,7 @@ export const useStore = create<StoreTypes>()(
           case "shape": {
             // @ts-ignore
             const type = element.properties!.type as ShapeType;
+            // const center = get().canvas?.getCenter();
             switch (type) {
               case "square": {
                 const shape = new fabric.Rect({
@@ -492,9 +493,11 @@ export const useStore = create<StoreTypes>()(
                     get().selectedElement.filter((el) => el.id !== element.id)
                   );
                 });
-                get().canvas?.on("object:modified", (e) => {
+                shape?.on("modified", (e) => {
+                  console.log(shape.left, shape.top);
                   get().updatePlacement(e, element, shape);
                 });
+                // console.log(shape.left, shape.top);
                 get().canvas?.add(shape);
                 // get().canvas?.centerObject(shape);
                 break;
@@ -521,7 +524,7 @@ export const useStore = create<StoreTypes>()(
                     get().selectedElement.filter((el) => el.id !== element.id)
                   );
                 });
-                get().canvas?.on("object:modified", (e) => {
+                shape.on("modified", (e) => {
                   get().updatePlacement(e, element, shape);
                 });
                 get().canvas?.add(shape);
@@ -550,7 +553,7 @@ export const useStore = create<StoreTypes>()(
                     get().selectedElement.filter((el) => el.id !== element.id)
                   );
                 });
-                get().canvas?.on("object:modified", (e) => {
+                shape.on("modified", (e) => {
                   get().updatePlacement(e, element, shape);
                 });
                 get().canvas?.add(shape);
@@ -572,6 +575,7 @@ export const useStore = create<StoreTypes>()(
           get().projects.find(
             (project) => project.id === get().currentProjectId
           )?.tracks ?? [];
+
         get().canvas?.remove(
           ...(get()
             .canvas?.getObjects()
@@ -585,8 +589,6 @@ export const useStore = create<StoreTypes>()(
             case "image":
             case "text":
             case "shape": {
-              const obj = element.fabricObject as fabric.Object;
-              get().canvas?.remove(obj);
               get().addElementToCanvas(element);
             }
 
@@ -600,11 +602,12 @@ export const useStore = create<StoreTypes>()(
         if (!e.target) return;
         const target = e.target;
         if (target != object) return;
+        const center = get().canvas?.getCenter();
         const placement = element.placement;
         const newPlacement: Placement = {
           ...placement,
-          x: target.left ?? placement.x,
-          y: target.top ?? placement.y,
+          x: (target.left ?? placement.x) - (center?.left ?? 0),
+          y: (target.top ?? placement.y) - (center?.top ?? 0),
           rotation: target.angle ?? placement.rotation,
           width:
             target.width && target.scaleX

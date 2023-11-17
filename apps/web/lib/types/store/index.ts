@@ -3,7 +3,7 @@ import { Element, Placement, Shape, ShapeType, Tracks } from "../track";
 import { BucketType, FileWithPath } from "../file";
 // import { IEvent } from "fabric/fabric-impl";
 import { Project } from "../project";
-import { FabricCanvas } from "@/canvas";
+import { FabricCanvas, Handler } from "@/canvas";
 // import { IEvent } from "fabric/fabric-impl";
 
 export interface StoreTypes {
@@ -24,6 +24,8 @@ export interface StoreTypes {
   mergeBucket: (projectId: string, bucket: BucketType) => void;
   mergeFileListToBucket: (projectId: string, fileList: FileList | null) => void;
 
+  handler: Handler | null;
+  setHandler: (handler: Handler | null) => void;
   canvas: FabricCanvas | null;
   setCanvas: (canvas: FabricCanvas | null) => void;
 

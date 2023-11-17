@@ -1,9 +1,7 @@
 import { Canvas as _Canvas, FabricCanvas, Handler } from "@/canvas";
 import { useTheme } from "next-themes";
-import { fabric } from "fabric";
 import React, { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
-import Navbar from "@/components/Navbar";
 import Tooltip from "@/components/Tooltip";
 import { Button } from "@/components/Button";
 import { IconFocusCentered } from "@tabler/icons-react";
@@ -140,13 +138,13 @@ const Canvas = () => {
       </div>
       <_Canvas
         init={(c) => {
-          //   setCanvas(c.canvas);
-          //   setHandler(c.handler);
-          refreshTracks();
+          setCanvas(c.canvas);
+          setHandler(c.handler);
+          //   refreshTracks();
         }}
-        ref={(c: any) => {
-          setCanvas(c?.canvas);
-        }}
+        // ref={(c: any) => {
+        //   //   setCanvas(c?.canvas);
+        // }}
         minZoom={20}
         maxZoom={500}
         objectOption={{
@@ -224,4 +222,4 @@ const Canvas = () => {
   );
 };
 
-export default Canvas;
+export default React.memo(Canvas);

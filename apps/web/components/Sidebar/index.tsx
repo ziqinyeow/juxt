@@ -90,7 +90,7 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
                   className="z-0 hidden object-contain text-white rounded"
                   alt={media.path}
                   onLoad={() => {
-                    refreshTracks(canvas);
+                    refreshTracks();
                   }}
                 />
               )}

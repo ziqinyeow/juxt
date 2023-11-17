@@ -11,11 +11,12 @@ import { notFound } from "next/navigation";
 import React, { useEffect } from "react";
 
 const Page = ({ params }: { params: { id: string } }) => {
-  const { projects, setCurrentProjectId, hidePanel } = useStore();
+  const { projects, setCurrentProjectId, hidePanel, refreshTracks } =
+    useStore();
 
   useEffect(() => {
     setCurrentProjectId(params.id);
-    // refreshTracks(canvas);
+    refreshTracks();
   }, [params.id, setCurrentProjectId]);
 
   // console.log(projects.find((project) => project.id === params.id));

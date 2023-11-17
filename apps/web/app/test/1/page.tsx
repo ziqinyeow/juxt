@@ -27,9 +27,9 @@ const One = () => {
   const [canvasZoomRatio, setCanvasZoomRatio] = useState(1);
   const zoomValue = parseInt((canvasZoomRatio * 100).toFixed(2), 10);
   // console.log(zoomValue);
-  const { test, setTest } = useStore();
-  const [canvas, setCanvas] = useState<FabricCanvas | null>(null);
-  const [handler, setHandler] = useState<Handler | null>(null);
+  const { test, setTest, canvas, setCanvas, handler, setHandler } = useStore();
+  // const [canvas, setCanvas] = useState<FabricCanvas | null>(null);
+  // const [handler, setHandler] = useState<Handler | null>(null);
   const { theme } = useTheme();
 
   useEffect(() => {
@@ -42,26 +42,26 @@ const One = () => {
         handler?.zoomHandler.zoomOut();
       }
     }
-  }, [c, plus, minus, canvas, handler?.zoomHandler]);
+  }, [c, plus, minus]);
   console.log(canvas?.getCenter());
 
   useEffect(() => {
     if (canvas) {
       canvas.add(
-        // new fabric.Rect({
-        //   // @ts-ignore
-        //   id: "test",
-        //   width: 100,
-        //   height: 100,
-        //   left: 0,
-        //   top: 0,
-        // })
         new fabric.Rect({
-          width: test?.width ?? 100,
-          height: test.height ?? 100,
-          left: test.left ?? 0,
-          top: test.top ?? 0,
+          // @ts-ignore
+          id: "test",
+          width: 100,
+          height: 100,
+          left: 0,
+          top: 0,
         })
+        // new fabric.Rect({
+        //   width: test?.width ?? 100,
+        //   height: test.height ?? 100,
+        //   left: test.left ?? 0,
+        //   top: test.top ?? 0,
+        // })
       );
       canvas.on("object:modified", (e) => {
         const { target } = e;
@@ -85,7 +85,7 @@ const One = () => {
         <div className="grid grid-cols-[300px_auto] w-full h-[calc(100vh_-_64px)]">
           {/* <Sidebar projectId={projectId} /> */}
           <div></div>
-          <Canvas />
+          {/* <Canvas /> */}
 
           <div className="w-full h-full relative">
             <div className="absolute z-20 flex items-center gap-1 p-1 text-white border rounded bg-light-200 dark:bg-primary-400 dark:border-primary-400 right-5 bottom-8">
@@ -177,12 +177,12 @@ const One = () => {
             </div>
             <_Canvas
               init={(c) => {
-                // setHandler(c.handler);
-                // setCanvas(c.canvas);
+                setHandler(c.handler);
+                setCanvas(c.canvas);
               }}
               ref={(c: any) => {
-                setHandler(c?.handler);
-                setCanvas(c?.canvas);
+                // setHandler(c?.handler);
+                // setCanvas(c?.canvas);
               }}
               minZoom={20}
               maxZoom={500}
