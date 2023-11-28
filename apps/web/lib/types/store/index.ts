@@ -4,14 +4,21 @@ import { BucketType, FileWithPath } from "../file";
 // import { IEvent } from "fabric/fabric-impl";
 import { Project } from "../project";
 import { FabricCanvas, Handler } from "@/canvas";
+import { SendMessage } from "react-use-websocket";
 // import { IEvent } from "fabric/fabric-impl";
 
 export interface StoreTypes {
+  lastWebsocketMessage: MessageEvent<any> | null;
+  setLastWebsocketMessage: (
+    lastWebsocketMessage: MessageEvent<any> | null
+  ) => void;
+  sendWebsocketMessage: SendMessage;
+  setSendWebsocketMessage: (sendWebsocketMessage: SendMessage) => void;
   test: any;
   setTest: any;
-  fileURLCache: Record<string, string>;
+  fileURLCache: Record<string, Record<string, string>>;
   setFileURLCache: (cache: Record<string, string>) => void;
-  addFileURLCache: (cache: Record<string, string>) => void;
+  addFileURLCache: (cache: Record<string, Record<string, any>>) => void;
   refreshFileURLCache: (projectId: string) => void;
   refreshAllFileURLCache: () => void;
 

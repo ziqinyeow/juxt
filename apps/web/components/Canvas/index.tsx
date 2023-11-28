@@ -1,4 +1,9 @@
-import { Canvas as _Canvas, FabricCanvas, Handler } from "@/canvas";
+import {
+  Canvas as _Canvas,
+  FabricCanvas,
+  FabricObject,
+  Handler,
+} from "@/canvas";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
 import { useStore } from "@/lib/store";
@@ -16,6 +21,7 @@ import { cn } from "@/lib/utils";
 import useKeyboardJs from "react-use/lib/useKeyboardJs";
 import Tools from "../LegacyCanvas/tools";
 import { tools } from "../LegacyCanvas/tools/tools";
+import { fabric } from "fabric";
 
 const Canvas = () => {
   const [c] = useKeyboardJs("c");
@@ -23,8 +29,7 @@ const Canvas = () => {
   const [minus] = useKeyboardJs("-");
   const [canvasZoomRatio, setCanvasZoomRatio] = useState(1);
   const zoomValue = parseInt((canvasZoomRatio * 100).toFixed(2), 10);
-  const { test, setTest, canvas, projects, setCanvas, refreshTracks } =
-    useStore();
+  const { canvas, setCanvas } = useStore();
   //   const [canvas, setCanvas] = useState<FabricCanvas | null>(null);
   const [handler, setHandler] = useState<Handler | null>(null);
   const { theme } = useTheme();
@@ -32,7 +37,11 @@ const Canvas = () => {
   useEffect(() => {
     if (canvas) {
       if (c) {
-        handler?.zoomHandler.zoomToFitPad();
+        const workarea = canvas
+          .getObjects()
+          // @ts-ignore
+          .find((obj) => obj.id === "workarea") as FabricObject;
+        handler?.zoomHandler.zoomToCenterWithObject(workarea, true);
       } else if (plus) {
         handler?.zoomHandler.zoomIn();
       } else if (minus) {
@@ -55,7 +64,12 @@ const Canvas = () => {
           <Button
             className="p-2 bg-light-300 dark:bg-primary-400"
             onClick={() => {
-              handler?.zoomHandler.zoomToFitPad();
+              // handler?.zoomHandler.zoomToFitPad();
+              const workarea = canvas
+                ?.getObjects()
+                // @ts-ignore
+                .find((obj) => obj.id === "workarea") as FabricObject;
+              handler?.zoomHandler.zoomToCenterWithObject(workarea, true);
             }}
           >
             <IconFocusCentered className="w-4 h-4 text-black dark:text-white" />
@@ -140,7 +154,7 @@ const Canvas = () => {
         init={(c) => {
           setCanvas(c.canvas);
           setHandler(c.handler);
-          //   refreshTracks();
+          // refreshTracks();
         }}
         // ref={(c: any) => {
         //   //   setCanvas(c?.canvas);

@@ -18,16 +18,29 @@ import { STROKE_COLOR, STROKE_WIDTH } from "../constants/colors";
 import { merge } from "../utils/file";
 import { checkFileType } from "@/components/Dropzone/utils";
 import { FabricCanvas, Handler } from "@/canvas";
+import {
+  addPoints,
+  getHeightAndWidthFromDataUrl,
+  getPoints,
+} from "../utils/pose";
 
 export const useStore = create<StoreTypes>()(
   // @ts-ignore
   persist<StoreTypes>(
     (set, get) => ({
+      lastWebsocketMessage: null,
+      setLastWebsocketMessage: (lastWebsocketMessage) => {
+        set((state) => ({ ...state, lastWebsocketMessage }));
+      },
+      sendWebsocketMessage: () => {},
+      setSendWebsocketMessage: (sendWebsocketMessage) => {
+        set((state) => ({ ...state, sendWebsocketMessage }));
+      },
       test: {},
       setTest: (test: any) => set((state) => ({ ...state, test })),
       fileURLCache: {},
       setFileURLCache: (cache) => {
-        set((state) => ({ ...state, fileURLCache: cache }));
+        set((state) => ({ ...state, fileURLCache: { cache } }));
       },
       addFileURLCache: (cache) => {
         // console.log({ file: { ...{ test: "test" }, ...cache } });
@@ -48,7 +61,7 @@ export const useStore = create<StoreTypes>()(
               const file = await getFile(f?.id);
               if (file) {
                 const url = URL.createObjectURL(file);
-                get().addFileURLCache({ [f.id]: url });
+                get().addFileURLCache({ [f.id]: { url, file } });
               }
             }
           });
@@ -62,13 +75,15 @@ export const useStore = create<StoreTypes>()(
               if (!(f.id in fileURLCache)) {
                 const file = await getFile(f?.id);
                 if (file) {
+                  // console.log(file);
                   const url = URL.createObjectURL(file);
-                  get().addFileURLCache({ [f.id]: url });
+                  get().addFileURLCache({ [f.id]: { url, file } });
                 }
               }
             });
           });
         });
+        // console.log("cache", get().fileURLCache);
       },
 
       projects: [],
@@ -570,11 +585,13 @@ export const useStore = create<StoreTypes>()(
         get().canvas?.requestRenderAll();
       },
 
-      refreshTracks: () => {
+      refreshTracks: async () => {
         const tracks =
           get().projects.find(
             (project) => project.id === get().currentProjectId
           )?.tracks ?? [];
+
+        // console.log("refresh");
 
         get().canvas?.remove(
           ...(get()
@@ -596,18 +613,117 @@ export const useStore = create<StoreTypes>()(
               break;
           }
         }
+        const canvas = get().canvas;
+        const center = canvas?.getCenter();
+        const id = "_Rekd4H8wA6m7BkHvU9Du";
+        // console.log(canvas?.getObjects());
+        const image = canvas?.getObjects().find((obj) => obj.name === id);
+
+        const imageElement = document.getElementById(
+          "/football.jpeg"
+        ) as HTMLImageElement;
+        const size = await getHeightAndWidthFromDataUrl(imageElement?.src);
+        [
+          [
+            [370.2985884348551, 221.90800952911377],
+            [376.7936407725016, 212.1654313802719],
+            [369.21607971191406, 210.0004140138626],
+            [352.97844886779785, 197.0103098154068],
+            [338.90583546956384, 190.5152577161789],
+            [324.8332220713297, 233.81560504436493],
+            [279.3678557078044, 227.32055294513702],
+            [296.6879952748617, 285.77602183818817],
+            [233.902489344279, 282.5284957885742],
+            [298.8530127207438, 308.50870418548584],
+            [207.92227999369305, 335.5714212656021],
+            [280.4503644307454, 340.98396468162537],
+            [224.15991083780926, 344.2314907312393],
+            [330.24576568603516, 430.8321853876114],
+            [239.31503295898438, 457.89490246772766],
+            [302.100538889567, 532.5880016088486],
+            [219.82987594604492, 545.5781058073044],
+          ],
+          [
+            [484.2794990539551, 236.9162654876709],
+            [495.3659453392029, 225.8298192024231],
+            [476.2166290283203, 224.82196044921875],
+            [521.5702729225159, 223.8141016960144],
+            [470.16947650909424, 225.8298192024231],
+            [558.8610467910767, 269.16774559020996],
+            [481.25592279434204, 271.18346309661865],
+            [626.3875832557678, 295.37207317352295],
+            [466.13804149627686, 329.6392707824707],
+            [691.8984022140503, 317.54496574401855],
+            [441.94943141937256, 379.02434968948364],
+            [589.096809387207, 374.99291467666626],
+            [536.688154220581, 376.0007734298706],
+            [535.6802954673767, 411.2758297920227],
+            [479.24020528793335, 442.5194511413574],
+            [546.7667417526245, 489.88881254196167],
+            [495.3659453392029, 512.0617051124573],
+          ],
+          [
+            [596.4959487915039, 159.50757217407227],
+            [603.3007173538208, 149.30041933059692],
+            [595.3618206977844, 148.16629123687744],
+            [633.9221758842468, 150.4345474243164],
+            [655.470609664917, 150.4345474243164],
+            [608.9713578224182, 201.47031164169312],
+            [690.628580570221, 182.1901340484619],
+            [564.7403621673584, 263.84735679626465],
+            [734.8595762252808, 199.20205545425415],
+            [525.0458788871765, 301.27358388900757],
+            [788.1635966300964, 212.81159257888794],
+            [658.8729939460754, 334.16329860687256],
+            [695.1650929450989, 330.7609143257141],
+            [690.628580570221, 432.83244276046753],
+            [624.849151134491, 402.2109842300415],
+            [754.139753818512, 485.0023350715637],
+            [611.2396140098572, 507.68489694595337],
+          ],
+        ].map((a) =>
+          a.map(async ([_x, _y]) => {
+            const { x, y } = getPoints({
+              x: _x,
+              y: _y,
+              original_image_width: size.width!,
+              original_image_height: size.height!,
+              scaled_image_width: image?.width,
+              scaled_image_height: image?.height,
+            });
+            addPoints({
+              x: Math.round(image?.left! + x),
+              y: Math.round(image?.top! + y),
+              canvas: get().canvas!,
+            });
+          })
+        );
+
+        // const imageElement = document.getElementById("/football.jpeg");
+        // console.log(imageElement?.);
+
+        // const obj = new fabric.Rect({
+        //   left: (image?.left ?? 0) + x,
+        //   top: (image?.top ?? 0) + y,
+        //   width: 5,
+        //   height: 5,
+        //   rx: 16,
+        //   ry: 16,
+        //   fill: "#2BEBC8",
+        // });
+        // get().canvas?.add(obj);
       },
 
       updatePlacement: (e: any, element: Element, object: any) => {
         if (!e.target) return;
         const target = e.target;
         if (target != object) return;
-        const center = get().canvas?.getCenter();
+        // const center = get().canvas?.getCenter();
         const placement = element.placement;
         const newPlacement: Placement = {
           ...placement,
-          x: (target.left ?? placement.x) - (center?.left ?? 0),
-          y: (target.top ?? placement.y) - (center?.top ?? 0),
+          x: target.left ?? placement.x, //- (center?.left ?? 0), //- (center?.left ?? 0),
+          y: target.top ?? placement.y, //- (center?.top ?? 0),
           rotation: target.angle ?? placement.rotation,
           width:
             target.width && target.scaleX

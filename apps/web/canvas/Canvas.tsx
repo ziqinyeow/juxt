@@ -187,7 +187,7 @@ class InternalCanvas
         const { width = 0, height = 0 } =
           (entries[0] && entries[0].contentRect) || {};
         this.handler.eventHandler.resize(width, height);
-        this.handler.zoomHandler.zoomToFitPad();
+        // this.handler.zoomHandler.zoomToFitPad();
 
         if (!this.state.loaded) {
           this.handleLoad();

@@ -15,6 +15,24 @@ import { Element as ElementType } from "@/lib/types/track";
 import { useStore } from "@/lib/store";
 import useKeyboardJs from "react-use/lib/useKeyboardJs";
 import { fabric } from "fabric";
+import {
+  IconClick,
+  IconEdit,
+  IconLayoutGridAdd,
+  IconScriptPlus,
+  IconStack2,
+  IconStack3,
+  IconTrash,
+} from "@tabler/icons-react";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuTrigger,
+} from "@/ui/context-menu";
+import { getFile } from "@/lib/store/storage";
 
 type Props = {
   element: ElementType;
@@ -172,10 +190,118 @@ type TrackProps = DivProps & {
 };
 
 export const Track = ({ track, ...props }: TrackProps) => {
+  const { lastWebsocketMessage, sendWebsocketMessage } = useStore();
+  const [contextMenu, setContextMenu] = useState({
+    id: "",
+    menu: "",
+  });
+  // console.log(lastWebsocketMessage);
+
+  // useEffect(() => {
+  //   if (!contextMenu.id) return;
+  //   switch (contextMenu.menu) {
+  //     case "process": {
+  //       break;
+  //     }
+  //   }
+  // }, [contextMenu]);
+  // console.log(track);
+
   return (
     <div {...props}>
       {track.elements.map((element: ElementType, i: number) => (
-        <Element key={i} element={element} />
+        <ContextMenu
+          key={i}
+          onOpenChange={() => {
+            // setContextMenuOpen(project.id);
+          }}
+        >
+          <ContextMenuTrigger asChild>
+            <div className="">
+              <Element key={i} element={element} />
+            </div>
+          </ContextMenuTrigger>
+          <ContextMenuContent className="font-mono text-black border-2 dark:text-white bg-light-200 dark:bg-primary-600 border-light-400 dark:border-primary-400">
+            <ContextMenuItem
+              onClick={async () => {
+                setContextMenu({
+                  id: element.id,
+                  menu: "process",
+                });
+                // console.log()
+                // const file = fileURL;
+                // console.log(file);
+                // if (!file) return;
+                // const reader = new FileReader();
+                // reader.readAsArrayBuffer(file);
+
+                // reader.onload = () => {
+                //   const imageData = reader.result as ArrayBufferLike;
+                //   const uint8Array = new Uint8Array(imageData);
+
+                //   // sendWebsocketMessage(uint8Array.buffer);
+                // };
+                // console.log(lastWebsocketMessage);
+              }}
+              className="flex items-center gap-2 cursor-pointer focus:bg-secondary-200 focus:text-black"
+            >
+              <div className="">
+                <IconClick className="w-4 h-4" />
+              </div>
+              <div className="text-[12px] font-bold tracking-widest">
+                Process
+              </div>
+            </ContextMenuItem>
+            <ContextMenuItem
+              onClick={() => {
+                setContextMenu({
+                  id: element.id,
+                  menu: "new tab",
+                });
+              }}
+              className="flex items-center gap-2 cursor-pointer focus:bg-secondary-200 focus:text-black"
+            >
+              <div className="">
+                <IconLayoutGridAdd className="w-4 h-4" />
+              </div>
+              <div className="text-[12px] font-bold tracking-widest">
+                View Chart
+              </div>
+            </ContextMenuItem>
+            {/* <ContextMenuSeparator className="h-1 bg-light-300 dark:bg-primary-400" />
+            <ContextMenuItem
+              onClick={() => {
+                setContextMenu({
+                  id: element.id,
+                  menu: "edit",
+                });
+              }}
+              className="flex items-center gap-2 cursor-pointer focus:bg-secondary-200 focus:text-black"
+            >
+              <div className="">
+                <IconEdit className="w-4 h-4" />
+              </div>
+              <div className="text-[12px] font-bold tracking-widest">Edit</div>
+            </ContextMenuItem>
+            <ContextMenuItem
+              onClick={() => {
+                setContextMenu({
+                  id: element.id,
+                  menu: "delete",
+                });
+              }}
+              className="flex items-center gap-2 cursor-pointer focus:bg-secondary-200 focus:text-black"
+            >
+              <div className="">
+                <IconTrash className="w-4 h-4" />
+              </div>
+              <div className="text-[12px] font-bold tracking-widest">
+                Delete
+              </div>
+              <ContextMenuShortcut></ContextMenuShortcut>
+            </ContextMenuItem> */}
+          </ContextMenuContent>
+        </ContextMenu>
       ))}
     </div>
   );

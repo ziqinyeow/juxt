@@ -50,7 +50,7 @@ export const workareaOption: Partial<WorkareaObject> = {
   name: "",
   id: "workarea",
   type: "image",
-  layout: "fixed", // fixed, responsive, fullscreen
+  layout: "responsive", // fixed, responsive, fullscreen
   link: {},
   tooltip: {
     enabled: false,
