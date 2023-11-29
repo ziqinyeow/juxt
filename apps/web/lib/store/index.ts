@@ -23,6 +23,7 @@ import {
   getHeightAndWidthFromDataUrl,
   getPoints,
 } from "../utils/pose";
+import _ from "lodash";
 
 export const useStore = create<StoreTypes>()(
   // @ts-ignore
@@ -206,6 +207,7 @@ export const useStore = create<StoreTypes>()(
           properties: {
             elementId: media.path,
             src: media.url ?? "",
+            pose: [],
           },
         };
         get().addTrackAndElement(element);
@@ -214,18 +216,28 @@ export const useStore = create<StoreTypes>()(
       },
 
       images: [],
-      addImage: (media: FileWithPath) => {
+      addImage: async (media: FileWithPath) => {
         const id = nanoid();
-        const center = get().canvas?.getCenter();
+        const canvas = get().canvas;
+        const center = canvas?.getCenter();
+        const imageElement = document.getElementById(
+          media.path
+        ) as HTMLImageElement;
+        const size = await getHeightAndWidthFromDataUrl(imageElement?.src);
+
+        const workarea = canvas
+          ?.getObjects()
+          .find((obj) => obj.name === "workarea");
+
         const element: Element = {
           id,
           name: media.path,
           type: "image",
           placement: {
-            x: (center?.left ?? 0) - 500,
-            y: (center?.top ?? 0) - 300,
-            width: 1000,
-            height: 600,
+            x: workarea?.left! + workarea?.width! / 2 - size.width! / 2,
+            y: workarea?.top! + workarea?.height! / 2 - size.height! / 2,
+            width: size.width!,
+            height: size.height!,
             rotation: 0,
             scaleX: 1,
             scaleY: 1,
@@ -237,6 +249,9 @@ export const useStore = create<StoreTypes>()(
           properties: {
             elementId: media.path,
             src: media.url ?? "",
+            originalHeight: size.height,
+            originalWidth: size.width,
+            pose: [],
           },
         };
         get().addTrackAndElement(element);
@@ -417,6 +432,7 @@ export const useStore = create<StoreTypes>()(
               id,
               placement: { height, rotation, scaleX, scaleY, width, x, y },
             } = element;
+            // console.log(image.height, image.)
             const imageObject = new CoverImage(image, {
               name: id,
               left: x,
@@ -426,10 +442,16 @@ export const useStore = create<StoreTypes>()(
               angle: rotation,
               // objectCaching: false,
               selectable: true,
-              // lockUniScaling: true,
+              lockUniScaling: true,
               centeredScaling: true,
             });
-            imageObject.setControlsVisibility({ mtr: false });
+            imageObject.setControlsVisibility({
+              mtr: false,
+              mr: false,
+              ml: false,
+              mb: false,
+              mt: false,
+            });
             element.fabricObject = imageObject;
             imageObject.on("selected", () => {
               get().setSelectedElement([...get().selectedElement, element]);
@@ -603,10 +625,14 @@ export const useStore = create<StoreTypes>()(
           const element = tracks[i].elements[0];
           switch (element.type) {
             case "video":
-            case "image":
             case "text":
             case "shape": {
               get().addElementToCanvas(element);
+              break;
+            }
+            case "image": {
+              get().addElementToCanvas(element);
+              break;
             }
 
             default:
@@ -615,33 +641,92 @@ export const useStore = create<StoreTypes>()(
         }
         const canvas = get().canvas;
         const center = canvas?.getCenter();
-        const id = "_Rekd4H8wA6m7BkHvU9Du";
+        const id = "UW03o1ck3TySbvy8PfDtv";
         // console.log(canvas?.getObjects());
         const image = canvas?.getObjects().find((obj) => obj.name === id);
+        // @ts-ignore
+        // const workarea = canvas
+        //   ?.getObjects()
+        //   .find((obj) => obj.id === "workarea");
+        // console.log(
+        //   workarea?.left,
+        //   workarea?.top,
+        //   workarea?.width,
+        //   workarea?.height,
+        //   workarea?.scaleX,
+        //   workarea?.scaleY
+        // );
 
         const imageElement = document.getElementById(
           "/football.jpeg"
         ) as HTMLImageElement;
         const size = await getHeightAndWidthFromDataUrl(imageElement?.src);
-        [
+        const zoom = canvas?.getZoom()!;
+        let position: any = {
+          left:
+            image?.left! + (image?.width! * image?.scaleX!) / 2 - image?.left!,
+          top:
+            image?.top! + (image?.height! * image?.scaleY!) / 2 - image?.top!,
+        };
+
+        var point = new fabric.Circle({
+          radius: 5,
+          fill: "red",
+          originX: "center",
+          originY: "center",
+          hasControls: false,
+          left: image?.left! + (image?.width! * image?.scaleX!) / 2,
+          top: image?.top! + (image?.height! * image?.scaleY!) / 2,
+        });
+
+        image?.on("moving", function () {
+          point.set({
+            left: image?.left! + position.left * image?.scaleX!,
+            top: image?.top! + position.top * image?.scaleY!,
+          });
+        });
+
+        image?.on("scaling", function () {
+          point.set({
+            left: image?.left! + position.left * image?.scaleX!,
+            top: image?.top! + position.top * image?.scaleY!,
+          });
+          // canvas?.renderAll();
+        });
+
+        // Enable point to be moved independently
+        point.on("moving", function (options) {
+          var pos = canvas?.getPointer(options.e);
+          position.left = pos?.x! - image?.left!;
+          position.top = pos?.y! - image?.top!;
+
+          point.set({
+            left: pos?.x,
+            top: pos?.y,
+          });
+          // canvas?.renderAll();
+        });
+        canvas?.add(point);
+
+        const points = [
           [
-            [370.2985884348551, 221.90800952911377],
-            [376.7936407725016, 212.1654313802719],
-            [369.21607971191406, 210.0004140138626],
-            [352.97844886779785, 197.0103098154068],
-            [338.90583546956384, 190.5152577161789],
-            [324.8332220713297, 233.81560504436493],
-            [279.3678557078044, 227.32055294513702],
-            [296.6879952748617, 285.77602183818817],
-            [233.902489344279, 282.5284957885742],
-            [298.8530127207438, 308.50870418548584],
-            [207.92227999369305, 335.5714212656021],
-            [280.4503644307454, 340.98396468162537],
-            [224.15991083780926, 344.2314907312393],
-            [330.24576568603516, 430.8321853876114],
-            [239.31503295898438, 457.89490246772766],
-            [302.100538889567, 532.5880016088486],
-            [219.82987594604492, 545.5781058073044],
+            [370.3, 221.91],
+            [376.79, 212.17],
+            [369.22, 210],
+            [352.98, 197.01],
+            [338.91, 190.52],
+            [324.83, 233.82],
+            [279.37, 227.32],
+            [296.69, 285.78],
+            [233.9, 282.53],
+            [298.85, 308.51],
+            [207.92, 335.57],
+            [280.45, 340.98],
+            [224.16, 344.23],
+            [330.25, 430.83],
+            [239.32, 457.89],
+            [302.1, 532.59],
+            [219.83, 545.58],
           ],
           [
             [484.2794990539551, 236.9162654876709],
@@ -682,22 +767,30 @@ export const useStore = create<StoreTypes>()(
             [611.2396140098572, 507.68489694595337],
           ],
         ].map((a) =>
-          a.map(async ([_x, _y]) => {
+          a.map(([_x, _y]) => {
             const { x, y } = getPoints({
               x: _x,
               y: _y,
               original_image_width: size.width!,
               original_image_height: size.height!,
-              scaled_image_width: image?.width,
-              scaled_image_height: image?.height,
+              scaled_image_width: image?.width!,
+              scaled_image_height: image?.height!,
             });
-            addPoints({
+            const point = addPoints({
               x: Math.round(image?.left! + x),
               y: Math.round(image?.top! + y),
               canvas: get().canvas!,
             });
+            return point;
           })
         );
+        // const group = new fabric.Group(
+        //   points.map((point) => {
+        //     const group = new fabric.Group(point);
+        //     return group;
+        //   })
+        // );
+        // get().canvas?.add(group);
 
         // const imageElement = document.getElementById("/football.jpeg");
         // console.log(imageElement?.);

@@ -20,7 +20,8 @@ export const addPoints = ({
     fill: "#2BEBC8",
     hasControls: false,
   });
-  canvas.add(point);
+  return point;
+  // canvas.add(point);
 };
 
 export const getPoints = ({

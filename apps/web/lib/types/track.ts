@@ -22,14 +22,26 @@ export type ElementBase<Type extends ElementType, Properties> = {
   properties: Properties;
 };
 
+export type Pose = {
+  kpts: any[];
+  bboxes: any[];
+};
+
 export type VideoElement = ElementBase<
   "video",
-  { src: string; elementId: string; imageObject?: fabric.Image }
+  { src: string; elementId: string; imageObject?: fabric.Image; pose: Pose[] }
 >;
 
 export type ImageElement = ElementBase<
   "image",
-  { src: string; elementId: string; imageObject?: fabric.Object }
+  {
+    src: string;
+    elementId: string;
+    imageObject?: fabric.Object;
+    originalHeight: number | null;
+    originalWidth: number | null;
+    pose: Pose[];
+  }
 >;
 
 export type TextElement = ElementBase<

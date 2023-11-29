@@ -33,6 +33,7 @@ const Canvas = () => {
   //   const [canvas, setCanvas] = useState<FabricCanvas | null>(null);
   const [handler, setHandler] = useState<Handler | null>(null);
   const { theme } = useTheme();
+  console.log();
 
   useEffect(() => {
     if (canvas) {
@@ -219,6 +220,7 @@ const Canvas = () => {
         ]}
         className="w-full h-full top-0 left-0"
         canvasOption={{
+          // uniformScaling: false,
           backgroundColor: theme === "dark" ? "#000" : "#F1F0F0",
           selectionColor:
             theme === "dark"

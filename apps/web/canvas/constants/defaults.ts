@@ -32,10 +32,10 @@ export const gridOption = {
 };
 
 export const workareaOption: Partial<WorkareaObject> = {
-  width: 600,
-  height: 400,
-  workareaWidth: 600,
-  workareaHeight: 400,
+  width: 1920,
+  height: 1080,
+  workareaWidth: 1920,
+  workareaHeight: 1080,
   lockScalingX: true,
   lockScalingY: true,
   scaleX: 1,
@@ -47,7 +47,7 @@ export const workareaOption: Partial<WorkareaObject> = {
   lockMovementX: true,
   lockMovementY: true,
   hoverCursor: "default",
-  name: "",
+  name: "workarea",
   id: "workarea",
   type: "image",
   layout: "responsive", // fixed, responsive, fullscreen
@@ -65,7 +65,7 @@ export const objectOption: Partial<FabricObjectOption> = {
 };
 
 export const guidelineOption = {
-  enabled: true,
+  enabled: false,
 };
 
 export const activeSelectionOption = {
