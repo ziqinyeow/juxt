@@ -23,6 +23,7 @@ import {
   IconStack2,
   IconStack3,
   IconTrash,
+  IconYoga,
 } from "@tabler/icons-react";
 import {
   ContextMenu,
@@ -172,13 +173,17 @@ export const Element = ({ element }: Props) => {
         className="absolute top-0 left-0 z-10 w-full h-full bg-repeat-space bg-contain bg-voice"
       />
       <div className="flex items-center w-full h-full gap-2 px-2 font-bold text-white dark:text-black">
-        <div className="z-20 select-none line-clamp-1 [&>*]:w-4 [&>*]:h-4">
+        <div className="z-20 select-none flex items-center gap-2 line-clamp-1 [&>*]:w-4 [&>*]:h-4">
           {getElementIcon(
             element.type === "shape" ? element.properties.type : element.type
           )}
+          {/* @ts-ignore */}
+          {/* {element.properties.pose.length > 0 ? <IconYoga /> : ""} */}
         </div>
         <div className="z-20 select-none line-clamp-1">
-          {element.type === "shape" ? element.properties.type : element.type}
+          {element.type === "shape" ? element.properties.type : element.type}{" "}
+          {/* @ts-ignore */}
+          {element.properties.pose.length > 0 ? "+ pose" : ""}
         </div>
       </div>
     </Rnd>
@@ -190,7 +195,8 @@ type TrackProps = DivProps & {
 };
 
 export const Track = ({ track, ...props }: TrackProps) => {
-  const { lastWebsocketMessage, sendWebsocketMessage } = useStore();
+  const { lastWebsocketMessage, sendWebsocketMessage, fileURLCache } =
+    useStore();
   const [contextMenu, setContextMenu] = useState({
     id: "",
     menu: "",
@@ -228,28 +234,79 @@ export const Track = ({ track, ...props }: TrackProps) => {
                   id: element.id,
                   menu: "process",
                 });
-                // console.log()
-                // const file = fileURL;
-                // console.log(file);
-                // if (!file) return;
-                // const reader = new FileReader();
-                // reader.readAsArrayBuffer(file);
 
-                // reader.onload = () => {
-                //   const imageData = reader.result as ArrayBufferLike;
-                //   const uint8Array = new Uint8Array(imageData);
+                // @ts-ignore
+                const cache = fileURLCache[element.properties.mediaId];
+                // @ts-ignore
+                const file = cache.file as File;
+                const url = cache.url;
+                if (!file) return;
 
-                //   // sendWebsocketMessage(uint8Array.buffer);
-                // };
-                // console.log(lastWebsocketMessage);
+                if (element.type === "image") {
+                  const reader = new FileReader();
+                  reader.readAsArrayBuffer(file);
+
+                  reader.onload = () => {
+                    const imageData = reader.result as ArrayBufferLike;
+                    const uint8Array = new Uint8Array(imageData);
+                    sendWebsocketMessage(element.id);
+                    sendWebsocketMessage(uint8Array.buffer);
+                  };
+                } else if (element.type === "video") {
+                  const video = document.createElement("video");
+                  video.src = url;
+                  video.muted = true;
+
+                  const canvas = document.createElement("canvas");
+                  const context = canvas.getContext("2d");
+                  const reader = new FileReader();
+
+                  function extractFrame() {
+                    if (video.paused || video.ended) {
+                      console.log("ended");
+                      return;
+                    }
+                    context?.drawImage(
+                      video,
+                      0,
+                      0,
+                      canvas.width,
+                      canvas.height
+                    );
+
+                    // Convert the canvas data to a buffer
+                    canvas.toBlob(function (blob: any) {
+                      reader.onload = function () {
+                        const buffer = reader.result as ArrayBuffer;
+                        sendWebsocketMessage(element.id);
+                        sendWebsocketMessage(buffer);
+
+                        requestAnimationFrame(extractFrame);
+                      };
+
+                      reader.readAsArrayBuffer(blob);
+                    }, "image/jpeg");
+                  }
+                  video.onloadeddata = function () {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                  };
+                  video.oncanplay = () => {
+                    video.play();
+                    extractFrame();
+                  };
+                }
               }}
               className="flex items-center gap-2 cursor-pointer focus:bg-secondary-200 focus:text-black"
             >
               <div className="">
-                <IconClick className="w-4 h-4" />
+                <IconYoga className="w-4 h-4" />
               </div>
               <div className="text-[12px] font-bold tracking-widest">
-                Process
+                {/* @ts-ignore */}
+                {element.properties?.pose.length > 0
+                  ? "Rerun pose estimation"
+                  : "Run pose estimation"}
               </div>
             </ContextMenuItem>
             <ContextMenuItem

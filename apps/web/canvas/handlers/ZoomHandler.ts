@@ -162,7 +162,7 @@ class ZoomHandler {
     const { left: canvasLeft, top: canvasTop } =
       this.handler.canvas.getCenter();
     const { left, top, width, height } = target;
-    console.log(width, height);
+    // console.log(width, height);
     const diffTop = canvasTop - (top + height / 2);
     const diffLeft = canvasLeft - (left + width / 2);
     if (zoomFit) {

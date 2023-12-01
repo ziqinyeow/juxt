@@ -13,6 +13,7 @@ import { BucketType } from "@/lib/types/file";
 import Image from "next/image";
 import ChartModal from "../Modal/ChartModal";
 import { useOnLoadImages } from "@/lib/hooks/useOnLoadImages";
+import { useOnLoadVideos } from "@/lib/hooks/useOnLoadVideos";
 
 type SidebarButtonProps = {
   tooltip?: string;
@@ -53,6 +54,7 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
   const [openChartModal, setOpenChartModal] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const imagesLoaded = useOnLoadImages(wrapperRef);
+  const videoLoaded = useOnLoadVideos(wrapperRef);
 
   useEffect(() => {
     if (imagesLoaded) {
@@ -60,6 +62,13 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
       refreshTracks();
     }
   }, [imagesLoaded, refreshTracks]);
+
+  // useEffect(() => {
+  //   if (videoLoaded) {
+  //     console.log("video loaded, refresh track");
+  //     refreshTracks();
+  //   }
+  // }, [videoLoaded, refreshTracks]);
 
   const bucket = useMemo(
     () => projects.find((project) => project.id === projectId),

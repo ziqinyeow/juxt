@@ -1,5 +1,5 @@
 import { fabric } from "fabric";
-import { Element, Placement, Shape, ShapeType, Tracks } from "../track";
+import { Element, Placement, Pose, Shape, ShapeType, Tracks } from "../track";
 import { BucketType, FileWithPath } from "../file";
 // import { IEvent } from "fabric/fabric-impl";
 import { Project } from "../project";
@@ -40,6 +40,7 @@ export interface StoreTypes {
   addVideo: (media: FileWithPath) => void;
   images: string[];
   addImage: (media: FileWithPath) => void;
+  addPose: (elementId: string, pose: Pose) => void;
 
   // elements
   tracks: Tracks[];

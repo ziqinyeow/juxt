@@ -30,11 +30,13 @@ const fetcher = (...args: any) => fetch(...args).then((res) => res.json());
 const Navbar = ({ className, ...props }: DivProps) => {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
-  const { setSendWebsocketMessage, setLastWebsocketMessage } = useStore();
+  const { setSendWebsocketMessage, setLastWebsocketMessage, addPose } =
+    useStore();
   const { data, error, isLoading } = useSWR("/api/healthchecker", fetcher);
   const { sendMessage, lastMessage, readyState } = useWebSocket(
     `${WEBSOCKET_URL}/ws`
   );
+
   const connectionStatus = {
     [ReadyState.CONNECTING]: "connecting",
     [ReadyState.OPEN]: "connected",
@@ -54,6 +56,26 @@ const Navbar = ({ className, ...props }: DivProps) => {
       setLastWebsocketMessage(lastMessage);
     }
   }, [readyState, lastMessage, setLastWebsocketMessage]);
+
+  useEffect(() => {
+    try {
+      if (lastMessage) {
+        const data = JSON.parse(lastMessage?.data ?? "{}");
+        console.log(
+          "added pose to video id -> ",
+          data.id,
+          "pose estimation result -> ",
+          data
+        );
+        addPose(data.id, {
+          bboxes: data.bboxes,
+          kpts: data.kpts,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [lastMessage]);
 
   // console.log("navbar refresh", connectionStatus);
 

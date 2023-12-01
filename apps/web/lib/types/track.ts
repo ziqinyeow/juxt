@@ -29,12 +29,21 @@ export type Pose = {
 
 export type VideoElement = ElementBase<
   "video",
-  { src: string; elementId: string; imageObject?: fabric.Image; pose: Pose[] }
+  {
+    mediaId: string;
+    src: string;
+    elementId: string;
+    imageObject?: fabric.Image;
+    originalHeight: number | null;
+    originalWidth: number | null;
+    pose: Pose[];
+  }
 >;
 
 export type ImageElement = ElementBase<
   "image",
   {
+    mediaId: string;
     src: string;
     elementId: string;
     imageObject?: fabric.Object;
