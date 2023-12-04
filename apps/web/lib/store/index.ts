@@ -341,6 +341,7 @@ export const useStore = create<StoreTypes>()(
                         group.on("modified", (e: any) => {
                           get().updatePlacement(e, element, group);
                         });
+                        element.fabricObject = group;
                         get().canvas?.add(group);
                       }
 
@@ -567,7 +568,6 @@ export const useStore = create<StoreTypes>()(
               mb: false,
               mt: false,
             });
-            element.fabricObject = imageObject;
 
             if (element?.properties?.pose?.length > 0) {
               const points = element.properties.pose[0].kpts.map((a) =>
@@ -588,6 +588,9 @@ export const useStore = create<StoreTypes>()(
                     x: Math.round(imageObject?.left! + x),
                     y: Math.round(imageObject?.top! + y),
                     canvas: get().canvas!,
+                  });
+                  point.on("selection:created", () => {
+                    console.log("point clicked");
                   });
                   return point;
                 })
@@ -619,6 +622,7 @@ export const useStore = create<StoreTypes>()(
                 get().updatePlacement(e, element, group);
               });
               get().canvas?.add(group);
+              element.fabricObject = group;
             } else {
               imageObject.on("selected", () => {
                 get().setSelectedElement([...get().selectedElement, element]);
@@ -631,6 +635,7 @@ export const useStore = create<StoreTypes>()(
               imageObject.on("modified", (e: any) => {
                 get().updatePlacement(e, element, imageObject);
               });
+              element.fabricObject = imageObject;
               get().canvas?.add(imageObject);
             }
             // get().canvas?.centerObject(imageObject);
