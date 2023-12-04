@@ -30,7 +30,7 @@ const Loader = ({ children }: Props) => {
 
   return (
     <div className="flex items-center justify-center w-screen h-screen">
-      <div className="border-4 border-white border-solid rounded-full w-7 h-7 animate-spinner border-t-transparent" />
+      <div className="border-4 border-black dark:border-white border-solid rounded-full w-7 h-7 animate-spinner border-t-transparent" />
     </div>
   );
 };

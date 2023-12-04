@@ -162,7 +162,7 @@ const Canvas = () => {
           </Button>
         </Tooltip>
       </div>
-      {websocketConnected && (
+      {websocketConnected ? (
         <div className="w-full h-full relative">
           <_Canvas
             className="w-full h-full absolute top-0 left-0"
@@ -354,6 +354,8 @@ const Canvas = () => {
             }}
           />
         </div>
+      ) : (
+        <></>
       )}
     </div>
   );
