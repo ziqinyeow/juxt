@@ -186,3 +186,26 @@
 .thin_scrollbar::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+.rde-contextmenu {
+  position: fixed;
+  -moz-animation: visibility 0.3s linear;
+  -webkit-animation: visibility 0.3s linear;
+  animation: visibility 0.3s linear;
+  z-index: 600000;
+}
+
+.rde-contextmenu-right {
+  position: relative;
+  border-radius: 4px;
+  font-size: 14px;
+  padding: 4px;
+
+  @apply font-mono text-black border-2 dark:text-white bg-light-200 dark:bg-primary-600 border-light-400 dark:border-primary-400;
+}
+
+.contextmenu-hidden {
+  display: none;
+  top: 0;
+  left: 0;
+}
