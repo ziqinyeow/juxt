@@ -63,14 +63,16 @@ const Navbar = ({ className, ...props }: DivProps) => {
         const data = JSON.parse(lastMessage?.data ?? "{}");
         console.log(
           "added pose to video id -> ",
-          data.id,
+          data?.id,
           "pose estimation result -> ",
           data
         );
-        addPose(data.id, {
-          bboxes: data.bboxes,
-          kpts: data.kpts,
-        });
+        if (data?.id) {
+          addPose(data.id, {
+            bboxes: data.bboxes,
+            kpts: data.kpts,
+          });
+        }
       }
     } catch (error) {
       console.log(error);

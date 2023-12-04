@@ -287,60 +287,62 @@ export const useStore = create<StoreTypes>()(
                     if (!element) {
                       return track;
                     } else {
-                      const image = get()
-                        .canvas?.getObjects()
-                        .find((obj) => obj.name === elementId);
-                      // @ts-ignore
-                      get().canvas?.remove(image);
-
-                      const points = pose.kpts.map((a) =>
-                        a.map(([_x, _y]: number[]) => {
-                          const { x, y } = getPoints({
-                            x: _x,
-                            y: _y,
-                            original_image_width:
-                              // @ts-ignore
-                              element.properties.originalWidth!,
-                            original_image_height:
-                              // @ts-ignore
-                              element.properties.originalHeight!,
-                            scaled_image_width: image?.width!,
-                            scaled_image_height: image?.height!,
-                          });
-                          const point = addPoints({
-                            x: Math.round(image?.left! + x),
-                            y: Math.round(image?.top! + y),
-                            canvas: get().canvas!,
-                          });
-                          return point;
-                        })
-                      );
-
-                      const group = new fabric.Group([
+                      if (element.type === "image") {
+                        const image = get()
+                          .canvas?.getObjects()
+                          .find((obj) => obj.name === elementId);
                         // @ts-ignore
-                        image,
-                        ...points.map((point) => {
-                          const group = new fabric.Group(point);
-                          return group;
-                        }),
-                      ]);
-                      group.on("selected", () => {
-                        get().setSelectedElement([
-                          ...get().selectedElement,
-                          element,
-                        ]);
-                      });
-                      group.on("deselected", () => {
-                        get().setSelectedElement(
-                          get().selectedElement.filter(
-                            (el) => el.id !== element.id
-                          )
+                        get().canvas?.remove(image);
+
+                        const points = pose.kpts.map((a) =>
+                          a.map(([_x, _y]: number[]) => {
+                            const { x, y } = getPoints({
+                              x: _x,
+                              y: _y,
+                              original_image_width:
+                                // @ts-ignore
+                                element.properties.originalWidth!,
+                              original_image_height:
+                                // @ts-ignore
+                                element.properties.originalHeight!,
+                              scaled_image_width: image?.width!,
+                              scaled_image_height: image?.height!,
+                            });
+                            const point = addPoints({
+                              x: Math.round(image?.left! + x),
+                              y: Math.round(image?.top! + y),
+                              canvas: get().canvas!,
+                            });
+                            return point;
+                          })
                         );
-                      });
-                      group.on("modified", (e: any) => {
-                        get().updatePlacement(e, element, group);
-                      });
-                      get().canvas?.add(group);
+
+                        const group = new fabric.Group([
+                          // @ts-ignore
+                          image,
+                          ...points.map((point) => {
+                            const group = new fabric.Group(point);
+                            return group;
+                          }),
+                        ]);
+                        group.on("selected", () => {
+                          get().setSelectedElement([
+                            ...get().selectedElement,
+                            element,
+                          ]);
+                        });
+                        group.on("deselected", () => {
+                          get().setSelectedElement(
+                            get().selectedElement.filter(
+                              (el) => el.id !== element.id
+                            )
+                          );
+                        });
+                        group.on("modified", (e: any) => {
+                          get().updatePlacement(e, element, group);
+                        });
+                        get().canvas?.add(group);
+                      }
 
                       return {
                         ...track,
@@ -497,8 +499,8 @@ export const useStore = create<StoreTypes>()(
               id,
               placement: { height, rotation, scaleX, scaleY, width, x, y },
             } = element;
-            video.width = 1000;
-            video.height = 600;
+            video.width = element.properties.originalWidth ?? 1920;
+            video.height = element.properties.originalHeight ?? 1080;
             const videoObject = new CoverVideo(video, {
               name: id,
               left: x,
