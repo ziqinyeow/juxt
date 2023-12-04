@@ -1,7 +1,7 @@
 // @ts-nocheck
 import ReactDOM from "react-dom";
 import debounce from "lodash/debounce";
-
+import { createRoot } from "react-dom/client";
 import { Handler } from ".";
 
 class ContextmenuHandler {
@@ -51,7 +51,9 @@ class ContextmenuHandler {
     }
     contextmenu.innerHTML = element;
     this.contextmenuEl.appendChild(contextmenu);
-    ReactDOM?.render(element, contextmenu);
+    // ReactDOM?.render(element, contextmenu);
+    const root = createRoot(contextmenu);
+    root.render(element);
     this.contextmenuEl.classList.remove("contextmenu-hidden");
     const { clientX: left, clientY: top } = e;
     this.contextmenuEl.style.left = `${left}px`;

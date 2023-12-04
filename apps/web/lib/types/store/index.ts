@@ -8,6 +8,8 @@ import { SendMessage } from "react-use-websocket";
 // import { IEvent } from "fabric/fabric-impl";
 
 export interface StoreTypes {
+  websocketConnected: number;
+  setWebsocketConnected: (websocketConnected: number) => void;
   lastWebsocketMessage: MessageEvent<any> | null;
   setLastWebsocketMessage: (
     lastWebsocketMessage: MessageEvent<any> | null
@@ -59,6 +61,7 @@ export interface StoreTypes {
   updatePlacement: (e: any, element: Element, object: any) => void;
   addElementToCanvas: (element: Element) => void;
   removeTrackAndElement: (elementIds: string[]) => void;
+  getElement: (elementId: string) => Element | undefined;
   updateElement: (elementId: string, data: any) => void;
 
   //

@@ -29,6 +29,10 @@ export const useStore = create<StoreTypes>()(
   // @ts-ignore
   persist<StoreTypes>(
     (set, get) => ({
+      websocketConnected: 0,
+      setWebsocketConnected: (websocketConnected) => {
+        set((state) => ({ ...state, websocketConnected }));
+      },
       lastWebsocketMessage: null,
       setLastWebsocketMessage: (lastWebsocketMessage) => {
         set((state) => ({ ...state, lastWebsocketMessage }));
@@ -198,7 +202,7 @@ export const useStore = create<StoreTypes>()(
 
         const element: Element = {
           id,
-          name: media.path,
+          name: id,
           type: "video",
           placement: {
             x: workarea?.left! + workarea?.width! / 2 - size.width! / 2,
@@ -242,7 +246,7 @@ export const useStore = create<StoreTypes>()(
 
         const element: Element = {
           id,
-          name: media.path,
+          name: id,
           type: "image",
           placement: {
             x: workarea?.left! + workarea?.width! / 2 - size.width! / 2,
@@ -317,14 +321,19 @@ export const useStore = create<StoreTypes>()(
                           })
                         );
 
-                        const group = new fabric.Group([
-                          // @ts-ignore
-                          image,
-                          ...points.map((point) => {
-                            const group = new fabric.Group(point);
-                            return group;
-                          }),
-                        ]);
+                        const group = new fabric.Group(
+                          [
+                            // @ts-ignore
+                            image,
+                            ...points.map((point) => {
+                              const group = new fabric.Group(point);
+                              return group;
+                            }),
+                          ],
+                          {
+                            name: element.id,
+                          }
+                        );
                         group.on("selected", () => {
                           get().setSelectedElement([
                             ...get().selectedElement,
@@ -377,7 +386,7 @@ export const useStore = create<StoreTypes>()(
         const id = nanoid();
         const element: Element = {
           id,
-          name: type + "_" + id,
+          name: id,
           type: "shape",
           fabricObject: shape,
           placement,
@@ -408,7 +417,7 @@ export const useStore = create<StoreTypes>()(
         const id = nanoid();
         const element: Element = {
           id,
-          name: "text_" + id,
+          name: id,
           type: "text",
           fabricObject: text,
           placement,
@@ -603,13 +612,18 @@ export const useStore = create<StoreTypes>()(
               //   });
               // });
 
-              const group = new fabric.Group([
-                imageObject,
-                ...points.map((point) => {
-                  const group = new fabric.Group(point);
-                  return group;
-                }),
-              ]);
+              const group = new fabric.Group(
+                [
+                  imageObject,
+                  ...points.map((point) => {
+                    const group = new fabric.Group(point);
+                    return group;
+                  }),
+                ],
+                {
+                  name: element.id,
+                }
+              );
               group.on("selected", () => {
                 get().setSelectedElement([...get().selectedElement, element]);
               });
@@ -644,6 +658,7 @@ export const useStore = create<StoreTypes>()(
           case "text": {
             // @ts-ignore
             const text = new fabric.IText(element.properties?.text, {
+              name: element.id,
               left: element.placement.x,
               top: element.placement.y,
               width: element.placement.width,
@@ -683,6 +698,7 @@ export const useStore = create<StoreTypes>()(
             switch (type) {
               case "square": {
                 const shape = new fabric.Rect({
+                  name: element.id,
                   left: element.placement.x,
                   top: element.placement.y,
                   width: element.placement.width,
@@ -714,6 +730,7 @@ export const useStore = create<StoreTypes>()(
               }
               case "triangle": {
                 const shape = new fabric.Triangle({
+                  name: element.id,
                   left: element.placement.x,
                   top: element.placement.y,
                   width: element.placement.width,
@@ -743,6 +760,7 @@ export const useStore = create<StoreTypes>()(
               case "polygon": {
                 // @ts-ignore
                 const shape = new fabric.Polyline(element.properties?.coords, {
+                  name: element.id,
                   left: element.placement.x,
                   top: element.placement.y,
                   width: element.placement.width,
@@ -892,6 +910,17 @@ export const useStore = create<StoreTypes>()(
         get().updateElement(element.id, {
           placement: newPlacement,
         });
+      },
+
+      getElement: (elementId: string) => {
+        return get()
+          .projects.find((project) => project.id === get().currentProjectId)
+          ?.tracks.find(
+            (track) =>
+              track.elements.findIndex((element) => element.id === elementId) >=
+              0
+          )
+          ?.elements.find((element) => element.id === elementId);
       },
 
       updateElement: (elementId: string, data: Element | any) =>
