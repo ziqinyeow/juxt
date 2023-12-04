@@ -569,7 +569,7 @@ export const useStore = create<StoreTypes>()(
             });
             element.fabricObject = imageObject;
 
-            if (element.properties.pose.length > 0) {
+            if (element?.properties?.pose?.length > 0) {
               const points = element.properties.pose[0].kpts.map((a) =>
                 a.map(([_x, _y]: number[]) => {
                   const { x, y } = getPoints({

@@ -183,7 +183,7 @@ export const Element = ({ element }: Props) => {
         <div className="z-20 select-none line-clamp-1">
           {element.type === "shape" ? element.properties.type : element.type}{" "}
           {/* @ts-ignore */}
-          {element.properties.pose.length > 0 ? "+ pose" : ""}
+          {element?.properties?.pose?.length > 0 ? "+ pose" : ""}
         </div>
       </div>
     </Rnd>
@@ -304,7 +304,7 @@ export const Track = ({ track, ...props }: TrackProps) => {
               </div>
               <div className="text-[12px] font-bold tracking-widest">
                 {/* @ts-ignore */}
-                {element.properties?.pose.length > 0
+                {element.properties?.pose?.length > 0
                   ? "Rerun pose estimation"
                   : "Run pose estimation"}
               </div>
