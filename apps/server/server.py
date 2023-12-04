@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+from dataclasses import asdict
 
 import cv2
 import asyncio
@@ -39,11 +40,16 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     while True:
         try:
-            bytes = await websocket.receive_bytes()
-            data = np.frombuffer(bytes, dtype=np.uint8)
+            print("websocket accepted")
+            b = await websocket.receive_bytes()
+            data = np.frombuffer(b, dtype=np.uint8)
             img = cv2.imdecode(data, 1)
+            print(img.shape)
             output = model(img, show=False)[0]  # .model_dump(exclude="im")
-            print(output.kpts)
+            output = {
+                k: v.tolist() if isinstance(v, np.ndarray) else v
+                for k, v in asdict(output).items()
+            }
             # print(output)
             await websocket.send_json(output)
         except Exception as e:

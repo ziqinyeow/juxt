@@ -1,5 +1,5 @@
 import { fabric } from "fabric";
-import { IEvent } from "fabric/fabric-impl";
+// import { IEvent } from "fabric/fabric-impl";
 import { setToDefaultCanvas } from ".";
 
 const STROKE_COLOR = "#2BEBC8";
@@ -14,7 +14,7 @@ export function drawRect(
     origY = 0,
     shape: any = null;
 
-  function onMouseDown(o: IEvent) {
+  function onMouseDown(o: any) {
     var pointer = canvas!.getPointer(o.e);
     isDown = true;
     origX = pointer.x;
@@ -31,7 +31,7 @@ export function drawRect(
     canvas?.add(shape);
   }
 
-  function onMouseMove(o: IEvent) {
+  function onMouseMove(o: any) {
     if (!isDown) return;
     const pointer = canvas?.getPointer(o.e);
     const { x, y } = pointer;
@@ -58,7 +58,7 @@ export function drawRect(
     canvas?.renderAll();
   }
 
-  function onMouseUp(o: IEvent) {
+  function onMouseUp(o: any) {
     shape.setCoords();
     isDown = false;
     setToDefaultCanvas(canvas);

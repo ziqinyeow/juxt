@@ -1,5 +1,5 @@
 import { fabric } from "fabric";
-import { IEvent } from "fabric/fabric-impl";
+// import { IEvent } from "fabric/fabric-impl";
 
 const STROKE_COLOR = "#2BEBC8";
 const STROKE_WIDTH = 3;
@@ -94,11 +94,11 @@ export function drawPolygon(
     lineCounter = 0;
   };
 
-  const onMouseUp = (o: IEvent) => {
+  const onMouseUp = (o: any) => {
     canvas.selection = true;
   };
 
-  const onMouseDown = (o: IEvent) => {
+  const onMouseDown = (o: any) => {
     if (drawingObject.type == "roof") {
       canvas.selection = false;
       setStartingPoint(o); // set x,y
@@ -118,7 +118,7 @@ export function drawPolygon(
     }
   };
 
-  const onMouseMove = (o: IEvent) => {
+  const onMouseMove = (o: any) => {
     if (
       lines[0] !== null &&
       lines[0] !== undefined &&

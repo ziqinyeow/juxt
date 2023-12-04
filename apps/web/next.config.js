@@ -23,6 +23,17 @@ const nextConfig = {
     // config.infrastructureLogging = { debug: /PackFileCache/ };
     return config;
   },
+  rewrites: async () => {
+    return [
+      {
+        source: "/api/:path*",
+        destination:
+          process.env.NODE_ENV === "development"
+            ? "http://127.0.0.1:8000/api/:path*"
+            : "/api/",
+      },
+    ];
+  },
   // ignoreBuildErrors: true,
   transpilePackages: [
     // "ui"

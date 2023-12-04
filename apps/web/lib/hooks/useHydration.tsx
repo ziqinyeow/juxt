@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useStore } from "../store";
 
 export const useHydration = () => {
-  const { refreshAllFileURLCache } = useStore();
+  const { refreshAllFileURLCache, refreshTracks } = useStore();
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {

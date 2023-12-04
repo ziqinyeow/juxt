@@ -1,6 +1,7 @@
 "use client";
 
 import Canvas from "@/components/Canvas";
+// import Canvas from "@/components/LegacyCanvas";
 import Dropzone from "@/components/Dropzone";
 import Panel from "@/components/Panel";
 import Layout from "@/layout/layout";
@@ -10,11 +11,12 @@ import { notFound } from "next/navigation";
 import React, { useEffect } from "react";
 
 const Page = ({ params }: { params: { id: string } }) => {
-  const { projects, setCurrentProjectId, hidePanel } = useStore();
+  const { projects, setCurrentProjectId, hidePanel, refreshTracks } =
+    useStore();
 
   useEffect(() => {
     setCurrentProjectId(params.id);
-    // refreshTracks(canvas);
+    // refreshTracks();
   }, [params.id, setCurrentProjectId]);
 
   // console.log(projects.find((project) => project.id === params.id));
@@ -32,7 +34,8 @@ const Page = ({ params }: { params: { id: string } }) => {
             ])}
           >
             <div className="relative h-full">
-              <Canvas projectId={params?.id} />
+              {/* <Canvas projectId={params?.id} /> */}
+              <Canvas />
             </div>
             <div className="">
               <Panel projectId={params?.id} />

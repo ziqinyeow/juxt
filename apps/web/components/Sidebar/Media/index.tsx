@@ -131,7 +131,7 @@ const Media = ({ projectId }: { projectId: string }) => {
                     <Image
                       id={media.path + "thumbnail"}
                       // src={media.url ?? ""}
-                      src={fileURLCache[media.id] ?? ""}
+                      src={fileURLCache[media.id].url ?? ""}
                       fill
                       className="z-0 object-contain w-full h-full text-white rounded"
                       alt={media.path}
@@ -148,7 +148,7 @@ const Media = ({ projectId }: { projectId: string }) => {
                       muted
                       className="rounded"
                       // src={media.url ?? ""}
-                      src={fileURLCache[media.id] ?? ""}
+                      src={fileURLCache[media.id].url ?? ""}
                     ></video>
                   </>
                 ) : media?.type === "youtube" ? (

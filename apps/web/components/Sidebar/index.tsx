@@ -3,7 +3,7 @@
 import { ButtonProps, DivProps } from "@/lib/types/html";
 import { cn } from "@/lib/utils";
 import { IconFileUpload } from "@tabler/icons-react";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Tooltip from "../Tooltip";
 import { Tab, getTabIcon } from "./utils";
 import Explorer from "./Explorer";
@@ -11,6 +11,9 @@ import Media from "./Media";
 import { useStore } from "@/lib/store";
 import { BucketType } from "@/lib/types/file";
 import Image from "next/image";
+import ChartModal from "../Modal/ChartModal";
+import { useOnLoadImages } from "@/lib/hooks/useOnLoadImages";
+import { useOnLoadVideos } from "@/lib/hooks/useOnLoadVideos";
 
 type SidebarButtonProps = {
   tooltip?: string;
@@ -48,7 +51,24 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
     mergeFileListToBucket,
   } = useStore();
   const [tab, setTab] = useState<Tab>("explorer");
-  // console.log(fileURLCache);
+  const [openChartModal, setOpenChartModal] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const imagesLoaded = useOnLoadImages(wrapperRef);
+  const videoLoaded = useOnLoadVideos(wrapperRef);
+
+  useEffect(() => {
+    if (imagesLoaded) {
+      console.log("image loaded, refresh track");
+      refreshTracks();
+    }
+  }, [imagesLoaded, refreshTracks]);
+
+  // useEffect(() => {
+  //   if (videoLoaded) {
+  //     console.log("video loaded, refresh track");
+  //     refreshTracks();
+  //   }
+  // }, [videoLoaded, refreshTracks]);
 
   const bucket = useMemo(
     () => projects.find((project) => project.id === projectId),
@@ -70,43 +90,62 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
 
   return (
     <div
+      ref={wrapperRef}
       {...props}
       className={cn([
         "w-full border-r dark:border-primary-400 grid grid-cols-[70px_auto] bg-white dark:bg-primary-700",
         className,
       ])}
     >
+      <>
+        {
+          <Image
+            src={"/vercel.svg"}
+            width={0}
+            height={0}
+            className="z-0 absolute text-white"
+            alt={"loader"}
+            onLoad={() => {
+              // refreshTracks();
+            }}
+          />
+        }
+      </>
       {medias?.map((media, i) => (
         <div key={i} className="absolute z-[-10]">
           {media.type === "image" ? (
             <>
-              <Image
-                id={media.path}
-                // src={media.url ?? ""}
-                src={fileURLCache[media.id] ?? ""}
-                width={0}
-                height={0}
-                className="z-0 hidden object-contain text-white rounded"
-                alt={media.path}
-                onLoad={() => {
-                  refreshTracks(canvas);
-                }}
-              />
+              {fileURLCache[media.id] && (
+                <Image
+                  id={media.path}
+                  // src={media.url ?? ""}
+                  src={fileURLCache[media.id]?.url ?? ""}
+                  width={0}
+                  height={0}
+                  className="z-0 hidden object-contain text-white rounded"
+                  alt={media.path}
+                  onLoad={() => {
+                    if (i == medias.length - 1) {
+                      // refreshTracks();
+                    }
+                  }}
+                />
+              )}
             </>
           ) : media.type === "video" ? (
             <>
               <video
                 id={media.path}
                 onLoad={() => {
-                  refreshTracks(canvas);
+                  // refreshTracks();
                 }}
                 onLoadedData={() => {
-                  refreshTracks(canvas);
+                  // refreshTracks();
                 }}
                 muted
                 className="absolute z-[-10] opacity-0"
                 // src={media.url ?? ""}
-                src={fileURLCache[media.id] ?? ""}
+                src={fileURLCache[media.id]?.url ?? ""}
               ></video>
             </>
           ) : (
@@ -138,6 +177,18 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
           ])}
         >
           {getTabIcon("media")}
+        </SidebarButton>
+        <SidebarButton
+          onClick={() => {
+            // setTab("chart");
+            setOpenChartModal(true);
+          }}
+          tooltip="chart"
+          className={cn([
+            "active:ring ring-secondary-100 dark:ring-secondary-200",
+          ])}
+        >
+          {getTabIcon("chart")}
         </SidebarButton>
       </div>
       <div className="">
@@ -173,6 +224,11 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
         <div>
           {tab === "explorer" && <Explorer projectId={projectId} />}
           {tab === "media" && <Media projectId={projectId} />}
+          <ChartModal
+            open={openChartModal}
+            setOpen={setOpenChartModal}
+            onClose={() => {}}
+          />
         </div>
       </div>
     </div>

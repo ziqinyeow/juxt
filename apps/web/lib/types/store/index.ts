@@ -1,13 +1,24 @@
 import { fabric } from "fabric";
-import { Element, Placement, Shape, ShapeType, Tracks } from "../track";
+import { Element, Placement, Pose, Shape, ShapeType, Tracks } from "../track";
 import { BucketType, FileWithPath } from "../file";
-import { IEvent } from "fabric/fabric-impl";
+// import { IEvent } from "fabric/fabric-impl";
 import { Project } from "../project";
+import { FabricCanvas, Handler } from "@/canvas";
+import { SendMessage } from "react-use-websocket";
+// import { IEvent } from "fabric/fabric-impl";
 
 export interface StoreTypes {
-  fileURLCache: Record<string, string>;
+  lastWebsocketMessage: MessageEvent<any> | null;
+  setLastWebsocketMessage: (
+    lastWebsocketMessage: MessageEvent<any> | null
+  ) => void;
+  sendWebsocketMessage: SendMessage;
+  setSendWebsocketMessage: (sendWebsocketMessage: SendMessage) => void;
+  test: any;
+  setTest: any;
+  fileURLCache: Record<string, Record<string, string>>;
   setFileURLCache: (cache: Record<string, string>) => void;
-  addFileURLCache: (cache: Record<string, string>) => void;
+  addFileURLCache: (cache: Record<string, Record<string, any>>) => void;
   refreshFileURLCache: (projectId: string) => void;
   refreshAllFileURLCache: () => void;
 
@@ -20,13 +31,16 @@ export interface StoreTypes {
   mergeBucket: (projectId: string, bucket: BucketType) => void;
   mergeFileListToBucket: (projectId: string, fileList: FileList | null) => void;
 
-  canvas: fabric.Canvas | null;
-  setCanvas: (canvas: fabric.Canvas | null) => void;
+  handler: Handler | null;
+  setHandler: (handler: Handler | null) => void;
+  canvas: FabricCanvas | null;
+  setCanvas: (canvas: FabricCanvas | null) => void;
 
   videos: string[];
   addVideo: (media: FileWithPath) => void;
   images: string[];
   addImage: (media: FileWithPath) => void;
+  addPose: (elementId: string, pose: Pose) => void;
 
   // elements
   tracks: Tracks[];
@@ -42,7 +56,7 @@ export interface StoreTypes {
   addText: (text: fabric.IText, properties: any, placement: Placement) => void;
   addTrackAndElement: (element: Element) => void;
   refreshTracks: (canvas?: fabric.Canvas | null) => void;
-  updatePlacement: (e: IEvent, element: Element, object: any) => void;
+  updatePlacement: (e: any, element: Element, object: any) => void;
   addElementToCanvas: (element: Element) => void;
   removeTrackAndElement: (elementIds: string[]) => void;
   updateElement: (elementId: string, data: any) => void;

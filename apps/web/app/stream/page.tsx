@@ -1,5 +1,6 @@
 "use client";
 
+import { WEBSOCKET_URL } from "@/lib/constants";
 import { useEffect, useState } from "react";
 
 const WebSocketComponent = () => {
@@ -10,7 +11,7 @@ const WebSocketComponent = () => {
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
-    const newSocket = new WebSocket("ws://localhost:8000/ws");
+    const newSocket = new WebSocket(`${WEBSOCKET_URL}/ws`);
 
     newSocket.onmessage = (event) => {
       // console.log(event.data);
@@ -21,7 +22,7 @@ const WebSocketComponent = () => {
     };
 
     newSocket.onerror = (event) => {
-      // console.log("error", event);
+      console.log("error", event);
     };
 
     newSocket.onclose = () => {
@@ -34,6 +35,22 @@ const WebSocketComponent = () => {
       newSocket.close();
     };
   }, []);
+
+  function processImage() {
+    if (!file) return;
+    // const image = document.createElement("img");
+    // image.src = URL.createObjectURL(file);
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+
+    reader.onload = () => {
+      const imageData = reader.result as ArrayBufferLike;
+      const uint8Array = new Uint8Array(imageData);
+
+      // Send the image data as bytes through the WebSocket connection
+      socket?.send(uint8Array.buffer);
+    };
+  }
 
   function processVideo() {
     if (!file) return;
@@ -76,7 +93,13 @@ const WebSocketComponent = () => {
   }
 
   const handleSendSocket = async () => {
-    processVideo();
+    if (!file) return;
+    // console.log(file);
+    if (file.type.startsWith("image")) {
+      processImage();
+    } else {
+      processVideo();
+    }
     // if (file) {
     //   socket?.send(file);
     // }
