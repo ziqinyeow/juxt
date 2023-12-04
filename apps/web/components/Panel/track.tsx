@@ -249,6 +249,7 @@ export const Track = ({ track, ...props }: TrackProps) => {
                   reader.onload = () => {
                     const imageData = reader.result as ArrayBufferLike;
                     const uint8Array = new Uint8Array(imageData);
+                    console.log(element.id, uint8Array.buffer);
                     sendWebsocketMessage(element.id);
                     sendWebsocketMessage(uint8Array.buffer);
                   };

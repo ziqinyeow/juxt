@@ -8,13 +8,14 @@ import {
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { IconPlus, IconSearch, IconStack2 } from "@tabler/icons-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import ProjectModal, { ProjectForm } from "../Modal/ProjectModal";
 import { colors } from "@/lib/constants/colors";
 import { nanoid } from "nanoid";
 
 const ProjectDropdown = () => {
+  const router = useRouter();
   const { setDisableKeyboardShortcut, addProject } = useStore();
   const [form, setForm] = useState<ProjectForm>({
     name: "",
@@ -64,7 +65,8 @@ const ProjectDropdown = () => {
       tags: [],
     });
     setOpenCreateProjectModal(false);
-    window.open(`/${id}`, "_self");
+    router.push(`/${id}`);
+    // window.open(`/${id}`, "_self");
   };
 
   return (
@@ -163,8 +165,8 @@ const ProjectDropdown = () => {
                   "bg-light-400 dark:bg-primary-800",
               ])}
               onClick={() => {
-                //   router.push(`/${project.id}`);
-                window.open(`/${project.id}`, "_self");
+                router.push(`/${project.id}`);
+                // window.open(`/${project.id}`, "_self");
               }}
             >
               <IconStack2

@@ -30,8 +30,12 @@ const fetcher = (...args: any) => fetch(...args).then((res) => res.json());
 const Navbar = ({ className, ...props }: DivProps) => {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
-  const { setSendWebsocketMessage, setLastWebsocketMessage, addPose } =
-    useStore();
+  const {
+    setSendWebsocketMessage,
+    setWebsocketConnected,
+    setLastWebsocketMessage,
+    addPose,
+  } = useStore();
   const { data, error, isLoading } = useSWR("/api/healthchecker", fetcher);
   const { sendMessage, lastMessage, readyState } = useWebSocket(
     `${WEBSOCKET_URL}/ws`
@@ -47,9 +51,14 @@ const Navbar = ({ className, ...props }: DivProps) => {
 
   useEffect(() => {
     if (readyState === 1) {
+      setWebsocketConnected(1);
       setSendWebsocketMessage(sendMessage);
     }
-  }, [readyState, sendMessage, setSendWebsocketMessage]);
+    return () => {
+      setWebsocketConnected(0);
+      setSendWebsocketMessage(() => {});
+    };
+  }, [readyState, sendMessage, setSendWebsocketMessage, setWebsocketConnected]);
 
   useEffect(() => {
     if (readyState === 1) {

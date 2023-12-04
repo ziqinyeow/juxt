@@ -81,6 +81,7 @@ async def websocket_endpoint(websocket: WebSocket):
         try:
             print("websocket accepted")
             ids = await websocket.receive_text()
+            print("ids", ids)
             b = await websocket.receive_bytes()
             data = np.frombuffer(b, dtype=np.uint8)
             img = cv2.imdecode(data, 1)
