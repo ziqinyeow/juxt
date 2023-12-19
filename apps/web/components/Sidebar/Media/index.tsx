@@ -131,7 +131,7 @@ const Media = ({ projectId }: { projectId: string }) => {
                     <Image
                       id={media.path + "thumbnail"}
                       // src={media.url ?? ""}
-                      src={fileURLCache[media.id].url ?? ""}
+                      src={fileURLCache[media.id]?.url ?? ""}
                       fill
                       className="z-0 object-contain w-full h-full text-white rounded"
                       alt={media.path}

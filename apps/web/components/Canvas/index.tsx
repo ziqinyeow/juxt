@@ -45,6 +45,13 @@ const Canvas = () => {
   //   const [canvas, setCanvas] = useState<FabricCanvas | null>(null);
   const [handler, setHandler] = useState<Handler | null>(null);
   const { theme } = useTheme();
+  // console.log(websocketConnected);
+
+  // useEffect(() => {
+  //   if (websocketConnected) {
+  //     refreshTracks();
+  //   }
+  // }, [websocketConnected]);
 
   useEffect(() => {
     if (canvas) {
@@ -188,8 +195,8 @@ const Canvas = () => {
                         // @ts-ignore
                         const cache = fileURLCache[element.properties.mediaId];
                         // @ts-ignore
-                        const file = cache.file as File;
-                        const url = cache.url;
+                        const file = cache?.file as File;
+                        const url = cache?.url;
                         if (!file) return;
 
                         if (element.type === "image") {

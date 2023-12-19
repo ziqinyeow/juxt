@@ -10,16 +10,30 @@ export const addPoints = ({
   y: number;
   canvas: FabricCanvas;
 }) => {
-  const point = new fabric.Rect({
+  var point = new fabric.Circle({
+    radius: 5,
+    fill: "#2BEBC8",
+    originX: "center",
+    originY: "center",
+    hasControls: false,
     left: x,
     top: y,
-    width: 5,
-    height: 5,
-    rx: 16,
-    ry: 16,
-    fill: "#2BEBC8",
-    hasControls: false,
+    // @ts-ignore
+    position: {
+      left: x,
+      top: y,
+    },
   });
+  // const point = new fabric.Rect({
+  //   left: x,
+  //   top: y,
+  //   width: 5,
+  //   height: 5,
+  //   rx: 16,
+  //   ry: 16,
+  //   fill: "#2BEBC8",
+  //   hasControls: false,
+  // });
   return point;
   // canvas.add(point);
 };

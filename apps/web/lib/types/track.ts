@@ -17,12 +17,14 @@ export type ElementBase<Type extends ElementType, Properties> = {
   type: Type;
   name: string;
   fabricObject?: fabric.Object;
+  poseObject?: any[];
   placement: Placement;
   timeframe: Timeframe;
   properties: Properties;
 };
 
 export type Pose = {
+  points: any[];
   kpts: any[];
   bboxes: any[];
 };
@@ -32,6 +34,7 @@ export type VideoElement = ElementBase<
   {
     mediaId: string;
     src: string;
+    duration: number;
     elementId: string;
     imageObject?: fabric.Image;
     originalHeight: number | null;

@@ -221,7 +221,7 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
             </label>
           </div>
         </div>
-        <div>
+        <div className="">
           {tab === "explorer" && <Explorer projectId={projectId} />}
           {tab === "media" && <Media projectId={projectId} />}
           <ChartModal

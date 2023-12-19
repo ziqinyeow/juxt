@@ -192,6 +192,10 @@ export const useStore = create<StoreTypes>()(
         const videoElement = document.getElementById(
           media.path
         ) as HTMLVideoElement;
+        // const quality = videoElement.getVideoPlaybackQuality();
+        // const totalVideoFrames = quality.totalVideoFrames;
+        console.log(video.duration);
+
         const size = {
           width: videoElement.videoWidth,
           height: videoElement.videoHeight,
@@ -224,6 +228,7 @@ export const useStore = create<StoreTypes>()(
             originalHeight: size.height,
             originalWidth: size.width,
             pose: [],
+            duration: video.duration,
           },
         };
         get().addTrackAndElement(element);
@@ -292,11 +297,11 @@ export const useStore = create<StoreTypes>()(
                       return track;
                     } else {
                       if (element.type === "image") {
-                        const image = get()
+                        const imageObject = get()
                           .canvas?.getObjects()
                           .find((obj) => obj.name === elementId);
                         // @ts-ignore
-                        get().canvas?.remove(image);
+                        get().canvas?.remove(imageObject);
 
                         const points = pose.kpts.map((a) =>
                           a.map(([_x, _y]: number[]) => {
@@ -309,49 +314,89 @@ export const useStore = create<StoreTypes>()(
                               original_image_height:
                                 // @ts-ignore
                                 element.properties.originalHeight!,
-                              scaled_image_width: image?.width!,
-                              scaled_image_height: image?.height!,
+                              scaled_image_width: imageObject?.width!,
+                              scaled_image_height: imageObject?.height!,
                             });
-                            const point = addPoints({
-                              x: Math.round(image?.left! + x),
-                              y: Math.round(image?.top! + y),
-                              canvas: get().canvas!,
+                            const point = new fabric.Rect({
+                              // radius: 1,
+                              fill: "#2BEBC8",
+                              width: 5,
+                              height: 5,
+                              rx: 16,
+                              ry: 16,
+                              originX: "center",
+                              originY: "center",
+                              hasControls: false,
+                              left: Math.round(imageObject?.left! + x),
+                              top: Math.round(imageObject?.top! + y),
+                              // @ts-ignore
+                              position: {
+                                left:
+                                  Math.round(imageObject?.left! + x) -
+                                  imageObject?.left!,
+                                top:
+                                  Math.round(imageObject?.top! + y) -
+                                  imageObject?.top!,
+                              },
+                            });
+                            point.on("moving", function (options) {
+                              var pos = get().canvas?.getPointer(options.e);
+
+                              // @ts-ignore
+                              point.position.left =
+                                pos?.x! - imageObject?.left!;
+                              // @ts-ignore
+                              point.position.top = pos?.y! - imageObject?.top!;
+
+                              point.set({
+                                left: pos?.x,
+                                top: pos?.y,
+                              });
                             });
                             return point;
                           })
                         );
-
-                        const group = new fabric.Group(
-                          [
-                            // @ts-ignore
-                            image,
-                            ...points.map((point) => {
-                              const group = new fabric.Group(point);
-                              return group;
-                            }),
-                          ],
-                          {
-                            name: element.id,
+                        // @ts-ignore
+                        get().canvas?.add(imageObject);
+                        points.map((point) => {
+                          point.map((p: fabric.Circle) => {
+                            // p.on("moving", (e) => {})
+                            get().canvas?.add(p);
+                          });
+                        });
+                        imageObject?.on(
+                          "moving",
+                          function (event: fabric.IEvent<MouseEvent>) {
+                            // event.target?.left!
+                            points.map((point) => {
+                              point.map((p: any) => {
+                                p.set({
+                                  left:
+                                    imageObject?.left! +
+                                    p.position.left * imageObject?.scaleX!,
+                                  top:
+                                    imageObject?.top! +
+                                    p.position.top * imageObject?.scaleY!,
+                                });
+                              });
+                            });
                           }
                         );
-                        group.on("selected", () => {
-                          get().setSelectedElement([
-                            ...get().selectedElement,
-                            element,
-                          ]);
+                        imageObject?.on("scaling", function () {
+                          points.map((point) => {
+                            point.map((p: any) => {
+                              p.set({
+                                left:
+                                  imageObject?.left! +
+                                  p.position.left * imageObject?.scaleX!,
+                                top:
+                                  imageObject?.top! +
+                                  p.position.top * imageObject?.scaleY!,
+                              });
+                            });
+                          });
                         });
-                        group.on("deselected", () => {
-                          get().setSelectedElement(
-                            get().selectedElement.filter(
-                              (el) => el.id !== element.id
-                            )
-                          );
-                        });
-                        group.on("modified", (e: any) => {
-                          get().updatePlacement(e, element, group);
-                        });
-                        element.fabricObject = group;
-                        get().canvas?.add(group);
+                        element.fabricObject = imageObject;
                       }
 
                       return {
@@ -532,16 +577,120 @@ export const useStore = create<StoreTypes>()(
               mb: false,
               mt: false,
             });
-            element.fabricObject = videoObject;
-            videoObject.on("selected", () => {
-              get().setSelectedElement([...get().selectedElement, element]);
-            });
-            videoObject.on("deselected", () => {
-              get().setSelectedElement(
-                get().selectedElement.filter((el) => el.id !== element.id)
+
+            if (element?.properties?.pose?.length > 0) {
+              const points = element.properties.pose?.map((p) =>
+                p.kpts.map((a) =>
+                  a.map(([_x, _y]: number[]) => {
+                    const { x, y } = getPoints({
+                      x: _x,
+                      y: _y,
+                      original_image_width:
+                        // @ts-ignore
+                        element.properties.originalWidth!,
+                      original_image_height:
+                        // @ts-ignore
+                        element.properties.originalHeight!,
+                      scaled_image_width: videoObject?.width!,
+                      scaled_image_height: videoObject?.height!,
+                    });
+                    const point = new fabric.Rect({
+                      // radius: 1,
+                      fill: "#2BEBC8",
+                      width: 5,
+                      height: 5,
+                      rx: 16,
+                      ry: 16,
+                      originX: "center",
+                      originY: "center",
+                      hasControls: false,
+                      left: Math.round(videoObject?.left! + x),
+                      top: Math.round(videoObject?.top! + y),
+                      // @ts-ignore
+                      position: {
+                        left:
+                          Math.round(videoObject?.left! + x) -
+                          videoObject?.left!,
+                        top:
+                          Math.round(videoObject?.top! + y) - videoObject?.top!,
+                      },
+                    });
+                    point.on("moving", function (options) {
+                      var pos = get().canvas?.getPointer(options.e);
+
+                      // @ts-ignore
+                      point.position.left = pos?.x! - videoObject?.left!;
+                      // @ts-ignore
+                      point.position.top = pos?.y! - videoObject?.top!;
+
+                      point.set({
+                        left: pos?.x,
+                        top: pos?.y,
+                      });
+                    });
+                    // p.points?.push(point);
+                    return point;
+                  })
+                )
               );
-            });
-            get().canvas?.add(videoObject);
+              element.poseObject = points;
+              // console.log(element);
+              get().canvas?.add(videoObject);
+              points?.[0].map((point) => {
+                point.map((p: fabric.Circle) => {
+                  // p.on("moving", (e) => {})
+                  get().canvas?.add(p);
+                });
+              });
+              videoObject.on(
+                "moving",
+                function (event: fabric.IEvent<MouseEvent>) {
+                  // event.target?.left!
+                  points?.[0].map((point) => {
+                    point.map((p: any) => {
+                      p.set({
+                        left:
+                          videoObject?.left! +
+                          p.position.left * videoObject?.scaleX!,
+                        top:
+                          videoObject?.top! +
+                          p.position.top * videoObject?.scaleY!,
+                      });
+                    });
+                  });
+                }
+              );
+              videoObject?.on("scaling", function () {
+                points?.[0].map((point) => {
+                  point.map((p: any) => {
+                    p.set({
+                      left:
+                        videoObject?.left! +
+                        p.position.left * videoObject?.scaleX!,
+                      top:
+                        videoObject?.top! +
+                        p.position.top * videoObject?.scaleY!,
+                    });
+                  });
+                });
+                // canvas?.renderAll();
+              });
+              element.fabricObject = videoObject;
+              // get().canvas?.add(videoObject);
+            } else {
+              get().canvas?.add(videoObject);
+
+              element.fabricObject = videoObject;
+              videoObject.on("selected", () => {
+                get().setSelectedElement([...get().selectedElement, element]);
+              });
+              videoObject.on("deselected", () => {
+                get().setSelectedElement(
+                  get().selectedElement.filter((el) => el.id !== element.id)
+                );
+              });
+            }
+
             // get().canvas?.centerObject(videoObject);
             // console.log(get().canvas?.getObjects());
 
@@ -578,6 +727,65 @@ export const useStore = create<StoreTypes>()(
               mt: false,
             });
 
+            // const canvas = get().canvas;
+            // const center = canvas?.getCenter();
+            // const id = "trQVNf5uz-8N_s4VH1jMI";
+            // // console.log(canvas?.getObjects());
+            // const image = canvas?.getObjects().find((obj) => obj.name === id);
+
+            // const imageElement = document.getElementById(
+            //   "/football.jpeg"
+            // ) as HTMLImageElement;
+
+            // var point = new fabric.Circle({
+            //   radius: 5,
+            //   fill: "red",
+            //   originX: "center",
+            //   originY: "center",
+            //   hasControls: false,
+            //   left: image?.left! + (image?.width! * image?.scaleX!) / 2,
+            //   top: image?.top! + (image?.height! * image?.scaleY!) / 2,
+            //   position: {
+            //     left:
+            //       image?.left! +
+            //       (image?.width! * image?.scaleX!) / 2 -
+            //       image?.left!,
+            //     top:
+            //       image?.top! +
+            //       (image?.height! * image?.scaleY!) / 2 -
+            //       image?.top!,
+            //   },
+            // });
+
+            // image?.on("moving", function () {
+            //   point.set({
+            //     left: image?.left! + point.position.left * image?.scaleX!,
+            //     top: image?.top! + point.position.top * image?.scaleY!,
+            //   });
+            // });
+
+            // image?.on("scaling", function () {
+            //   point.set({
+            //     left: image?.left! + position.left * image?.scaleX!,
+            //     top: image?.top! + position.top * image?.scaleY!,
+            //   });
+            //   // canvas?.renderAll();
+            // });
+
+            // // Enable point to be moved independently
+            // point.on("moving", function (options) {
+            //   var pos = canvas?.getPointer(options.e);
+
+            //   point.position.left = pos?.x! - image?.left!;
+            //   point.position.top = pos?.y! - image?.top!;
+
+            //   point.set({
+            //     left: pos?.x,
+            //     top: pos?.y,
+            //   });
+            // });
+            // canvas?.add(point);
+
             if (element?.properties?.pose?.length > 0) {
               const points = element.properties.pose[0].kpts.map((a) =>
                 a.map(([_x, _y]: number[]) => {
@@ -593,50 +801,122 @@ export const useStore = create<StoreTypes>()(
                     scaled_image_width: imageObject?.width!,
                     scaled_image_height: imageObject?.height!,
                   });
-                  const point = addPoints({
-                    x: Math.round(imageObject?.left! + x),
-                    y: Math.round(imageObject?.top! + y),
-                    canvas: get().canvas!,
+                  const point = new fabric.Rect({
+                    // radius: 1,
+                    fill: "#2BEBC8",
+                    width: 5,
+                    height: 5,
+                    rx: 16,
+                    ry: 16,
+                    originX: "center",
+                    originY: "center",
+                    hasControls: false,
+                    left: Math.round(imageObject?.left! + x),
+                    top: Math.round(imageObject?.top! + y),
+                    // @ts-ignore
+                    position: {
+                      left:
+                        Math.round(imageObject?.left! + x) - imageObject?.left!,
+                      top:
+                        Math.round(imageObject?.top! + y) - imageObject?.top!,
+                    },
                   });
-                  point.on("selection:created", () => {
-                    console.log("point clicked");
+                  point.on("moving", function (options) {
+                    var pos = get().canvas?.getPointer(options.e);
+
+                    // @ts-ignore
+                    point.position.left = pos?.x! - imageObject?.left!;
+                    // @ts-ignore
+                    point.position.top = pos?.y! - imageObject?.top!;
+
+                    point.set({
+                      left: pos?.x,
+                      top: pos?.y,
+                    });
                   });
                   return point;
                 })
               );
 
-              // get().canvas?.add(imageObject);
-              // points.map((point) => {
-              //   point.map((p) => {
-              //     get().canvas?.add(p);
-              //   });
-              // });
-
-              const group = new fabric.Group(
-                [
-                  imageObject,
-                  ...points.map((point) => {
-                    const group = new fabric.Group(point);
-                    return group;
-                  }),
-                ],
-                {
-                  name: element.id,
+              // console.log(points);
+              get().canvas?.add(imageObject);
+              points.map((point) => {
+                point.map((p: fabric.Circle) => {
+                  // p.on("moving", (e) => {})
+                  get().canvas?.add(p);
+                });
+              });
+              imageObject.on(
+                "moving",
+                function (event: fabric.IEvent<MouseEvent>) {
+                  // event.target?.left!
+                  points.map((point) => {
+                    point.map((p: any) => {
+                      p.set({
+                        left:
+                          imageObject?.left! +
+                          p.position.left * imageObject?.scaleX!,
+                        top:
+                          imageObject?.top! +
+                          p.position.top * imageObject?.scaleY!,
+                      });
+                    });
+                  });
                 }
               );
-              group.on("selected", () => {
+              imageObject?.on("scaling", function () {
+                points.map((point) => {
+                  point.map((p: any) => {
+                    p.set({
+                      left:
+                        imageObject?.left! +
+                        p.position.left * imageObject?.scaleX!,
+                      top:
+                        imageObject?.top! +
+                        p.position.top * imageObject?.scaleY!,
+                    });
+                  });
+                });
+                // canvas?.renderAll();
+              });
+              element.fabricObject = imageObject;
+              imageObject.on("selected", () => {
                 get().setSelectedElement([...get().selectedElement, element]);
               });
-              group.on("deselected", () => {
+              imageObject.on("deselected", () => {
                 get().setSelectedElement(
                   get().selectedElement.filter((el) => el.id !== element.id)
                 );
               });
-              group.on("modified", (e: any) => {
-                get().updatePlacement(e, element, group);
+              imageObject.on("modified", (e: any) => {
+                get().updatePlacement(e, element, imageObject);
               });
-              get().canvas?.add(group);
-              element.fabricObject = group;
+
+              // const group = new fabric.Group(
+              //   [
+              //     imageObject,
+              //     ...points.map((point) => {
+              //       const group = new fabric.Group(point);
+              //       return group;
+              //     }),
+              //   ],
+              //   {
+              //     name: element.id,
+              //   }
+              // );
+              // group.on("selected", () => {
+              //   get().setSelectedElement([...get().selectedElement, element]);
+              // });
+              // group.on("deselected", () => {
+              //   get().setSelectedElement(
+              //     get().selectedElement.filter((el) => el.id !== element.id)
+              //   );
+              // });
+              // group.on("modified", (e: any) => {
+              //   get().updatePlacement(e, element, group);
+              // });
+              // get().canvas?.add(group);
+              // element.fabricObject = group;
             } else {
               imageObject.on("selected", () => {
                 get().setSelectedElement([...get().selectedElement, element]);
@@ -804,7 +1084,7 @@ export const useStore = create<StoreTypes>()(
             (project) => project.id === get().currentProjectId
           )?.tracks ?? [];
 
-        // console.log("refresh");
+        console.log("refresh");
 
         get().canvas?.remove(
           ...(get()
@@ -827,62 +1107,6 @@ export const useStore = create<StoreTypes>()(
               break;
           }
         }
-        const canvas = get().canvas;
-        const center = canvas?.getCenter();
-        const id = "UW03o1ck3TySbvy8PfDtv";
-        // console.log(canvas?.getObjects());
-        const image = canvas?.getObjects().find((obj) => obj.name === id);
-
-        // const imageElement = document.getElementById(
-        //   "/football.jpeg"
-        // ) as HTMLImageElement;
-        // const size = await getHeightAndWidthFromDataUrl(imageElement?.src);
-        // const zoom = canvas?.getZoom()!;
-        // let position: any = {
-        //   left:
-        //     image?.left! + (image?.width! * image?.scaleX!) / 2 - image?.left!,
-        //   top:
-        //     image?.top! + (image?.height! * image?.scaleY!) / 2 - image?.top!,
-        // };
-
-        // var point = new fabric.Circle({
-        //   radius: 5,
-        //   fill: "red",
-        //   originX: "center",
-        //   originY: "center",
-        //   hasControls: false,
-        //   left: image?.left! + (image?.width! * image?.scaleX!) / 2,
-        //   top: image?.top! + (image?.height! * image?.scaleY!) / 2,
-        // });
-
-        // image?.on("moving", function () {
-        //   point.set({
-        //     left: image?.left! + position.left * image?.scaleX!,
-        //     top: image?.top! + position.top * image?.scaleY!,
-        //   });
-        // });
-
-        // image?.on("scaling", function () {
-        //   point.set({
-        //     left: image?.left! + position.left * image?.scaleX!,
-        //     top: image?.top! + position.top * image?.scaleY!,
-        //   });
-        //   // canvas?.renderAll();
-        // });
-
-        // // Enable point to be moved independently
-        // point.on("moving", function (options) {
-        //   var pos = canvas?.getPointer(options.e);
-        //   position.left = pos?.x! - image?.left!;
-        //   position.top = pos?.y! - image?.top!;
-
-        //   point.set({
-        //     left: pos?.x,
-        //     top: pos?.y,
-        //   });
-        //   // canvas?.renderAll();
-        // });
-        // canvas?.add(point);
       },
 
       updatePlacement: (e: any, element: Element, object: any) => {
@@ -971,7 +1195,7 @@ export const useStore = create<StoreTypes>()(
         set((state) => ({ ...state, disableKeyboardShortcut: disable }));
       },
 
-      fps: 25,
+      fps: 100,
       maxTime: 0,
       setMaxTime: (time: number) =>
         set((state) => ({ ...state, maxTime: time })),
@@ -1070,6 +1294,9 @@ export const useStore = create<StoreTypes>()(
         tracks?.forEach((track) => {
           track.elements.forEach((element) => {
             if (!element.fabricObject) return;
+            // @ts-ignore
+            if (element.properties?.pose) {
+            }
             const isInside =
               element.timeframe.start <= time &&
               time <= element.timeframe.start + element.timeframe.duration;
@@ -1082,6 +1309,7 @@ export const useStore = create<StoreTypes>()(
         if (get().playing) {
           get().setPlaying(false);
         }
+        console.log(get().getCurrentTimeInMs(), seek);
         get().updateTime(seek);
         get().updateVideoElement();
       },

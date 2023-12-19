@@ -8,7 +8,7 @@ export const useOnLoadVideos = (ref: RefObject<HTMLElement>) => {
     const updateStatus = (images: HTMLVideoElement[]) => {
       setStatus(
         images
-          .map((image) => image.readyState >= 2)
+          .map((image) => image.readyState >= 0)
           .every((item) => item === true)
       );
     };
@@ -23,6 +23,7 @@ export const useOnLoadVideos = (ref: RefObject<HTMLElement>) => {
     }
 
     imagesLoaded.forEach((image) => {
+      // console.log(image.readyState);
       image.addEventListener("load", () => updateStatus(imagesLoaded), {
         once: true,
       });

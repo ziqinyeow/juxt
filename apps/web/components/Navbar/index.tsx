@@ -80,6 +80,7 @@ const Navbar = ({ className, ...props }: DivProps) => {
           addPose(data.id, {
             bboxes: data.bboxes,
             kpts: data.kpts,
+            points: [],
           });
         }
       }
