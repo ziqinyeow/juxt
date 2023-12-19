@@ -65,6 +65,8 @@ export interface StoreTypes {
   updateElement: (elementId: string, data: any) => void;
 
   //
+  hideSidePanel: boolean;
+  setHideSidePanel: (hideSidePanel: boolean) => void;
   hidePanel: boolean;
   setHidePanel: (hidePanel: boolean) => void;
   panelScale: number;

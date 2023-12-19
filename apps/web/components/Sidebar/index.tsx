@@ -48,6 +48,8 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
     fileURLCache,
     refreshTracks,
     canvas,
+    hideSidePanel,
+    setHideSidePanel,
     mergeFileListToBucket,
   } = useStore();
   const [tab, setTab] = useState<Tab>("explorer");
@@ -153,9 +155,15 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
           )}
         </div>
       ))}
-      <div className="flex flex-col w-full gap-4 p-4 border-r dark:border-primary-400 text-secondary-100 dark:text-secondary-200">
+      <div className="flex flex-col w-full h-[calc(100vh_-_64px)] gap-4 p-4 border-r dark:border-primary-400 text-secondary-100 dark:text-secondary-200">
         <SidebarButton
           onClick={() => {
+            if ((tab === "explorer" && hideSidePanel) || tab !== "explorer") {
+              setHideSidePanel(false);
+            } else if (tab === "explorer" && !hideSidePanel) {
+              setHideSidePanel(true);
+            }
+
             setTab("explorer");
           }}
           tooltip="explorer"
@@ -168,6 +176,12 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
         </SidebarButton>
         <SidebarButton
           onClick={() => {
+            if ((tab === "media" && hideSidePanel) || tab !== "media") {
+              setHideSidePanel(false);
+            } else if (tab === "media" && !hideSidePanel) {
+              setHideSidePanel(true);
+            }
+
             setTab("media");
           }}
           tooltip="media"
@@ -221,7 +235,7 @@ const Sidebar = ({ projectId, className, ...props }: Props) => {
             </label>
           </div>
         </div>
-        <div className="">
+        <div className={cn([hideSidePanel && "hidden"])}>
           {tab === "explorer" && <Explorer projectId={projectId} />}
           {tab === "media" && <Media projectId={projectId} />}
           <ChartModal

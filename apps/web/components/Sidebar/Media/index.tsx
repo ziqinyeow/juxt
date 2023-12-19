@@ -136,7 +136,7 @@ const Media = ({ projectId }: { projectId: string }) => {
                       className="z-0 object-contain w-full h-full text-white rounded"
                       alt={media.path}
                       onLoad={() => {
-                        refreshTracks(canvas);
+                        // refreshTracks(canvas);
                       }}
                     />
                   </>

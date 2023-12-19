@@ -1171,6 +1171,10 @@ export const useStore = create<StoreTypes>()(
         })),
 
       // panel properties
+      hideSidePanel: false,
+      setHideSidePanel: (hideSidePanel: boolean) =>
+        set((state) => ({ ...state, hideSidePanel })),
+
       hidePanel: false,
       setHidePanel: (hidePanel: boolean) =>
         set((state) => ({ ...state, hidePanel })),
