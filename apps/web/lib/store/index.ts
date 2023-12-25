@@ -633,49 +633,88 @@ export const useStore = create<StoreTypes>()(
                   })
                 )
               );
-              element.poseObject = points;
+
               // console.log(element);
               get().canvas?.add(videoObject);
-              points?.[0].map((point) => {
-                point.map((p: fabric.Circle) => {
-                  // p.on("moving", (e) => {})
-                  get().canvas?.add(p);
+              points.map((_points) => {
+                _points.map((point) => {
+                  point.map((p: fabric.Circle) => {
+                    // p.on("moving", (e) => {})
+                    get().canvas?.add(p);
+                  });
                 });
               });
+
               videoObject.on(
                 "moving",
                 function (event: fabric.IEvent<MouseEvent>) {
                   // event.target?.left!
-                  points?.[0].map((point) => {
-                    point.map((p: any) => {
+                  points.map((_points) => {
+                    _points.map((point) => {
+                      point.map((p: fabric.Circle) => {
+                        // p.on("moving", (e) => {})
+                        p.set({
+                          left:
+                            videoObject?.left! +
+                            // @ts-ignore
+                            p.position.left * videoObject?.scaleX!,
+                          top:
+                            videoObject?.top! +
+                            // @ts-ignore
+                            p.position.top * videoObject?.scaleY!,
+                        });
+                      });
+                    });
+                  });
+                  // points?.[0].map((point) => {
+                  //   point.map((p: any) => {
+                  //     p.set({
+                  //       left:
+                  //         videoObject?.left! +
+                  //         p.position.left * videoObject?.scaleX!,
+                  //       top:
+                  //         videoObject?.top! +
+                  //         p.position.top * videoObject?.scaleY!,
+                  //     });
+                  //   });
+                  // });
+                }
+              );
+              videoObject?.on("scaling", function () {
+                points.map((_points) => {
+                  _points.map((point) => {
+                    point.map((p: fabric.Circle) => {
+                      // p.on("moving", (e) => {})
                       p.set({
                         left:
                           videoObject?.left! +
+                          // @ts-ignore
                           p.position.left * videoObject?.scaleX!,
                         top:
                           videoObject?.top! +
+                          // @ts-ignore
                           p.position.top * videoObject?.scaleY!,
                       });
                     });
                   });
-                }
-              );
-              videoObject?.on("scaling", function () {
-                points?.[0].map((point) => {
-                  point.map((p: any) => {
-                    p.set({
-                      left:
-                        videoObject?.left! +
-                        p.position.left * videoObject?.scaleX!,
-                      top:
-                        videoObject?.top! +
-                        p.position.top * videoObject?.scaleY!,
-                    });
-                  });
                 });
+                // points?.[0].map((point) => {
+                //   point.map((p: any) => {
+                //     p.set({
+                //       left:
+                //         videoObject?.left! +
+                //         p.position.left * videoObject?.scaleX!,
+                //       top:
+                //         videoObject?.top! +
+                //         p.position.top * videoObject?.scaleY!,
+                //     });
+                //   });
+                // });
                 // canvas?.renderAll();
               });
               element.fabricObject = videoObject;
+              element.poseObject = points;
+              console.log(element.poseObject);
               // get().canvas?.add(videoObject);
             } else {
               get().canvas?.add(videoObject);
@@ -1298,8 +1337,35 @@ export const useStore = create<StoreTypes>()(
         tracks?.forEach((track) => {
           track.elements.forEach((element) => {
             if (!element.fabricObject) return;
+            // console.log(
+            //   element.properties?.duration,
+            //   time,
+            //   element.poseObject?.length
+            // );
             // @ts-ignore
             if (element.properties?.pose) {
+              // @ts-ignore
+              const totalFrames = Math.ceil(element.properties?.duration * 25);
+              // console.log(
+              //   Math.ceil(
+              //     ((time / 1000) * totalFrames) / element.properties.duration
+              //   )
+              // );
+              const index = Math.ceil(
+                // @ts-ignore
+                ((time / 1000) * totalFrames) / element.properties?.duration
+              );
+              // console.log(element.poseObject);
+              element.poseObject?.map((poses, idx) => {
+                const isInside = idx === index;
+                // console.log(isInside && idx);
+                poses?.map((pose: any) => {
+                  pose.map((p: any) => {
+                    // console.log(p);
+                    p.visible = isInside;
+                  });
+                });
+              });
             }
             const isInside =
               element.timeframe.start <= time &&
@@ -1313,7 +1379,7 @@ export const useStore = create<StoreTypes>()(
         if (get().playing) {
           get().setPlaying(false);
         }
-        console.log(get().getCurrentTimeInMs(), seek);
+        // console.log(get().getCurrentTimeInMs(), seek);
         get().updateTime(seek);
         get().updateVideoElement();
       },
